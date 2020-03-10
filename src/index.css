@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +8,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.form-login, .form-signup {
+  text-align: center;
+  width: 400px;
+  margin: auto;
+  padding: 20px
+}
+
+.form-input-login-signup {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.form-input-login-signup label {
+  margin-right: 10px;
+}
+
+input {
+  height: 20px;
+  width: 200px;
+  border-radius: 3px;
 }
