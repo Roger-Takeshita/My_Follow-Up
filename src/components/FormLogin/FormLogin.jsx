@@ -1,26 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer } from 'react';
 import { Link } from 'react-router-dom';
+import userService from '../../utils/userService';
+import { connect } from 'react-redux';
+import { loginUser } from '../../redux/user';
+
+function formReducer(state, action) {
+    switch (action.type) {
+        case 'UPDATE_INPUT':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            };
+        default:
+            throw new Error(`Unsuported action ${action.type}`);
+    }
+}
 
 function FormLogin(props) {
-    const [info, setInfo] = useState({
+    const initialState = {
         email: '',
         password: '',
         message: ''
-    });
+    };
+
+    const [info, setInfo] = useReducer(formReducer, initialState);
 
     function handleChange(e) {
         setInfo({
-            ...info,
-            message: '',
-            [e.target.name]: e.target.value
+            type: 'UPDATE_INPUT',
+            payload: e.target
         });
-        console.log(info);
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            //api call
+            await userService.login(info);
+            props.loginUser();
+            props.history.push('/login');
         } catch (err) {
             console.log(err);
             setInfo({ ...info, message: 'Invalid Credentials!' });
@@ -67,4 +84,8 @@ function FormLogin(props) {
     );
 }
 
-export default FormLogin;
+const mapDispatchToProps = (dispatch) => ({
+    loginUser: () => dispatch(loginUser())
+});
+
+export default connect(null, mapDispatchToProps)(FormLogin);

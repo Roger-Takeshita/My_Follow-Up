@@ -1,30 +1,61 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import { Link } from 'react-router-dom';
+import userService from '../../utils/userService';
+import { connect } from 'react-redux';
+import { signupUser } from '../../redux/user';
+
+function formReducer(state, action) {
+    switch (action.type) {
+        case 'UPDATE_INPUT':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            };
+        default:
+            return {
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                confPassword: '',
+                message: `Unsupported action type ${action.type}`
+            };
+        // throw new Error(`Unsupported action type ${action.type}`);
+    }
+}
 
 function FormSignup(props) {
-    const [message, setMessage] = useState('');
-    const [info, setInfo] = useState({
+    console.log(props);
+    const initialState = {
         firstName: '',
         lastName: '',
         email: '',
         password: '',
-        confPassword: ''
-    });
+        confPassword: '',
+        message: ''
+    };
+
+    const [info, setInfo] = useReducer(formReducer, initialState);
 
     function handleChange(e) {
         setInfo({
-            ...info,
-            [e.target.name]: e.target.value
+            type: 'UPDATE_INPUT',
+            payload: e.target
         });
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            //api call
+            await userService.signup(info);
+            props.signupUser();
+            props.history.push('/');
         } catch (err) {
             console.log(err);
-            setMessage('Invalid Credentials!');
+            setInfo({
+                ...info,
+                message: 'Invalid Credentials!'
+            });
         }
     }
 
@@ -33,8 +64,7 @@ function FormSignup(props) {
             info.firstName &&
             info.lastName &&
             info.email &&
-            info.password &&
-            info.confPassword
+            info.password === info.confPassword
         );
     }
 
@@ -63,7 +93,9 @@ function FormSignup(props) {
                     <label>Email</label>
                     <input
                         name="email"
+                        type="email"
                         placeholder="Email"
+                        autoComplete="username"
                         value={info.email}
                         onChange={handleChange}
                     />
@@ -73,6 +105,7 @@ function FormSignup(props) {
                     <input
                         name="password"
                         type="password"
+                        autoComplete="new-password"
                         placeholder="Password"
                         value={info.password}
                         onChange={handleChange}
@@ -83,6 +116,7 @@ function FormSignup(props) {
                     <input
                         name="confPassword"
                         type="password"
+                        autoComplete="new-password"
                         placeholder="Confirm Password"
                         value={info.confPassword}
                         onChange={handleChange}
@@ -94,8 +128,13 @@ function FormSignup(props) {
                     <Link to="/login">Cancel</Link>
                 </div>
             </div>
+            <div>{info.message}</div>
         </form>
     );
 }
 
-export default FormSignup;
+const mapDispatchToProps = (dispatch) => ({
+    signupUser: () => dispatch(signupUser())
+});
+
+export default connect(null, mapDispatchToProps)(FormSignup);

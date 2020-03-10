@@ -31,3 +31,20 @@ input {
   width: 200px;
   border-radius: 3px;
 }
+
+header div {
+  background-color: lightgrey;
+}
+
+.navbar-link-tag {
+  padding: 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+  text-decoration: none;
+  font-weight: bolder;
+  color: white;
+}
+
+.navbar-link-tag:hover {
+  background-color: rgba(128, 128, 128, 0.15);
+}
