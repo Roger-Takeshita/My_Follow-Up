@@ -36,6 +36,57 @@ header div {
   background-color: lightgrey;
 }
 
+.MuiToolbar-root {
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.MuiToolbar-root > a:first-child {
+  display: flex;
+  align-items: center;
+  margin-left: 0px;
+}
+
+.MuiToolbar-root a:first-child:hover > span {
+  color: rgb(101, 148, 250);
+}
+.navbar-icon {
+  margin-right: 10px !important;
+}
+
+.navbar-search {
+  position: relative;  
+  border-radius: 3px;
+  margin-left: 10px;
+}
+
+.navbar-search-input {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: darkgray !important;
+  border-radius: 3px;
+  padding: 2px 15px 2px 40px;
+  min-width: 130px;
+  width: 25vw;
+}
+
+.navbar-search-input input:focus {
+  color: black !important;
+}
+
+.navbar-search-input:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-search-icon {
+  height: 100%;
+  padding-left: 10px;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .navbar-link-tag {
   padding: 10px;
   border-radius: 3px;
@@ -47,4 +98,29 @@ header div {
 
 .navbar-link-tag:hover {
   background-color: rgba(128, 128, 128, 0.15);
+}
+
+.navbar-logged-user {
+  display: flex;
+}
+
+.navbar-logged-user a:first-child:hover > svg {
+  color: rgb(101, 148, 250);
+}
+
+.navbar-logged-user a:last-child {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logged-user a:last-child:hover > svg {
+  color: rgb(101, 148, 250);
+}
+
+.sidebar-list {
+  width: 230px;
+}
+
+.MuiButtonBase-root:hover div:first-child > svg { 
+  color: rgb(101, 148, 250);
 }

@@ -10,7 +10,7 @@ import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 function App(props) {
     return (
         <div className="App">
-            <Navbar />
+            <Navbar history={props.history} />
             <main>
                 <Switch>
                     <Route exact path="/" render={() => <HomePage />} />

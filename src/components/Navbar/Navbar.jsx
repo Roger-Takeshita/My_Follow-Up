@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { Link } from 'react-router-dom';
-import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -11,76 +9,59 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { connect } from 'react-redux';
-import tokenService from '../../utils/tokenService';
-import { token } from 'morgan';
+import { logoutUser } from '../../redux/user';
+import Icon from '@material-ui/core/Icon';
+import apiService from '../../utils/apiService';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
+import TimelineIcon from '@material-ui/icons/Timeline';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1
-    },
-    menuButton: {
-        marginRight: theme.spacing(2)
-    },
-    title: {
-        flexGrow: 1
-    },
-    list: {
-        width: 250
-    },
-    fullList: {
-        width: 'auto'
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25)
-        },
-        marginRight: theme.spacing(2),
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(3),
-            width: 'auto'
-        }
-    },
-    searchIcon: {
-        width: theme.spacing(7),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    inputRoot: {
-        color: 'inherit'
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 7),
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: 200
-        }
+const searchReducer = (state, action) => {
+    switch (action.type) {
+        case 'UPDATE_INPUT':
+            return {
+                [action.payload.name]: action.payload.value
+            };
+        case 'CLEAR_INPUT':
+            return {
+                search: ''
+            };
+        default:
+            return state;
     }
-}));
+};
 
 function Navbar(props) {
-    const classes = useStyles();
-
     const [state, setState] = React.useState({
-        top: false,
-        left: false,
-        bottom: false,
         right: false
     });
+
+    const [search, setSearch] = useReducer(searchReducer, { search: '' });
+
+    function handleChange(e) {
+        setSearch({
+            type: 'UPDATE_INPUT',
+            payload: e.target
+        });
+    }
+
+    async function keyPressed(e) {
+        if (e.key === 'Enter') {
+            if (search.search !== '') {
+                try {
+                    const data = await apiService.search(search.search);
+                    setSearch({ type: 'CLEAR_INPUT' });
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        }
+    }
 
     const toggleDrawer = (side, open) => (event) => {
         if (
@@ -90,54 +71,64 @@ function Navbar(props) {
             return;
         }
 
-        setState({ ...state, [side]: open });
+        setState({ [side]: open });
     };
 
     const sideList = (side) => (
         <div
-            className={classes.list}
+            className="sidebar-list"
             role="presentation"
             onClick={toggleDrawer(side, false)}
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
-                    (text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    )
-                )}
+                <ListItem button onClick={() => props.history.push('/new')}>
+                    <ListItemIcon>
+                        <AddBoxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="New Application" />
+                </ListItem>
+                <ListItem button onClick={() => props.history.push('/summary')}>
+                    <ListItemIcon>
+                        <TimelineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Summary" />
+                </ListItem>
+                <ListItem
+                    button
+                    onClick={() => props.history.push('/contacts')}
+                >
+                    <ListItemIcon>
+                        <ContactMailIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Contacts" />
+                </ListItem>
             </List>
             <Divider />
             <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
+                <ListItem button onClick={props.logout}>
+                    <ListItemIcon>
+                        <MeetingRoomIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Log Out" />
+                </ListItem>
             </List>
         </div>
     );
 
     const navNotLoggedin = props.fullName ? (
-        <div>
+        <div className="navbar-logged-user">
             <Link className="navbar-link-tag" color="inherit" to="/new">
-                +
+                <AddCircleOutlineIcon />
             </Link>
             <Link
                 className="navbar-link-tag"
                 color="inherit"
-                to=""
-                onClick={() => tokenService.removeToken()}
+                to="#"
+                onClick={toggleDrawer('right', true)}
             >
-                {props.fullName}
+                {props.fullName} &nbsp;
+                <MenuIcon />
             </Link>
         </div>
     ) : (
@@ -150,40 +141,40 @@ function Navbar(props) {
             </Link>
         </div>
     );
+
     return (
-        <div className={classes.root}>
+        <div>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        onClick={toggleDrawer('left', true)}
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="menu"
-                    >
-                        <MenuIcon />
-                    </IconButton>
                     <Link className="navbar-link-tag" color="inherit" to="/">
-                        Home
+                        <Icon>home</Icon>&nbsp;Home
                     </Link>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
+                    <div
+                        className="navbar-search"
+                        style={{ display: props.fullName ? '' : 'none' }}
+                    >
+                        <div className="navbar-search-icon">
                             <SearchIcon />
                         </div>
                         <InputBase
                             placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput
-                            }}
+                            className="navbar-search-input"
+                            name="search"
                             inputProps={{ 'aria-label': 'search' }}
+                            value={search.search}
+                            onChange={handleChange}
+                            onKeyPress={keyPressed}
                         />
                     </div>
                     {navNotLoggedin}
                 </Toolbar>
             </AppBar>
-            <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
-                {sideList('left')}
+            <Drawer
+                anchor="right"
+                open={state.right}
+                onClose={toggleDrawer('right', false)}
+            >
+                {sideList('right')}
             </Drawer>
         </div>
     );
@@ -201,4 +192,8 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(Navbar);
+const mapDispatchToProps = (dispatch) => ({
+    logout: () => dispatch(logoutUser())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
