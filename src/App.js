@@ -7,16 +7,19 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 
-function App() {
+function App(props) {
     return (
         <div className="App">
             <Navbar />
             <main>
                 <Switch>
+                    <Route exact path="/" render={() => <HomePage />} />
                     <Route
                         exact
                         path="/new"
-                        render={(props) => <NewApplicationPage {...props} />}
+                        render={({ history }) => (
+                            <NewApplicationPage history={history} />
+                        )}
                     />
                     <Route
                         exact
@@ -31,11 +34,6 @@ function App() {
                         render={({ history }) => (
                             <SignupPage history={history} />
                         )}
-                    />
-                    <Route
-                        exact
-                        path="/"
-                        render={(props) => <HomePage {...props} />}
                     />
                     <Route render={() => <Redirect to={{ pathname: '/' }} />} />
                 </Switch>

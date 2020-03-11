@@ -13,7 +13,7 @@ function signup(info) {
     return fetch(`${BASE_URL}/signup`, options)
         .then((res) => {
             if (res.ok) return res.json();
-            throw new Error('Bad credentials');
+            throw new Error('Email already taken!');
         })
         .then(({ token }) => {
             tokenService.setToken(token);
@@ -31,7 +31,7 @@ function login(info) {
     return fetch(`${BASE_URL}/login`, options)
         .then((res) => {
             if (res.ok) return res.json();
-            throw new Error('Email already taken');
+            throw new Error('Bad credentials!');
         })
         .then(({ token }) => {
             tokenService.setToken(token);

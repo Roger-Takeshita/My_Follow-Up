@@ -12,20 +12,11 @@ function formReducer(state, action) {
                 [action.payload.name]: action.payload.value
             };
         default:
-            return {
-                firstName: '',
-                lastName: '',
-                email: '',
-                password: '',
-                confPassword: '',
-                message: `Unsupported action type ${action.type}`
-            };
-        // throw new Error(`Unsupported action type ${action.type}`);
+            throw new Error(`Unsupported action type ${action.type}`);
     }
 }
 
 function FormSignup(props) {
-    console.log(props);
     const initialState = {
         firstName: '',
         lastName: '',
@@ -36,7 +27,6 @@ function FormSignup(props) {
     };
 
     const [info, setInfo] = useReducer(formReducer, initialState);
-
     function handleChange(e) {
         setInfo({
             type: 'UPDATE_INPUT',

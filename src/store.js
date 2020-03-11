@@ -2,10 +2,10 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import userReducer from './redux/user';
 import logger from 'redux-logger';
 
-const rootReducer = combineReducers({
+const reducers = combineReducers({
     userReducer
 });
 
-const store = createStore(rootReducer, applyMiddleware(logger));
+const store = createStore(reducers, applyMiddleware(logger));
 
 export default store;

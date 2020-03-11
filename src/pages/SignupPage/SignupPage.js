@@ -5,7 +5,7 @@ function SignupPage(props) {
     return (
         <div>
             <h1>SignupPage</h1>
-            <FormSignup />
+            <FormSignup history={props.history} />
         </div>
     );
 }

@@ -7,30 +7,41 @@ function createJWT(user) {
 }
 
 async function signup(req, res) {
-    const user = new User(req.body);
     try {
-        await user.save();
-        const token = createJWT(user);
-        res.json({ token });
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            const newUser = new User(req.body);
+            try {
+                await newUser.save();
+                const token = createJWT(newUser);
+
+                res.json({ token });
+            } catch (err) {
+                console.log(err);
+                res.status(500).json({ err: 'Something went wrong' });
+            }
+        } else {
+            res.status(400).json({ err: 'Email already taken' });
+        }
     } catch (err) {
-        res.status(401).json({ err: 'bad credentials' });
+        res.status(500).json({ err: 'Something went wrong' });
     }
 }
 
 async function login(req, res) {
     try {
         const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(401).json({ err: 'bad credentials' });
+        if (!user) return res.status(404).json({ err: "User doesn't exist!" });
         user.comparePassword(req.body.password, (err, isMatch) => {
             if (isMatch) {
                 const token = createJWT(user);
                 res.json({ token });
             } else {
-                return res.status(401).json({ err: 'bad credentials' });
+                return res.status(400).json({ err: 'Wrong password!' });
             }
         });
     } catch (err) {
-        res.status(401).json({ err: 'bad credentials' });
+        res.status(500).json({ err: 'Something went wrong' });
     }
 }
 

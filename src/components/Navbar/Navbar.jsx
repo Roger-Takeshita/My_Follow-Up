@@ -15,6 +15,9 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
+import { connect } from 'react-redux';
+import tokenService from '../../utils/tokenService';
+import { token } from 'morgan';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ButtonAppBar() {
+function Navbar(props) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
@@ -123,6 +126,30 @@ export default function ButtonAppBar() {
         </div>
     );
 
+    const navNotLoggedin = props.fullName ? (
+        <div>
+            <Link className="navbar-link-tag" color="inherit" to="/new">
+                +
+            </Link>
+            <Link
+                className="navbar-link-tag"
+                color="inherit"
+                to=""
+                onClick={() => tokenService.removeToken()}
+            >
+                {props.fullName}
+            </Link>
+        </div>
+    ) : (
+        <div>
+            <Link className="navbar-link-tag" color="inherit" to="/login">
+                Log In
+            </Link>
+            <Link className="navbar-link-tag" color="inherit" to="/signup">
+                Sign Up
+            </Link>
+        </div>
+    );
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -152,23 +179,7 @@ export default function ButtonAppBar() {
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    <Link className="navbar-link-tag" color="inherit" to="/new">
-                        +
-                    </Link>
-                    <Link
-                        className="navbar-link-tag"
-                        color="inherit"
-                        to="/login"
-                    >
-                        Log In
-                    </Link>
-                    <Link
-                        className="navbar-link-tag"
-                        color="inherit"
-                        to="/signup"
-                    >
-                        Sign Up
-                    </Link>
+                    {navNotLoggedin}
                 </Toolbar>
             </AppBar>
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
@@ -177,3 +188,17 @@ export default function ButtonAppBar() {
         </div>
     );
 }
+
+const mapStateToProps = (state) => {
+    if (state.userReducer) {
+        return {
+            fullName: `${state.userReducer.firstName} ${state.userReducer.lastName}`
+        };
+    } else {
+        return {
+            fullName: null
+        };
+    }
+};
+
+export default connect(mapStateToProps)(Navbar);

@@ -37,7 +37,7 @@ function FormLogin(props) {
         try {
             await userService.login(info);
             props.loginUser();
-            props.history.push('/login');
+            props.history.push('/');
         } catch (err) {
             console.log(err);
             setInfo({ ...info, message: 'Invalid Credentials!' });
