@@ -1,3 +1,15 @@
+$iconColorHover: rgb(101, 148, 250);
+$navbarButtonColorHover: rgba(128, 128, 128, 0.15);
+$navbarBGColor: rgba(255, 255, 255, 0.25);
+$navbarInputBGColor: rgba(255, 255, 255, 0.5);
+$borderRadius: 3px;
+
+@mixin displayFlex ($justifyContent){
+  display: flex;
+  justify-content: $justifyContent;
+  align-items: center;
+}
+
 body {
   margin: 0;
   text-align: center;
@@ -16,10 +28,8 @@ body {
 }
 
 .form-input-login-signup {
-  display: flex;
-  justify-content: flex-end;
+  @include displayFlex(flex-end);
   margin-bottom: 10px;
-  align-items: center;
 }
 
 .form-input-login-signup label {
@@ -29,7 +39,7 @@ body {
 input {
   height: 20px;
   width: 200px;
-  border-radius: 3px;
+  border-radius: $borderRadius;
 }
 
 header div {
@@ -39,42 +49,40 @@ header div {
 .MuiToolbar-root {
   flex-grow: 1;
   justify-content: space-between;
+  a:first-child {
+    @include displayFlex(center);
+    margin-left: 0px;
+  }
+  a:first-child:hover > span {
+    color: $iconColorHover;
+  }
 }
 
-.MuiToolbar-root > a:first-child {
-  display: flex;
-  align-items: center;
-  margin-left: 0px;
-}
-
-.MuiToolbar-root a:first-child:hover > span {
-  color: rgb(101, 148, 250);
-}
 .navbar-icon {
   margin-right: 10px !important;
 }
 
 .navbar-search {
   position: relative;  
-  border-radius: 3px;
+  border-radius: $borderRadius;
   margin-left: 10px;
 }
 
 .navbar-search-input {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: $navbarBGColor;
   color: darkgray !important;
-  border-radius: 3px;
+  border-radius: $borderRadius;
   padding: 2px 15px 2px 40px;
   min-width: 130px;
   width: 25vw;
+  &:hover {
+    background-color: $navbarInputBGColor;
+    color: black !important;
+  }
 }
 
-.navbar-search-input input:focus {
+.MuiInputBase-input:focus{
   color: black !important;
-}
-
-.navbar-search-input:hover {
-  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .navbar-search-icon {
@@ -89,32 +97,27 @@ header div {
 
 .navbar-link-tag {
   padding: 10px;
-  border-radius: 3px;
+  border-radius: $borderRadius;
   margin-left: 10px;
   text-decoration: none;
   font-weight: bolder;
   color: white;
-}
-
-.navbar-link-tag:hover {
-  background-color: rgba(128, 128, 128, 0.15);
+  &:hover {
+    background-color: $navbarButtonColorHover;
+  }
 }
 
 .navbar-logged-user {
-  display: flex;
-}
-
-.navbar-logged-user a:first-child:hover > svg {
-  color: rgb(101, 148, 250);
-}
-
-.navbar-logged-user a:last-child {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-logged-user a:last-child:hover > svg {
-  color: rgb(101, 148, 250);
+  @include displayFlex(center);
+  a:first-child:hover > svg {
+    color: $iconColorHover;
+  }
+  a:last-child {
+    @include displayFlex(center)
+  }
+  a:last-child:hover > svg {
+    color: $iconColorHover;
+  }
 }
 
 .sidebar-list {
@@ -122,5 +125,5 @@ header div {
 }
 
 .MuiButtonBase-root:hover div:first-child > svg { 
-  color: rgb(101, 148, 250);
+  color: $iconColorHover;
 }
