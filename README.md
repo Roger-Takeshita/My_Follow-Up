@@ -1,11 +1,9 @@
 <h1 id='summary'>Summary</h1>
 
 * [Follow-Up App](#followup)
-  * [Basic Back-end](#basic)
+  * [Back-end Node.js](#basic)
     * [Installation](#installation)
-    * [CSS and Initial Structure](#files)
-      * [CSS Family Fonts](#fonts)
-      * [Server Basic Structure](#serverstructure)
+    * [Basic Server Structure](#serverstructure)
     * [Basic Server](#baiscserver)
     * [dotenv File](#dotenv)
     * [Database](#database)
@@ -24,7 +22,31 @@
       * [Application Controller](#controllersapplications)
       * [Add API Routes to the Server](#serverapis)
     * [Server Structure](#serverstructure1)
-    * [         ](#xxxxxxxx)
+  * [Front-End React](#frontend)
+    * [Index.html](#index)
+      * [CSS Family Fonts](#fonts)
+  * [Redux](#redux)
+    * [Redux Folder/Files](#reduxfiles)
+    * [Redux - User](#reduxuser)
+    * [Store](#store)
+  * [index.js](#indexjs1)
+  * [API Folder](#apiutils)
+    * [API Folders/Files](#folderfilesapi)
+    * [tokenService.js](#apitoken)
+    * [userService.js](#apiuser)
+    * [apiService.js](#apiservice)
+  * [Components](#components)
+    * [FormLogin.jsx](#formlogin)
+    * [FormSignup.jsx](#formsignup)
+    * [Navbar.jsx](#navbar)
+  * [Pages](#pages)
+    * [HomePage.js](#homepage)
+    * [LoginPage.js](#loginpage)
+    * [NewApplicationPage.js](#newpage)
+    * [SignupPage.js](#signuppage)
+  * [CSS Folder](#css)
+  * [App.js](#app)
+  * [Front-End Structure](#appstructure)
 
 <h1 id='followup'>Follow-Up App</h1>
 
@@ -41,21 +63,9 @@
     npm i @material-ui/core @material-ui/icons @material-ui/icons 
 ```
 
-<h3 id='files'>CSS and Initial Structure</h3>
+<h3 id='serverstructure'>Basic Server Structure</h3>
 
 [Go Back to Summary](#summary)
-
-
-<h4 id='fonts'>CSS Family Fonts</h4>
-
-* Add to html file:
-
-    ```html
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-    ```
-
-<h4 id='serverstructure'>Server Basic Structure</h4>
 
 * Initial Structure
   
@@ -479,6 +489,933 @@
     │   ├── index.js
     │   ├── serviceWorker.js
     │   └── setupTests.js
+    ├── .env
+    ├── package-lock.json
+    ├── package.json
+    ├── Procfile
+    └── server.js
+```
+
+<h2 id='frontend'>Front-End React</h2>
+
+<h3 id='index'>Index.html</h3>
+
+[Go Back to Summary](#summary)
+
+<h4 id='fonts'>CSS Family Fonts</h4>
+
+* Add to `public/index.html` file:
+
+    ```html
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    ```
+
+<h3 id='redux'>Redux</h3>
+
+[Go Back to Summary](#summary)
+
+<h4 id='reduxfiles'>Redux Folder/Files</h4>
+
+```Bash
+    touch redux/user.js
+    touch store.js
+```
+<h4 id='reduxuser'>Redux - User</h4>
+
+* In `redux/user.js` add:
+
+    ```JavaScript
+        //! Constants
+        const LOGIN_USER = 'LOGIN_USER';
+        const LOGOUT_USER = 'LOGOUT_USER';
+        const SIGNUP_USER = 'SIGNUP_USER';
+
+        //! Actions
+        export const loginUser = () => ({
+            type: LOGIN_USER,
+            payload: null
+        });
+
+        export const logoutUser = () => {
+            // logout function
+            return {
+                type: LOGOUT_USER
+            };
+        };
+
+        export const signupUser = () => ({
+            type: SIGNUP_USER,
+            payload: null
+        });
+
+        //! Reducers
+        function userReducer(state = null, action) {
+            switch (action.type) {
+                case LOGIN_USER:
+                    return action.payload;
+                case LOGOUT_USER:
+                    return null;
+                case SIGNUP_USER:
+                    return action.payload;
+                default:
+                    return state;
+            }
+        }
+
+        //! Export reducer as default
+        export default userReducer;
+    ```
+
+<h4 id='store'>Store</h4>
+
+```JavaScript
+    import { createStore, combineReducers, applyMiddleware } from 'redux';  //! Import createStore, combineReducer and applyMiddleware from redux
+    import userReducer from './redux/user';                                 //! Import userReducer from user redux
+    import logger from 'redux-logger';                                      //! Import redux-logger - A middleware to log each step on the console
+
+    const reducers = combineReducers({                                          //+ combineReducers, here is where you combine multiple reducers into one object
+        userReducer
+    });
+
+    const store = createStore(reducers, applyMiddleware(logger));               //+ createStore and applyMiddleware(logger) - logger in our case
+
+    export default store;                                                       //+ Export default store
+```
+
+<h3 id='indexjs1'>index.js</h3>
+
+[Go Back to Summary](#summary)
+
+* Configure the react router and redux store (provider)
+* in `src/index.js` add:
+
+    ```JavaScript
+        import React from 'react';
+        import ReactDOM from 'react-dom';
+        import './index.css';
+        import App from './App';
+        import * as serviceWorker from './serviceWorker';
+        import { BrowserRouter as Router, Route } from 'react-router-dom';  //! Import BrowserRouter and Route
+        import { Provider } from 'react-redux';                             //! Import redux Provider to connect the store
+        import store from './store';                                        //! Import the store
+
+        ReactDOM.render(
+            <Provider store={store}>                                            //+ Wrap the main app and pass down the store 
+                <Router>                                                            //- Wrapt the main app with Router component, so we can use different routers
+                    <Route component={App} />                                           //? Router - render component App
+                </Router>
+            </Provider>,
+            document.getElementById('root')
+        );
+
+        serviceWorker.unregister();
+    ```
+
+<h3 id='apiutils'>API Folder</h3>
+
+[Go Back to Summary](#summary)
+
+<h4 id='folderfilesapi'>API Folders/Files</h4>
+
+```Bash
+    touch utils/apiService.js
+    touch utils/tokenService.js
+    touch utils/userService.js
+```
+<h4 id='apitoken'>tokenService.js</h4>
+
+```JavaScript
+    //! Storing, retrieving and removing tokens from localStorage
+    function setToken(token) {
+        if (token) {
+            localStorage.setItem('token', token);
+        } else {
+            localStorage.removeItem('token');
+        }
+    }
+
+    //! Getting token and checking if it's still valid
+    function getToken() {
+        let token = localStorage.getItem('token');
+        if (token) {
+            //? atob() - decoding a base-64 encoded string. It is used to decode a string of data which has been encoded using the btoa() method.
+            //? JSON.parse - Converting back a json object
+            const payload = JSON.parse(atob(token.split('.')[1]));                             
+            if (payload.exp < Date.now() / 1000) {
+                localStorage.removeItem('token');
+                token = null;
+            }
+        }
+        return token;
+    }
+
+    //! Getting user from token
+    function getUserFromToken() {
+        const token = getToken();
+        return token ? JSON.parse(atob(token.split('.')[1])).user : null;
+    }
+
+    //! Remove token
+    function removeToken() {
+        localStorage.removeItem('token');
+    }
+
+    export default {
+        setToken,
+        getToken,
+        getUserFromToken,
+        removeToken
+    };
+```
+<h4 id='apiuser'>userService.js</h4>
+
+```JavaScript
+    import tokenService from './tokenService';
+
+    const BASE_URL = '/api/users';
+
+    function signup(info) {
+        const options = {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(info)
+        };
+        return fetch(`${BASE_URL}/signup`, options)
+            .then((res) => {
+                if (res.ok) return res.json();
+                throw new Error('Email already taken!');
+            })
+            .then(({ token }) => {
+                tokenService.setToken(token);
+            });
+    }
+
+    function login(info) {
+        const options = {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(info)
+        };
+        return fetch(`${BASE_URL}/login`, options)
+            .then((res) => {
+                if (res.ok) return res.json();
+                throw new Error('Bad credentials!');
+            })
+            .then(({ token }) => {
+                tokenService.setToken(token);
+            });
+    }
+
+    function logout() {
+        tokenService.removeToken();
+    }
+
+    function getUser() {
+        return tokenService.getUserFromToken();
+    }
+
+    export default {
+        signup,
+        login,
+        logout,
+        getUser
+    };
+```
+<h4 id='apiservice'>apiService.js</h4>
+
+```JavaScript
+    import tokenService from './tokenService';
+
+    const BASE_URL = '/api/search';
+
+    function search(data) {
+        const option = {
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                Authorization: 'Baerer ' + tokenService.getToken()
+            })
+        };
+        return fetch(`${BASE_URL}/${data}`, option).then((res) => {
+            if (res.ok) return res.json();
+            throw new Error("Item doesn't exist");
+        });
+    }
+
+    export default {
+        search
+    };
+```
+
+<h3 id='components'>Components</h3>
+
+[Go Back to Summary](#summary)
+
+<h4 id='folderfilescomponents'>Create Components Folders/Files</h4>
+
+```Bash
+    touch components/FormLogin/FormLogin.jsx
+    touch components/FormSignup/FormSignup.jsx
+    touch components/Navbar/Navbar.jsx
+```
+
+<h4 id='formlogin'>FormLogin.jsx</h4>
+
+* In `src/components/FormLogin/FormLogin.jsx` add:
+
+    ```JavaScript
+        import React, { useReducer } from 'react';
+        import { Link } from 'react-router-dom';
+        import userService from '../../utils/userService';
+        import { connect } from 'react-redux';
+        import { loginUser } from '../../redux/user';
+
+        function formReducer(state, action) {
+            switch (action.type) {
+                case 'UPDATE_INPUT':
+                    return {
+                        ...state,
+                        [action.payload.name]: action.payload.value
+                    };
+                default:
+                    throw new Error(`Unsuported action ${action.type}`);
+            }
+        }
+
+        function FormLogin(props) {
+            const initialState = {
+                email: '',
+                password: '',
+                message: ''
+            };
+
+            const [info, setInfo] = useReducer(formReducer, initialState);
+
+            function handleChange(e) {
+                setInfo({
+                    type: 'UPDATE_INPUT',
+                    payload: e.target
+                });
+            }
+
+            async function handleSubmit(e) {
+                e.preventDefault();
+                try {
+                    await userService.login(info);
+                    props.loginUser();
+                    props.history.push('/');
+                } catch (err) {
+                    console.log(err);
+                    setInfo({ ...info, message: 'Invalid Credentials!' });
+                }
+            }
+
+            function isFormValid() {
+                return !(info.email && info.password);
+            }
+
+            return (
+                <form onSubmit={handleSubmit}>
+                    <div className="form-login">
+                        <div className="form-input-login-signup">
+                            <label>Email</label>
+                            <input
+                                name="email"
+                                type="email"
+                                autoComplete="username"
+                                placeholder="Email"
+                                value={info.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-input-login-signup">
+                            <label>Password</label>
+                            <input
+                                name="password"
+                                type="password"
+                                autoComplete="new-password"
+                                placeholder="Password"
+                                value={info.password}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <button disabled={isFormValid()}>Log In</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <Link to="/signup">Cancel</Link>
+                        </div>
+                    </div>
+                    <div>{info.message}</div>
+                </form>
+            );
+        }
+
+        const mapDispatchToProps = (dispatch) => ({
+            loginUser: () => dispatch(loginUser())
+        });
+
+        export default connect(null, mapDispatchToProps)(FormLogin);
+    ```
+
+<h4 id='formsignup'>FormSignup.jsx</h4>
+
+* In `src/components/FormSignup/FormSignup.jsx` add:
+  
+    ```JavaScript
+        import React, { useReducer } from 'react';
+        import { Link } from 'react-router-dom';
+        import userService from '../../utils/userService';
+        import { connect } from 'react-redux';
+        import { signupUser } from '../../redux/user';
+
+        function formReducer(state, action) {
+            switch (action.type) {
+                case 'UPDATE_INPUT':
+                    return {
+                        ...state,
+                        [action.payload.name]: action.payload.value
+                    };
+                default:
+                    throw new Error(`Unsupported action type ${action.type}`);
+            }
+        }
+
+        function FormSignup(props) {
+            const initialState = {
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                confPassword: '',
+                message: ''
+            };
+
+            const [info, setInfo] = useReducer(formReducer, initialState);
+            function handleChange(e) {
+                setInfo({
+                    type: 'UPDATE_INPUT',
+                    payload: e.target
+                });
+            }
+
+            async function handleSubmit(e) {
+                e.preventDefault();
+                try {
+                    await userService.signup(info);
+                    props.signupUser();
+                    props.history.push('/');
+                } catch (err) {
+                    console.log(err);
+                    setInfo({
+                        ...info,
+                        message: 'Invalid Credentials!'
+                    });
+                }
+            }
+
+            function isFormValid() {
+                return !(
+                    info.firstName &&
+                    info.lastName &&
+                    info.email &&
+                    info.password === info.confPassword
+                );
+            }
+
+            return (
+                <form onSubmit={handleSubmit}>
+                    <div className="form-signup">
+                        <div className="form-input-login-signup">
+                            <label>First Name</label>
+                            <input
+                                name="firstName"
+                                placeholder="First Name"
+                                value={info.firstName}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-input-login-signup">
+                            <label>Last Name</label>
+                            <input
+                                name="lastName"
+                                placeholder="Last Name"
+                                value={info.lastName}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-input-login-signup">
+                            <label>Email</label>
+                            <input
+                                name="email"
+                                type="email"
+                                placeholder="Email"
+                                autoComplete="username"
+                                value={info.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-input-login-signup">
+                            <label>Password</label>
+                            <input
+                                name="password"
+                                type="password"
+                                autoComplete="new-password"
+                                placeholder="Password"
+                                value={info.password}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-input-login-signup">
+                            <label>Confirm Password</label>
+                            <input
+                                name="confPassword"
+                                type="password"
+                                autoComplete="new-password"
+                                placeholder="Confirm Password"
+                                value={info.confPassword}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <button disabled={isFormValid()}>Sign Up</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <Link to="/login">Cancel</Link>
+                        </div>
+                    </div>
+                    <div>{info.message}</div>
+                </form>
+            );
+        }
+
+        const mapDispatchToProps = (dispatch) => ({
+            signupUser: () => dispatch(signupUser())
+        });
+
+        export default connect(null, mapDispatchToProps)(FormSignup);
+    ```
+
+<h4 id='navbar'>Navbar.jsx</h4>
+
+* In `src/components/Navbar/Navbar/jsx` add:
+  
+    ```JavaScript
+        import React, { useReducer } from 'react';
+        import { Link } from 'react-router-dom';
+        import AppBar from '@material-ui/core/AppBar';
+        import Toolbar from '@material-ui/core/Toolbar';
+        import MenuIcon from '@material-ui/icons/Menu';
+        import Drawer from '@material-ui/core/Drawer';
+        import List from '@material-ui/core/List';
+        import Divider from '@material-ui/core/Divider';
+        import ListItem from '@material-ui/core/ListItem';
+        import ListItemIcon from '@material-ui/core/ListItemIcon';
+        import ListItemText from '@material-ui/core/ListItemText';
+        import SearchIcon from '@material-ui/icons/Search';
+        import InputBase from '@material-ui/core/InputBase';
+        import { connect } from 'react-redux';
+        import { logoutUser } from '../../redux/user';
+        import Icon from '@material-ui/core/Icon';
+        import apiService from '../../utils/apiService';
+        import AddBoxIcon from '@material-ui/icons/AddBox';
+        import ContactMailIcon from '@material-ui/icons/ContactMail';
+        import TimelineIcon from '@material-ui/icons/Timeline';
+        import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+        import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+
+        const searchReducer = (state, action) => {
+            switch (action.type) {
+                case 'UPDATE_INPUT':
+                    return {
+                        [action.payload.name]: action.payload.value
+                    };
+                case 'CLEAR_INPUT':
+                    return {
+                        search: ''
+                    };
+                default:
+                    return state;
+            }
+        };
+
+        function Navbar(props) {
+            const [state, setState] = React.useState({
+                right: false
+            });
+
+            const [search, setSearch] = useReducer(searchReducer, { search: '' });
+
+            function handleChange(e) {
+                setSearch({
+                    type: 'UPDATE_INPUT',
+                    payload: e.target
+                });
+            }
+
+            async function keyPressed(e) {
+                if (e.key === 'Enter') {
+                    if (search.search !== '') {
+                        try {
+                            const data = await apiService.search(search.search);
+                            setSearch({ type: 'CLEAR_INPUT' });
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }
+                }
+            }
+
+            const toggleDrawer = (side, open) => (event) => {
+                if (
+                    event.type === 'keydown' &&
+                    (event.key === 'Tab' || event.key === 'Shift')
+                ) {
+                    return;
+                }
+
+                setState({ [side]: open });
+            };
+
+            const sideList = (side) => (
+                <div
+                    className="sidebar-list"
+                    role="presentation"
+                    onClick={toggleDrawer(side, false)}
+                    onKeyDown={toggleDrawer(side, false)}
+                >
+                    <List>
+                        <ListItem button onClick={() => props.history.push('/new')}>
+                            <ListItemIcon>
+                                <AddBoxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="New Application" />
+                        </ListItem>
+                        <ListItem button onClick={() => props.history.push('/summary')}>
+                            <ListItemIcon>
+                                <TimelineIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Summary" />
+                        </ListItem>
+                        <ListItem
+                            button
+                            onClick={() => props.history.push('/contacts')}
+                        >
+                            <ListItemIcon>
+                                <ContactMailIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Contacts" />
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        <ListItem button onClick={props.logout}>
+                            <ListItemIcon>
+                                <MeetingRoomIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Log Out" />
+                        </ListItem>
+                    </List>
+                </div>
+            );
+
+            const navNotLoggedin = props.fullName ? (
+                <div className="navbar-logged-user">
+                    <Link className="navbar-link-tag" color="inherit" to="/new">
+                        <AddCircleOutlineIcon />
+                    </Link>
+                    <Link
+                        className="navbar-link-tag"
+                        color="inherit"
+                        to="#"
+                        onClick={toggleDrawer('right', true)}
+                    >
+                        {props.fullName} &nbsp;
+                        <MenuIcon />
+                    </Link>
+                </div>
+            ) : (
+                <div>
+                    <Link className="navbar-link-tag" color="inherit" to="/login">
+                        Log In
+                    </Link>
+                    <Link className="navbar-link-tag" color="inherit" to="/signup">
+                        Sign Up
+                    </Link>
+                </div>
+            );
+
+            return (
+                <div>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Link className="navbar-link-tag" color="inherit" to="/">
+                                <Icon>home</Icon>&nbsp;Home
+                            </Link>
+                            <div
+                                className="navbar-search"
+                                style={{ display: props.fullName ? '' : 'none' }}
+                            >
+                                <div className="navbar-search-icon">
+                                    <SearchIcon />
+                                </div>
+                                <InputBase
+                                    placeholder="Search…"
+                                    className="navbar-search-input"
+                                    name="search"
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    value={search.search}
+                                    onChange={handleChange}
+                                    onKeyPress={keyPressed}
+                                />
+                            </div>
+                            {navNotLoggedin}
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        anchor="right"
+                        open={state.right}
+                        onClose={toggleDrawer('right', false)}
+                    >
+                        {sideList('right')}
+                    </Drawer>
+                </div>
+            );
+        }
+
+        const mapStateToProps = (state) => {
+            if (state.userReducer) {
+                return {
+                    fullName: `${state.userReducer.firstName} ${state.userReducer.lastName}`
+                };
+            } else {
+                return {
+                    fullName: null
+                };
+            }
+        };
+
+        const mapDispatchToProps = (dispatch) => ({
+            logout: () => dispatch(logoutUser())
+        });
+
+        export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+    ```
+
+<h3 id='pages'>Pages</h3>
+
+[Go Back to Summary](#summary)
+
+<h4 id='homepage'>HomePage.js</h4>
+
+* in `scr/pages/HomePage/HomePage.js` add:
+  
+    ```JavaScript
+        import React from 'react';
+
+        function HomePage(props) {
+            return (
+                <div>
+                    <h1>HomePage</h1>
+                </div>
+            );
+        }
+
+        export default HomePage;
+    ```
+<h4 id='loginpage'>LoginPage.js</h4>
+
+* in `scr/pages/LoginPage/LoginPage.js` add:
+
+    ```JavaScript
+        import React from 'react';
+        import FormLogin from '../../components/FormLogin/FormLogin';
+
+        function LoginPage(props) {
+            return (
+                <div>
+                    <h1>LoginPage</h1>
+                    <FormLogin history={props.history} />
+                </div>
+            );
+        }
+
+        export default LoginPage;
+    ```
+
+<h4 id='newpage'>NewApplicationPage.js</h4>
+
+* in `scr/pages/NewApplicationPage/NewApplicationPage.js` add:
+
+    ```JavaScript
+        import React from 'react';
+
+        function NewApplicationPage(props) {
+            return (
+                <div>
+                    <h1>NewApplicationPage</h1>
+                </div>
+            );
+        }
+
+        export default NewApplicationPage;
+    ```
+
+<h4 id='signuppage'>SignupPage.js</h4>
+
+* in `scr/pages/HomePage/HomePage.js` add:
+
+    ```JavaScript
+        import React from 'react';
+        import FormSignup from '../../components/FormSignup/FormSignup';
+
+        function SignupPage(props) {
+            return (
+                <div>
+                    <h1>SignupPage</h1>
+                    <FormSignup history={props.history} />
+                </div>
+            );
+        }
+
+        export default SignupPage;
+    ```
+<h3 id='css'>CSS Folder</h3>
+
+[Go Back to Summary](#summary)
+
+* Centralize all css files into a single folder
+
+    ```Bash
+        .
+        └── src
+            └── css
+                ├── index.css
+                └── app.css
+    ```
+
+* We need to fix the css path from files:
+  * `App.js` and `index.js`
+
+<h3 id='app'>App.js</h3>
+
+[Go Back to Summary](#summary)
+
+* In `src/App.js` add:
+
+  * Change the **App** from class component to function component
+
+    ```JavaScript
+        import React from 'react';
+        import { Redirect, Route, Switch } from 'react-router-dom';
+        import './**css/**App.css';
+        import Navbar from './components/Navbar/Navbar';
+        import HomePage from './pages/HomePage/HomePage';
+        import LoginPage from './pages/LoginPage/LoginPage';
+        import SignupPage from './pages/SignupPage/SignupPage';
+        import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
+        import userService from './utils/userService';
+
+        function App(props) {
+            let pages = userService.getUser() ? (
+                <Switch>
+                    <Route
+                        exact
+                        path="/new"
+                        render={({ history }) => (
+                            <NewApplicationPage history={history} />
+                        )}
+                    />
+                    <Route exact path="/" render={() => <HomePage />} />
+                    <Route render={() => <Redirect to={{ pathname: '/' }} />} />
+                </Switch>
+            ) : (
+                <Switch>
+                    <Route
+                        exact
+                        path="/login"
+                        render={({ history }) => <LoginPage history={history} />}
+                    />
+                    <Route
+                        exact
+                        path="/signup"
+                        render={({ history }) => <SignupPage history={history} />}
+                    />
+                    <Route exact path="/" render={() => <HomePage />} />
+                    <Route render={() => <Redirect to={{ pathname: '/login' }} />} />
+                </Switch>
+            );
+
+            return (
+                <div className="App">
+                    <Navbar history={props.history} />
+                    <main>{pages}</main>
+                    <footer>
+                        <div>Footer</div>
+                    </footer>
+                </div>
+            );
+        }
+
+        export default App;
+    ```
+
+<h3 id='appstructure'>App Structure</h3>
+
+[Go Back to Summary](#summary)
+
+```Bash
+    .
+    ├── config
+    │   ├── auth.js
+    │   └── database.js
+    ├── controllers
+    │   ├── applications.js
+    │   └── users.js
+    ├── models
+    │   └── user.js
+    ├── node_modules
+    ├── public
+    │   ├── favicon.ico
+    │   ├── index.html
+    │   └── robots.txt
+    ├── routes
+    │   ├── requests.js
+    │   └── users.js
+    ├── src
+    │   ├── components
+    │   │   ├── FormLogin
+    │   │   │   └── FromLogin.jsx
+    │   │   ├── FormSignup
+    │   │   │   └── FormSignup.jsx
+    │   │   └── Navbar
+    │   │       └── Navbar.jsx
+    │   ├── css
+    │   │   ├── App.css
+    │   │   └── index.css
+    │   ├── pages
+    │   │   ├── HomePage
+    │   │   │   └── HomePage.js
+    │   │   ├── LoginPage
+    │   │   │   └── LoginPage.js
+    │   │   ├── NewApplicationPage
+    │   │   │   └── NewApplicationPage.js
+    │   │   └── SignupPage
+    │   │       └── SignupPage.js
+    │   ├── redux
+    │   │   └── user.js
+    │   ├── utils
+    │   │   ├── apiService.js
+    │   │   ├── tokenService.js
+    │   │   └── userService.js
+    │   ├── App.js
+    │   ├── index.js
+    │   ├── serviceWorker.js
+    │   ├── setupTests.js
+    │   └── store.js
     ├── .env
     ├── package-lock.json
     ├── package.json
