@@ -13,13 +13,13 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../redux/user';
-import Icon from '@material-ui/core/Icon';
 import apiService from '../../utils/apiService';
+import HomeIcon from '@material-ui/icons/Home';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
-import TimelineIcon from '@material-ui/icons/Timeline';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import PersonIcon from '@material-ui/icons/Person';
 
 const searchReducer = (state, action) => {
     switch (action.type) {
@@ -48,6 +48,11 @@ function Navbar(props) {
             type: 'UPDATE_INPUT',
             payload: e.target
         });
+    }
+
+    function logoutFn() {
+        props.logout();
+        props.history.push('/');
     }
 
     async function keyPressed(e) {
@@ -82,17 +87,17 @@ function Navbar(props) {
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
+                <ListItem button onClick={() => props.history.push('/')}>
+                    <ListItemIcon>
+                        <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Home" />
+                </ListItem>
                 <ListItem button onClick={() => props.history.push('/new')}>
                     <ListItemIcon>
                         <AddBoxIcon />
                     </ListItemIcon>
                     <ListItemText primary="New Application" />
-                </ListItem>
-                <ListItem button onClick={() => props.history.push('/summary')}>
-                    <ListItemIcon>
-                        <TimelineIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Summary" />
                 </ListItem>
                 <ListItem
                     button
@@ -103,10 +108,16 @@ function Navbar(props) {
                     </ListItemIcon>
                     <ListItemText primary="Contacts" />
                 </ListItem>
+                <ListItem button onClick={() => props.history.push('/profile')}>
+                    <ListItemIcon>
+                        <PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Profile" />
+                </ListItem>
             </List>
             <Divider />
             <List>
-                <ListItem button onClick={props.logout}>
+                <ListItem button onClick={() => logoutFn()}>
                     <ListItemIcon>
                         <MeetingRoomIcon />
                     </ListItemIcon>
@@ -118,25 +129,26 @@ function Navbar(props) {
 
     const navNotLoggedin = props.fullName ? (
         <div className="navbar-logged-user">
-            <Link className="navbar-link-tag" color="inherit" to="/new">
-                <AddCircleOutlineIcon />
-            </Link>
-            <Link
-                className="navbar-link-tag"
-                color="inherit"
-                to="#"
-                onClick={toggleDrawer('right', true)}
-            >
+            <div className="tooltip">
+                <Link color="inherit" to="/new">
+                    <AddCircleOutlineIcon />
+                </Link>
+                <div className="bottom">
+                    <h3>Add a new application</h3>
+                    <i></i>
+                </div>
+            </div>
+            <Link color="inherit" to="#" onClick={toggleDrawer('right', true)}>
                 {props.fullName} &nbsp;
                 <MenuIcon />
             </Link>
         </div>
     ) : (
         <div>
-            <Link className="navbar-link-tag" color="inherit" to="/login">
+            <Link color="inherit" to="/login">
                 Log In
             </Link>
-            <Link className="navbar-link-tag" color="inherit" to="/signup">
+            <Link color="inherit" to="/signup">
                 Sign Up
             </Link>
         </div>
@@ -146,8 +158,9 @@ function Navbar(props) {
         <div>
             <AppBar position="static">
                 <Toolbar>
-                    <Link className="navbar-link-tag" color="inherit" to="/">
-                        <Icon>home</Icon>&nbsp;Home
+                    <Link color="inherit" to="/">
+                        <HomeIcon />
+                        &nbsp;Home
                     </Link>
                     <div
                         className="navbar-search"

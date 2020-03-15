@@ -1,9 +1,73 @@
 body {
   margin: 0;
+  height: 100vh;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root, .App {
+  height: 100%;
+}
+
+header {
+  position: fixed !important;
+  top: 0 !important;
+  width: 100% !important;
+}
+
+header div {
+  background-color: lightgrey;
+}
+
+main {
+  height: 90%;
+  padding: 45px 0 0 0;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+footer div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: lightgray;
+  height: 50px;
+}
+
+footer div a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-decoration: none;
+  color: black;
+  font-size: 13px;
+}
+
+footer div a span {
+  font-family: 'Dancing Script', cursive;
+  font-size: 13px;
+}
+
+footer div a svg {
+  font-size: 14px !important;
 }
 
 .form-login, .form-signup {
@@ -30,14 +94,10 @@ body {
   margin-right: 10px;
 }
 
-input {
+.form-input-login-signup input {
   height: 20px;
   width: 200px;
   border-radius: 3px;
-}
-
-header div {
-  background-color: lightgrey;
 }
 
 .MuiToolbar-root {
@@ -47,6 +107,19 @@ header div {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+.MuiToolbar-root a {
+  padding: 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+  text-decoration: none;
+  font-weight: bolder;
+  color: white;
+}
+
+.MuiToolbar-root a:hover {
+  background-color: rgba(128, 128, 128, 0.15);
 }
 
 .MuiToolbar-root a:first-child {
@@ -62,18 +135,30 @@ header div {
   margin-left: 0px;
 }
 
-.MuiToolbar-root a:first-child:hover > span {
+.MuiToolbar-root a:first-child:hover svg {
   color: #6594fa;
 }
 
-.navbar-icon {
-  margin-right: 10px !important;
+.MuiToolbar-root div:last-child {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .navbar-search {
   position: relative;
   border-radius: 3px;
   margin-left: 10px;
+}
+
+.navbar-search:hover div svg {
+  color: #6594fa;
+  z-index: 1;
+}
+
+.navbar-search:focus div svg {
+  color: #6594fa;
+  z-index: 1;
 }
 
 .navbar-search-input {
@@ -90,7 +175,7 @@ header div {
   color: black !important;
 }
 
-.MuiInputBase-input:focus {
+.navbar-search-input input:focus {
   color: black !important;
 }
 
@@ -110,19 +195,6 @@ header div {
           justify-content: center;
 }
 
-.navbar-link-tag {
-  padding: 10px;
-  border-radius: 3px;
-  margin-left: 10px;
-  text-decoration: none;
-  font-weight: bolder;
-  color: white;
-}
-
-.navbar-link-tag:hover {
-  background-color: rgba(128, 128, 128, 0.15);
-}
-
 .navbar-logged-user {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -135,7 +207,7 @@ header div {
           align-items: center;
 }
 
-.navbar-logged-user a:first-child:hover > svg {
+.navbar-logged-user a:first-child:hover svg {
   color: #6594fa;
 }
 
@@ -151,7 +223,7 @@ header div {
           align-items: center;
 }
 
-.navbar-logged-user a:last-child:hover > svg {
+.navbar-logged-user a:last-child:hover svg {
   color: #6594fa;
 }
 
@@ -159,7 +231,61 @@ header div {
   width: 230px;
 }
 
-.MuiButtonBase-root:hover div:first-child > svg {
+.MuiButtonBase-root:hover div:first-child svg {
   color: #6594fa;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover .bottom {
+  display: block;
+  visibility: visible;
+}
+
+.tooltip .bottom {
+  min-width: 200px;
+  top: 55px;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  padding: 10px 20px;
+  color: #444444;
+  background-color: #EEEEEE;
+  font-weight: normal;
+  font-size: 13px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 99999999;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  display: none;
+  visibility: hidden;
+}
+
+.tooltip .bottom i {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -12px;
+  width: 24px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.tooltip .bottom i::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: 50%;
+  -webkit-transform: translate(-50%, 50%) rotate(45deg);
+          transform: translate(-50%, 50%) rotate(45deg);
+  background-color: #EEEEEE;
+  -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 /*# sourceMappingURL=index.css.map */
