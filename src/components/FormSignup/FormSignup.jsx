@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import userService from '../../utils/userService';
 import { connect } from 'react-redux';
 import { signupUser } from '../../redux/user';
+import { Prompt } from 'react-router-dom';
 
 function formReducer(state, action) {
     switch (action.type) {
@@ -55,6 +56,16 @@ function FormSignup(props) {
             info.lastName &&
             info.email &&
             info.password === info.confPassword
+        );
+    }
+
+    function isFormFilled() {
+        return !!(
+            info.firstName ||
+            info.lastName ||
+            info.email ||
+            info.password ||
+            info.confPassword
         );
     }
 
@@ -119,6 +130,10 @@ function FormSignup(props) {
                 </div>
             </div>
             <div>{info.message}</div>
+            <Prompt
+                when={isFormFilled()}
+                message="Are you sure you want to leave?"
+            />
         </form>
     );
 }
