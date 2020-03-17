@@ -16,7 +16,7 @@ import { logoutUser } from '../../redux/user';
 import apiService from '../../utils/apiService';
 import HomeIcon from '@material-ui/icons/Home';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
+import DescriptionIcon from '@material-ui/icons/Description';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PersonIcon from '@material-ui/icons/Person';
@@ -99,14 +99,11 @@ function Navbar(props) {
                     </ListItemIcon>
                     <ListItemText primary="New Application" />
                 </ListItem>
-                <ListItem
-                    button
-                    onClick={() => props.history.push('/contacts')}
-                >
+                <ListItem button onClick={() => props.history.push('/resumes')}>
                     <ListItemIcon>
-                        <ContactMailIcon />
+                        <DescriptionIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Contacts" />
+                    <ListItemText primary="Resumes" />
                 </ListItem>
                 <ListItem button onClick={() => props.history.push('/profile')}>
                     <ListItemIcon>

@@ -7,7 +7,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import ContactsPage from './pages/ContactsPage/ContactsPage';
+import ResumesPage from './pages/ResumesPage/ResumesPage';
 import userService from './utils/userService';
 import GitHubIcon from '@material-ui/icons/GitHub';
 
@@ -28,8 +28,8 @@ function App(props) {
             />
             <Route
                 exact
-                path="/contacts"
-                render={({ history }) => <ContactsPage history={history} />}
+                path="/resumes"
+                render={({ history }) => <ResumesPage history={history} />}
             />
             <Route exact path="/" render={() => <HomePage />} />
             <Route render={() => <Redirect to={{ pathname: '/' }} />} />

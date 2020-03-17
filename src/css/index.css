@@ -288,4 +288,9 @@ footer div a svg {
   -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
           box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
+
+.form-resume {
+  width: 80%;
+  margin: auto;
+}
 /*# sourceMappingURL=index.css.map */
