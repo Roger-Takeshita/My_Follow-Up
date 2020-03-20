@@ -13,6 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../redux/user';
+import { logoutResume } from '../../redux/resume';
 import apiService from '../../utils/apiService';
 import HomeIcon from '@material-ui/icons/Home';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -51,7 +52,8 @@ function Navbar(props) {
     }
 
     function logoutFn() {
-        props.logout();
+        props.logoutUser();
+        props.logoutResume();
         props.history.push('/');
     }
 
@@ -191,9 +193,9 @@ function Navbar(props) {
 }
 
 const mapStateToProps = (state) => {
-    if (state.userReducer) {
+    if (state.user) {
         return {
-            fullName: `${state.userReducer.firstName} ${state.userReducer.lastName}`
+            fullName: `${state.user.firstName} ${state.user.lastName}`
         };
     } else {
         return {
@@ -203,7 +205,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    logout: () => dispatch(logoutUser())
+    logoutUser: () => dispatch(logoutUser()),
+    logoutResume: () => dispatch(logoutResume())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

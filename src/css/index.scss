@@ -21,6 +21,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.container {
+  width: 90%;
+  @include displayFlex(center);
+  flex-direction: column;
+  margin: auto;
+}
+
 #root, .App {
   height: 100%;
 }
@@ -217,7 +224,33 @@ footer {
   }
 }
 
+.table-width {
+  width: inherit;
+  min-width: 650px;
+}
+
+.table-message {
+  @include displayFlex(center);
+  min-height: 300px;
+}
 .form-resume {
-  width: 80%;
+  @include displayFlex(center);
   margin: auto;
+  flex-direction: column;
+
+  &__input {
+    height: 40px; 
+    width: 97%;
+    margin-bottom: 10px;
+    padding: 2px 10px 2px 10px;
+    font-size: 1.75em;
+  }
+  &__div-button {
+    width: 100%;
+    text-align: right;
+    margin: 10px 0;
+  }
+  &__button {
+    margin-left: 5px !important;
+  }
 }

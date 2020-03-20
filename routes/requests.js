@@ -1,14 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const applicationCtrl = require('../controllers/applications');
+const resumeCtrl = require('../controllers/resumes');
 
 //! Privet Routes
 router.use(require('../config/auth'));
 router.get('/search/*', checkAuth, applicationCtrl.search);
+router.post('/resume/new', checkAuth, resumeCtrl.newResume);
+router.get('/resumes', checkAuth, resumeCtrl.getResumes);
+router.put('/resume/:id', checkAuth, resumeCtrl.updateResume);
 
 function checkAuth(req, res, next) {
     if (req.user) return next();
-    return res.status(401).json({ msg: 'Not Authorized' });
+    return res.status(400).json({ error: 'Not Authorized' });
 }
 
 module.exports = router;

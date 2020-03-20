@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './css/App.css';
 import Navbar from './components/Navbar/Navbar';
@@ -9,7 +9,10 @@ import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ResumesPage from './pages/ResumesPage/ResumesPage';
 import userService from './utils/userService';
+import apiService from './utils/apiService';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import { connect } from 'react-redux';
+import { getResumes } from './redux/resume';
 
 function App(props) {
     let pages = userService.getUser() ? (
@@ -51,6 +54,16 @@ function App(props) {
         </Switch>
     );
 
+    useEffect(() => {
+        async function fetchResumes() {
+            if (props.userFirstName) {
+                const [resumes] = await Promise.all([apiService.getResumes()]);
+                props.getResumes(resumes);
+            }
+        }
+        fetchResumes();
+    }, [props.userFirstName]);
+
     return (
         <div className="App">
             <Navbar history={props.history} />
@@ -67,4 +80,12 @@ function App(props) {
     );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+    userFirstName: state.user ? state.user.firstName : ''
+});
+
+const mapsDispatchToProps = (dispatch) => ({
+    getResumes: (data) => dispatch(getResumes(data))
+});
+
+export default connect(mapStateToProps, mapsDispatchToProps)(App);

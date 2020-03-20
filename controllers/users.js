@@ -17,31 +17,38 @@ async function signup(req, res) {
 
                 res.json({ token });
             } catch (err) {
-                console.log(err);
-                res.status(500).json({ err: 'Something went wrong' });
+                console.log('Something went wrong', err);
+                res.status(500).json({ error: 'Something went wrong' });
             }
         } else {
-            res.status(400).json({ err: 'Email already taken' });
+            console.log('Email already taken');
+            res.status(400).json({ error: 'Email already taken' });
         }
     } catch (err) {
-        res.status(500).json({ err: 'Something went wrong' });
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
     }
 }
 
 async function login(req, res) {
     try {
         const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(404).json({ err: "User doesn't exist!" });
+        if (!user) {
+            console.log("User doesn't exist!");
+            return res.status(404).json({ error: "User doesn't exist!" });
+        }
         user.comparePassword(req.body.password, (err, isMatch) => {
             if (isMatch) {
                 const token = createJWT(user);
                 res.json({ token });
             } else {
-                return res.status(400).json({ err: 'Wrong password!' });
+                console.log('Wrong password');
+                return res.status(400).json({ error: 'Wrong password!' });
             }
         });
     } catch (err) {
-        res.status(500).json({ err: 'Something went wrong' });
+        console.log('Something went wrong');
+        res.status(500).json({ error: 'Something went wrong' });
     }
 }
 

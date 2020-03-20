@@ -11,9 +11,10 @@ function signup(info) {
         body: JSON.stringify(info)
     };
     return fetch(`${BASE_URL}/signup`, options)
-        .then((res) => {
-            if (res.ok) return res.json();
-            throw new Error('Email already taken!');
+        .then(async (res) => {
+            let data = await res.json();
+            if (res.ok) return data;
+            throw new Error(data.error);
         })
         .then(({ token }) => {
             tokenService.setToken(token);
@@ -29,9 +30,10 @@ function login(info) {
         body: JSON.stringify(info)
     };
     return fetch(`${BASE_URL}/login`, options)
-        .then((res) => {
-            if (res.ok) return res.json();
-            throw new Error('Bad credentials!');
+        .then(async (res) => {
+            let data = await res.json();
+            if (res.ok) return data;
+            throw new Error(data.error);
         })
         .then(({ token }) => {
             tokenService.setToken(token);

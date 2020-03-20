@@ -11,6 +11,11 @@ function formReducer(state, action) {
                 ...state,
                 [action.payload.name]: action.payload.value
             };
+        case 'ERROR':
+            return {
+                ...state,
+                message: action.payload
+            };
         default:
             throw new Error(`Unsuported action ${action.type}`);
     }
@@ -40,7 +45,11 @@ function FormLogin(props) {
             props.history.push('/');
         } catch (err) {
             console.log(err);
-            setInfo({ ...info, message: 'Invalid Credentials!' });
+            setInfo({
+                type: 'ERROR',
+                payload: 'Invalid Credentials!'
+            });
+            console.log(info);
         }
     }
 
