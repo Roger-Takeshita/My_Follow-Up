@@ -67,7 +67,6 @@ function newResume(data) {
 }
 
 function updateResume(data) {
-    console.log(data);
     const option = {
         method: 'PUT',
         headers: new Headers({
@@ -76,8 +75,24 @@ function updateResume(data) {
         }),
         body: JSON.stringify(data)
     };
-    return fetch(`${RESUME_URL}/${data.resumeId}`, option).then((res) => {
-        if (res.ok) return res.json();
+    return fetch(`${RESUME_URL}/${data.resumeId}`, option).then(async (res) => {
+        let data = await res.json();
+        if (res.ok) return data;
+        throw new Error(data.error);
+    });
+}
+
+function deleteResume(id) {
+    const option = {
+        method: 'DELETE',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            Authorization: 'Baerer ' + tokenService.getToken()
+        })
+    };
+    return fetch(`${RESUME_URL}/${id}`, option).then(async (res) => {
+        let data = await res.json();
+        if (res.ok) return data;
         throw new Error(data.error);
     });
 }
@@ -87,5 +102,6 @@ export default {
     getResume,
     getResumes,
     newResume,
-    updateResume
+    updateResume,
+    deleteResume
 };

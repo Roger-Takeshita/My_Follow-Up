@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import apiService from '../../utils/apiService';
-import { addResume } from '../../redux/resume';
-import { Prompt } from 'react-router-dom';
+import { addResume, updateResume, deleteResume } from '../../redux/resume';
+import { Prompt, Link } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -42,10 +42,14 @@ function FormResume(props) {
     };
 
     const handleBtnClick = () => {
-        setForm({
-            ...form,
-            formActive: !form.formActive
-        });
+        if (!form.formActive) {
+            setForm({
+                ...form,
+                formActive: !form.formActive
+            });
+        } else {
+            setForm(initialState);
+        }
     };
 
     const handleClick = async (title) => {
@@ -72,16 +76,25 @@ function FormResume(props) {
         try {
             const data = await apiService.newResume(form);
             props.addResume(data);
+            setForm(initialState);
         } catch (err) {
             console.log(err);
         }
     }
 
-    async function handleUpdate(e) {
-        e.preventDefault();
+    async function handleUpdate() {
         try {
             const data = await apiService.updateResume(form);
-            console.log(data);
+            props.updateResume(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function handleDelete(id) {
+        try {
+            const data = await apiService.deleteResume(id);
+            props.deleteResume(data);
         } catch (err) {
             console.log(err);
         }
@@ -111,14 +124,15 @@ function FormResume(props) {
                             height: 500,
                             width: '100%',
                             menubar: true,
-                            plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                            toolbar: `undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help`
+                            plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
+                                visualblocks visualchars fullscreen image link media template codesample table charmap hr 
+                                pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern 
+                                noneditable help charmap emoticons`,
+
+                            toolbar: `fullscreen print | undo redo | bold italic underline strikethrough | 
+                            fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
+                            outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
+                            image media link anchor | help`
                         }}
                         onEditorChange={handleEditorChange}
                     />
@@ -162,18 +176,21 @@ function FormResume(props) {
                         {props.resumes.map((resume, idx) => (
                             <TableRow key={idx}>
                                 <TableCell component="th" scope="row">
-                                    <a
+                                    <Link
                                         onClick={() =>
                                             handleClick(resume.title)
                                         }
-                                        href="#"
+                                        to="#"
                                     >
                                         {resume.title}
                                         <EditIcon />
-                                    </a>
-                                    {/* <a onClick={}>
+                                    </Link>
+                                    <Link
+                                        onClick={() => handleDelete(resume._id)}
+                                        to="#"
+                                    >
                                         <DeleteForeverIcon />
-                                    </a> */}
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -200,7 +217,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    addResume: (data) => dispatch(addResume(data))
+    addResume: (data) => dispatch(addResume(data)),
+    updateResume: (data) => dispatch(updateResume(data)),
+    deleteResume: (data) => dispatch(deleteResume(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormResume);

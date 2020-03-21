@@ -40,16 +40,32 @@ async function getResumes(req, res) {
 
 async function updateResume(req, res) {
     try {
-        console.log(req.body);
         const resume = await Resume.findOne({ _id: req.params.id });
         resume.title = req.body.title;
         resume.description = req.body.description;
         await resume.save();
-    } catch (error) {}
+        const updatedResume = await Resume.findOne({
+            _id: req.params.id
+        }).select('-user -createdAt -updatedAt -__v');
+        res.json(updatedResume);
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
+async function deleteResume(req, res) {
+    try {
+        res.json(await Resume.findOneAndDelete({ _id: req.params.id }));
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
 }
 
 module.exports = {
     newResume,
     getResumes,
-    updateResume
+    updateResume,
+    deleteResume
 };
