@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const followUpSchema = new Schema(
+const followupSchema = new Schema(
     {
         description: {
             type: String
@@ -27,26 +27,30 @@ const jobSchema = new Schema(
         },
         link: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
-        description: {
+        jobDescription: {
             type: String,
             required: true
         },
         appliedDate: {
             type: Date
         },
-        extraInfo: {
+        rejectedDate: {
+            type: Date
+        },
+        resume: {
             type: String
         },
-        customResume: {
+        coverLetter: {
             type: String
         },
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
-        followUp: [followUpSchema],
+        followup: [followupSchema],
         status: {
             type: String,
             enum: ['Pending', 'Applied', 'Rejected']
