@@ -3,7 +3,7 @@ import FormResume from '../../components/FormResume/FormResume';
 
 function ResumesPage(props) {
     return (
-        <div>
+        <div className="container">
             <h1>ResumesPage</h1>
             <FormResume />
         </div>

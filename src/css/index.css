@@ -8,25 +8,18 @@ body {
 }
 
 .container {
-  width: 90%;
+  width: 80vw;
+}
+
+#root, .App {
+  min-height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin: auto;
-}
-
-#root, .App {
-  height: 100%;
 }
 
 header {
@@ -40,13 +33,12 @@ header div {
 }
 
 main {
-  height: 90%;
-  padding: 45px 0 0 0;
+  padding: 55px 0 20px 0;
+  margin-bottom: 20px;
+  margin: 0 auto auto auto;
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
   width: 100%;
 }
 
@@ -86,6 +78,33 @@ footer div a span {
 
 footer div a svg {
   font-size: 14px !important;
+}
+
+.a-save {
+  background-color: rgba(5, 117, 5, 0.788) !important;
+  color: white !important;
+}
+
+.a-save svg {
+  font-size: 18px;
+}
+
+.a-cancel {
+  background-color: #f50556 !important;
+  color: white !important;
+}
+
+.a-cancel svg {
+  font-size: 18px;
+}
+
+.a-add {
+  background-color: lightblue !important;
+  color: white !important;
+}
+
+.a-add svg {
+  font-size: 18px;
 }
 
 .form-login, .form-signup {
@@ -307,9 +326,8 @@ footer div a svg {
           box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 
-.table-width {
-  width: inherit;
-  min-width: 650px;
+.table__width {
+  min-width: 100%;
 }
 
 .table-message {
@@ -344,7 +362,9 @@ footer div a svg {
 
 .form-resume__input {
   height: 40px;
-  width: 97%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   margin-bottom: 10px;
   padding: 2px 10px 2px 10px;
   font-size: 1.75em;
@@ -358,5 +378,118 @@ footer div a svg {
 
 .form-resume__button {
   margin-left: 5px !important;
+}
+
+.form-application {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.form-application__header {
+  display: inherit;
+  -webkit-box-flex: 1 !important;
+      -ms-flex-positive: 1 !important;
+          flex-grow: 1 !important;
+  padding: 5px !important;
+}
+
+.form-application__title {
+  width: 250px;
+  margin-right: 5px !important;
+}
+
+.form-application__company {
+  width: 200px;
+  margin: auto 5px !important;
+}
+
+.form-application__link {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  margin: auto 5px !important;
+}
+
+.form-application__status {
+  margin: auto 5px !important;
+  min-width: 120px !important;
+}
+
+.form-application__forms {
+  display: inherit;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.form-application__form-title {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.form-application__form-job, .form-application__form-resume {
+  width: 50%;
+  padding: 5px;
+}
+
+.form-application__form-cl {
+  margin: auto 5px 10px 5px;
+}
+
+.form-application__followup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 10px;
+}
+
+.form-application__followup-list, .form-application__followup-list-input {
+  padding: auto 5px !important;
+  width: 50% !important;
+}
+
+.form-application__followup-ctrl {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.form-application__followup-ctrl a {
+  -webkit-box-sizing: unset;
+          box-sizing: unset;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  height: 30px;
+}
+
+.form-application__followup-list {
+  text-align: left;
+}
+
+.form-application__followup-input {
+  width: -webkit-fill-available;
+  margin: auto 5px;
+  min-height: 60px;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+
+.form-application__date {
+  width: 145px;
+  -webkit-box-sizing: unset;
+          box-sizing: unset;
+}
+
+.MuiGrid-container {
+  width: auto !important;
 }
 /*# sourceMappingURL=index.css.map */

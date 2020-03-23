@@ -61,7 +61,7 @@ function Navbar(props) {
         if (e.key === 'Enter') {
             if (search.search !== '') {
                 try {
-                    const data = await apiService.search(search.search);
+                    await apiService.search(search.search);
                     setSearch({ type: 'CLEAR_INPUT' });
                 } catch (err) {
                     console.log(err);

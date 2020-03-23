@@ -1,9 +1,10 @@
 import React from 'react';
+import FormApplication from '../../components/FormApplication/FormApplication';
 
 function NewApplicationPage(props) {
     return (
         <div>
-            <h1>NewApplicationPage</h1>
+            <FormApplication />
         </div>
     );
 }

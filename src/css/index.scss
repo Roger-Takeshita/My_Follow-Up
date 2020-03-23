@@ -3,6 +3,10 @@ $navbarButtonColorHover: rgba(128, 128, 128, 0.15);
 $navbarBGColor: rgba(255, 255, 255, 0.25);
 $navbarInputBGColor: rgba(255, 255, 255, 0.5);
 $borderRadius: 3px;
+$buttonSaveBGColor: rgba(5, 117, 5, 0.788);
+$buttonCancelBGColor: #f50556;
+$buttonAddBGColor: lightblue;
+$buttonIconSize: 18px;
 
 @mixin displayFlex ($justifyContent){
   display: flex;
@@ -22,14 +26,13 @@ body {
 }
 
 .container {
-  width: 90%;
-  @include displayFlex(center);
-  flex-direction: column;
-  margin: auto;
+  width: 80vw;
 }
 
 #root, .App {
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -42,13 +45,12 @@ header {
 }
 
 main {
-  height: 90%;
-  padding: 45px 0 0 0;
+  padding: 55px 0 20px 0;
+  margin-bottom: 20px;
+  margin: 0 auto auto auto;
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
   width: 100%;
   div {
     @include displayFlex(center);
@@ -67,6 +69,30 @@ footer {
         font-size: 14px !important;
       }
     }
+  }
+}
+
+.a-save {
+  background-color: $buttonSaveBGColor !important;
+  color: white !important;
+  svg {
+    font-size: $buttonIconSize;
+  }
+}
+
+.a-cancel {
+  background-color: $buttonCancelBGColor !important;
+  color: white !important;
+  svg {
+    font-size: $buttonIconSize;
+  }
+}
+
+.a-add {
+  background-color: $buttonAddBGColor !important;
+  color: white !important;
+  svg {
+    font-size: $buttonIconSize;
   }
 }
 
@@ -224,15 +250,15 @@ footer {
   }
 }
 
-.table-width {
-  width: inherit;
-  min-width: 650px;
+.table__width {
+  min-width: 100%;
 }
 
 .table-message {
   @include displayFlex(center);
   min-height: 300px;
 }
+
 .form-resume {
   @include displayFlex(center);
   margin: auto;
@@ -240,7 +266,7 @@ footer {
 
   &__input {
     height: 40px; 
-    width: 97%;
+    flex-grow: 1;
     margin-bottom: 10px;
     padding: 2px 10px 2px 10px;
     font-size: 1.75em;
@@ -253,4 +279,81 @@ footer {
   &__button {
     margin-left: 5px !important;
   }
+}
+
+.form-application {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: inherit;
+    flex-grow: 1 !important;
+    padding: 5px !important;
+  }
+  &__title {
+    width: 250px;
+    margin-right: 5px !important;
+  }
+  &__company {
+    width: 200px;
+    margin: auto 5px !important;
+  }
+  &__link {
+    flex-grow: 1;
+    margin: auto 5px !important;
+  }
+  &__status {
+    margin: auto 5px !important;
+    min-width: 120px !important;
+  }
+  &__forms {
+    display: inherit;
+    justify-content: space-between;
+  }
+  &__form-title {
+    text-align: left;
+    margin-bottom: 5px;
+  }
+  &__form-job, &__form-resume {
+    width: 50%;
+    padding: 5px;
+  }
+  &__form-cl {
+    margin: auto 5px 10px 5px;
+  }
+  &__followup {
+    display: flex;
+    margin-top: 10px;
+  }
+  &__followup-list, &__followup-list-input {
+    padding: auto 5px!important;
+    width: 50% !important;
+  }
+  &__followup-ctrl{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    a {
+      box-sizing: unset;
+      align-self: center;
+      height: 30px;
+    }
+  }
+  &__followup-list {
+    text-align: left;
+  }
+  &__followup-input {
+    width: -webkit-fill-available;
+    margin: auto 5px;
+    min-height: 60px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+  }
+  &__date {
+    width: 145px;
+    box-sizing: unset;
+  }
+}
+
+.MuiGrid-container {
+  width: auto !important;
 }

@@ -34,10 +34,10 @@ const jobSchema = new Schema(
             type: String,
             required: true
         },
-        appliedDate: {
+        appliedOn: {
             type: Date
         },
-        rejectedDate: {
+        rejectedOn: {
             type: Date
         },
         resume: {

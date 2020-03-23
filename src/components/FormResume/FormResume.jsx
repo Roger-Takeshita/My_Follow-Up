@@ -21,7 +21,8 @@ function FormResume(props) {
         title: '',
         description: '',
         resumeId: '',
-        formActive: false
+        formActive: false,
+        modifiedFlag: false
     };
 
     const [form, setForm] = useState(initialState);
@@ -54,12 +55,13 @@ function FormResume(props) {
 
     const handleClick = async (title) => {
         const resume = props.resumes.filter((resum) => resum.title === title);
-
-        setForm({
+        await setForm(initialState);
+        await setForm({
             title: resume[0].title,
             description: resume[0].description,
             resumeId: resume[0]._id,
-            formActive: true
+            formActive: true,
+            modifiedFlag: false
         });
     };
 
@@ -67,9 +69,9 @@ function FormResume(props) {
         return !(form.title && form.description);
     }
 
-    function isFormFilled() {
-        return !!(form.title || form.description);
-    }
+    // function isFormFilled() {
+    //     return !!(form.title || form.description);
+    // }
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -101,7 +103,7 @@ function FormResume(props) {
     }
 
     return (
-        <div className="container">
+        <div className="table">
             <button onClick={handleBtnClick} hidden={form.formActive}>
                 Add New Resume
             </button>
@@ -163,7 +165,7 @@ function FormResume(props) {
             )}
             <TableContainer component={Paper}>
                 <Table
-                    className="table-width"
+                    className="table__width"
                     size="small"
                     aria-label="a dense table"
                 >
@@ -205,7 +207,7 @@ function FormResume(props) {
                 )}
             </TableContainer>
             <Prompt
-                when={isFormFilled()}
+                when={form.modifiedFlag}
                 message="Are you sure you want to leave? You have unsaved chages"
             />
         </div>
