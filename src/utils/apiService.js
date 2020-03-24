@@ -1,10 +1,6 @@
 import tokenService from './tokenService';
 
 const SEARCH_URL = '/api/search';
-const RESUMES_URL = '/api/resumes';
-const RESUME_URL = '/api/resume';
-const NEW_RESUME_URL = '/api/resume/new';
-const NEW_APPLICATION_URL = '/api/application/new';
 
 function search(data) {
     const option = {
@@ -21,7 +17,7 @@ function search(data) {
     });
 }
 
-function getResumes() {
+function getData(url, page = 1, numDocs = 100) {
     const option = {
         method: 'GET',
         headers: new Headers({
@@ -29,61 +25,32 @@ function getResumes() {
             Authorization: 'Baerer ' + tokenService.getToken()
         })
     };
-    return fetch(`${RESUMES_URL}`, option).then(async (res) => {
-        let data = await res.json();
-        if (res.ok) return data;
-        throw new Error(data.error);
-    });
+    return fetch(`${url}/?page=${page}&docs=${numDocs}`, option).then(
+        async (res) => {
+            let data = await res.json();
+            if (res.ok) return data;
+            throw new Error(data.error);
+        }
+    );
 }
 
-function getResume(id) {
+function postPutData(url, data, id) {
     const option = {
-        method: 'GET',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            Authorization: 'Baerer ' + tokenService.getToken()
-        })
-    };
-    return fetch(`${RESUME_URL}/${id}`, option).then(async (res) => {
-        let data = await res.json();
-        if (res.ok) return data;
-        throw new Error(data.error);
-    });
-}
-
-function newResume(data) {
-    const option = {
-        method: 'POST',
+        method: id ? 'PUT' : 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
             Authorization: 'Baerer ' + tokenService.getToken()
         }),
         body: JSON.stringify(data)
     };
-    return fetch(`${NEW_RESUME_URL}`, option).then(async (res) => {
+    return fetch(id ? `${url}/${id}` : url, option).then(async (res) => {
         let data = await res.json();
         if (res.ok) return data;
         throw new Error(data.error);
     });
 }
 
-function updateResume(data) {
-    const option = {
-        method: 'PUT',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            Authorization: 'Baerer ' + tokenService.getToken()
-        }),
-        body: JSON.stringify(data)
-    };
-    return fetch(`${RESUME_URL}/${data.resumeId}`, option).then(async (res) => {
-        let data = await res.json();
-        if (res.ok) return data;
-        throw new Error(data.error);
-    });
-}
-
-function deleteResume(id) {
+function deleteData(url, id) {
     const option = {
         method: 'DELETE',
         headers: new Headers({
@@ -91,23 +58,7 @@ function deleteResume(id) {
             Authorization: 'Baerer ' + tokenService.getToken()
         })
     };
-    return fetch(`${RESUME_URL}/${id}`, option).then(async (res) => {
-        let data = await res.json();
-        if (res.ok) return data;
-        throw new Error(data.error);
-    });
-}
-
-function newApplication(data) {
-    const option = {
-        method: 'POST',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            Authorization: 'Baerer ' + tokenService.getToken()
-        }),
-        body: JSON.stringify(data)
-    };
-    return fetch(`${NEW_APPLICATION_URL}`, option).then(async (res) => {
+    return fetch(`${url}/${id}`, option).then(async (res) => {
         let data = await res.json();
         if (res.ok) return data;
         throw new Error(data.error);
@@ -116,10 +67,7 @@ function newApplication(data) {
 
 export default {
     search,
-    getResume,
-    getResumes,
-    newResume,
-    updateResume,
-    deleteResume,
-    newApplication
+    getData,
+    postPutData,
+    deleteData
 };

@@ -47,7 +47,7 @@ function TableResumes(props) {
 }
 
 const mapStateToProps = (state) => ({
-    resumes: state.resumes
+    resumes: state.resume
 });
 
 export default connect(mapStateToProps)(TableResumes);

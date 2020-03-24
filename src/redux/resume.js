@@ -1,11 +1,11 @@
-const GET_RESUMES = 'GET_RESUMES';
+const SET_RESUMES = 'SET_RESUMES';
 const ADD_RESUME = 'ADD_RESUME';
 const UPDATE_RESUME = 'UPDATE_RESUME';
 const DELETE_RESUME = 'DELETE_RESUME';
-const LOGOUT_RESUME = 'LOGOUT_RESUME';
+const LOGOUT = 'LOGOUT';
 
-export const getResumes = (data) => ({
-    type: GET_RESUMES,
+export const setResumes = (data) => ({
+    type: SET_RESUMES,
     payload: data
 });
 
@@ -25,12 +25,12 @@ export const deleteResume = (data) => ({
 });
 
 export const logoutResume = () => ({
-    type: LOGOUT_RESUME
+    type: LOGOUT
 });
 
 function resumeReducer(state = [], action) {
     switch (action.type) {
-        case GET_RESUMES:
+        case SET_RESUMES:
             return [...state, ...action.payload];
         case ADD_RESUME:
             return [...state, action.payload];
@@ -53,7 +53,7 @@ function resumeReducer(state = [], action) {
                 ...state.slice(0, index),
                 ...state.slice(index + 1, state.length)
             ];
-        case LOGOUT_RESUME:
+        case LOGOUT:
             return [];
         default:
             return state;

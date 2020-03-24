@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
 import apiService from '../../utils/apiService';
-import { addResume, updateResume, deleteResume } from '../../redux/resume';
+import { addApplication } from '../../redux/application';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -54,6 +54,7 @@ function FormApplication(props) {
             star: !form.star
         });
     };
+
     const handleJobEditorChange = (content, editor) => {
         setForm({
             ...form,
@@ -95,14 +96,7 @@ function FormApplication(props) {
     };
 
     const handleCancelBtn = () => {
-        if (!form.formActive) {
-            setForm({
-                ...form,
-                formActive: !form.formActive
-            });
-        } else {
-            setForm(initialState);
-        }
+        props.history.push('/');
     };
 
     function isFormValid() {
@@ -119,11 +113,12 @@ function FormApplication(props) {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const data = await apiService.newApplication(form);
-            //= make a new redux
-            console.log(data);
-            // props.addResume(data);
-            // setForm(initialState);
+            const data = await apiService.postPutData(
+                '/api/application/new',
+                form
+            );
+            props.addApplication(data);
+            setForm(initialState);
         } catch (err) {
             console.log(err);
         }
@@ -133,7 +128,7 @@ function FormApplication(props) {
         <div className="container">
             <h1>
                 {form.title ? form.title.toUpperCase() : 'New Application'}
-                {form.company ? ` - ${form.company}` : ''}
+                {form.company ? ` - ${form.company.toUpperCase()}` : ''}
             </h1>
             <form onSubmit={handleSubmit} className="form-application">
                 <div className="form-application__header">
@@ -228,7 +223,7 @@ function FormApplication(props) {
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.jobDescription}
                             init={{
-                                height: 500,
+                                height: 400,
                                 width: '100%',
                                 menubar: true,
                                 plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -252,7 +247,7 @@ function FormApplication(props) {
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.resume}
                             init={{
-                                height: 500,
+                                height: 400,
                                 width: '100%',
                                 menubar: true,
                                 plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -289,7 +284,7 @@ function FormApplication(props) {
                                     apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                                     value={form.coverLetter}
                                     init={{
-                                        height: 500,
+                                        height: 400,
                                         width: '100%',
                                         menubar: true,
                                         plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -388,13 +383,11 @@ function FormApplication(props) {
 }
 
 const mapStateToProps = (state) => ({
-    resumes: state.resumes
+    resumes: state.resume
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    addResume: (data) => dispatch(addResume(data)),
-    updateResume: (data) => dispatch(updateResume(data)),
-    deleteResume: (data) => dispatch(deleteResume(data))
+    addApplication: (data) => dispatch(addApplication(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormApplication);

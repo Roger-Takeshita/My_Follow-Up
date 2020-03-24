@@ -12,7 +12,8 @@ import userService from './utils/userService';
 import apiService from './utils/apiService';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { connect } from 'react-redux';
-import { getResumes } from './redux/resume';
+import { setResumes } from './redux/resume';
+import { setApplications } from './redux/application';
 
 function App(props) {
     let pages = userService.getUser() ? (
@@ -55,13 +56,17 @@ function App(props) {
     );
 
     useEffect(() => {
-        async function fetchResumes() {
+        async function getData() {
             if (props.userFirstName) {
-                const [resumes] = await Promise.all([apiService.getResumes()]);
-                props.getResumes(resumes);
+                const [resumes, applications] = await Promise.all([
+                    apiService.getData('/api/resumes'),
+                    apiService.getData('/api/applications')
+                ]);
+                await props.setApplications(applications);
+                await props.setResumes(resumes);
             }
         }
-        fetchResumes();
+        getData();
     }, [props.userFirstName]);
 
     return (
@@ -85,7 +90,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapsDispatchToProps = (dispatch) => ({
-    getResumes: (data) => dispatch(getResumes(data))
+    setResumes: (data) => dispatch(setResumes(data)),
+    setApplications: (data) => dispatch(setApplications(data))
 });
 
 export default connect(mapStateToProps, mapsDispatchToProps)(App);

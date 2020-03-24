@@ -4,7 +4,7 @@ import FormApplication from '../../components/FormApplication/FormApplication';
 function NewApplicationPage(props) {
     return (
         <div>
-            <FormApplication />
+            <FormApplication history={props.history} />
         </div>
     );
 }

@@ -25,7 +25,10 @@ async function newResume(req, res) {
 
 async function getResumes(req, res) {
     try {
-        const resumes = await Resume.find({ user: req.user._id });
+        const resumes = await Resume.find({ user: req.user._id })
+            .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
+            .limit(parseInt(req.query.docs, 10))
+            .select('-user -createdAt -updatedAt -__v');
         if (resumes) {
             res.json(resumes);
         } else {

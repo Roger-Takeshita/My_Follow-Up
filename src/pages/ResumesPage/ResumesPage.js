@@ -5,7 +5,7 @@ function ResumesPage(props) {
     return (
         <div className="container">
             <h1>ResumesPage</h1>
-            <FormResume />
+            <FormResume history={props.history} />
         </div>
     );
 }

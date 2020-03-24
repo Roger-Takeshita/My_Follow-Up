@@ -22,7 +22,6 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PersonIcon from '@material-ui/icons/Person';
 import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
 import Zoom from '@material-ui/core/Zoom';
 
 const searchReducer = (state, action) => {

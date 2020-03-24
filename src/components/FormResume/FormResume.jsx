@@ -69,14 +69,10 @@ function FormResume(props) {
         return !(form.title && form.description);
     }
 
-    // function isFormFilled() {
-    //     return !!(form.title || form.description);
-    // }
-
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const data = await apiService.newResume(form);
+            const data = await apiService.postPutData('/api/resume/new', form);
             props.addResume(data);
             setForm(initialState);
         } catch (err) {
@@ -84,10 +80,16 @@ function FormResume(props) {
         }
     }
 
-    async function handleUpdate() {
+    async function handleUpdate(e) {
+        e.preventDefault();
         try {
-            const data = await apiService.updateResume(form);
+            const data = await apiService.postPutData(
+                '/api/resume',
+                form,
+                form.resumeId
+            );
             props.updateResume(data);
+            setForm(initialState);
         } catch (err) {
             console.log(err);
         }
@@ -95,7 +97,7 @@ function FormResume(props) {
 
     async function handleDelete(id) {
         try {
-            const data = await apiService.deleteResume(id);
+            const data = await apiService.deleteData('/api/resume', id);
             props.deleteResume(data);
         } catch (err) {
             console.log(err);
@@ -215,7 +217,7 @@ function FormResume(props) {
 }
 
 const mapStateToProps = (state) => ({
-    resumes: state.resumes
+    resumes: state.resume
 });
 
 const mapDispatchToProps = (dispatch) => ({
