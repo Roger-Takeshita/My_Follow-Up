@@ -98,13 +98,18 @@ footer div a svg {
   font-size: 18px;
 }
 
-.a-add {
+.a-show-hide {
   background-color: lightblue !important;
   color: white !important;
+  height: 25px !important;
 }
 
-.a-add svg {
+.a-show-hide svg {
   font-size: 18px;
+}
+
+.a-show-hide:hover svg {
+  color: #6594fa;
 }
 
 .form-login, .form-signup {
@@ -272,60 +277,6 @@ footer div a svg {
   color: #6594fa;
 }
 
-.tooltip {
-  position: relative;
-}
-
-.tooltip:hover .bottom {
-  display: block;
-  visibility: visible;
-}
-
-.tooltip .bottom {
-  min-width: 200px;
-  top: 55px;
-  left: 50%;
-  -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
-  padding: 10px 20px;
-  color: #444444;
-  background-color: #EEEEEE;
-  font-weight: normal;
-  font-size: 13px;
-  border-radius: 8px;
-  position: absolute;
-  z-index: 99999999;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-          box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-  display: none;
-  visibility: hidden;
-}
-
-.tooltip .bottom i {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -12px;
-  width: 24px;
-  height: 12px;
-  overflow: hidden;
-}
-
-.tooltip .bottom i::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  left: 50%;
-  -webkit-transform: translate(-50%, 50%) rotate(45deg);
-          transform: translate(-50%, 50%) rotate(45deg);
-  background-color: #EEEEEE;
-  -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-          box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-}
-
 .table__width {
   min-width: 100%;
 }
@@ -398,6 +349,11 @@ footer div a svg {
   padding: 5px !important;
 }
 
+.form-application__header a {
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+}
+
 .form-application__title {
   width: 250px;
   margin-right: 5px !important;
@@ -418,6 +374,22 @@ footer div a svg {
 .form-application__status {
   margin: auto 5px !important;
   min-width: 120px !important;
+}
+
+.form-application__star--true {
+  color: #ffc107;
+}
+
+.form-application__star--true svg {
+  font-size: 2rem;
+}
+
+.form-application__star--false {
+  color: lightgray;
+}
+
+.form-application__star--false svg {
+  font-size: 2rem;
 }
 
 .form-application__forms {
@@ -481,12 +453,23 @@ footer div a svg {
   min-height: 60px;
   border: 1px solid lightgrey;
   border-radius: 5px;
+  font-size: 15px;
 }
 
 .form-application__date {
   width: 145px;
   -webkit-box-sizing: unset;
           box-sizing: unset;
+}
+
+.form-application__ctrl {
+  width: 100%;
+  text-align: right;
+  margin: 10px 0;
+}
+
+.form-application__button {
+  margin-left: 5px !important;
 }
 
 .MuiGrid-container {

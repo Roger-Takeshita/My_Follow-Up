@@ -15,10 +15,15 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import BusinessIcon from '@material-ui/icons/Business';
 import LinkIcon from '@material-ui/icons/Link';
 import DescriptionIcon from '@material-ui/icons/Description';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityIconOff from '@material-ui/icons/VisibilityOff';
+import StarIcon from '@material-ui/icons/Star';
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
 
 function FormApplication(props) {
     const initialState = {
-        jobTitle: '',
+        title: '',
         company: '',
         link: '',
         jobDescription: '',
@@ -26,8 +31,11 @@ function FormApplication(props) {
         appliedOn: '',
         rejectedOn: '',
         status: '',
+        followupNow: '',
+        followup: [],
         coverLetter: '',
-        coverLetterActive: false
+        coverLetterActive: false,
+        star: false
     };
 
     const [form, setForm] = useState(initialState);
@@ -39,6 +47,13 @@ function FormApplication(props) {
         });
     };
 
+    const handleStarClick = (e) => {
+        e.preventDefault();
+        setForm({
+            ...form,
+            star: !form.star
+        });
+    };
     const handleJobEditorChange = (content, editor) => {
         setForm({
             ...form,
@@ -68,6 +83,17 @@ function FormApplication(props) {
         });
     };
 
+    const onKeyPress = async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await setForm({
+                ...form,
+                followup: [...form.followup, e.target.value],
+                followupNow: ''
+            });
+        }
+    };
+
     const handleCancelBtn = () => {
         if (!form.formActive) {
             setForm({
@@ -79,17 +105,25 @@ function FormApplication(props) {
         }
     };
 
-    //= fix this for last
     function isFormValid() {
-        return !(form.title && form.description);
+        return !(
+            form.title &&
+            form.company &&
+            form.link &&
+            form.jobDescription &&
+            form.resume &&
+            form.status
+        );
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const data = await apiService.newResume(form);
-            props.addResume(data);
-            setForm(initialState);
+            const data = await apiService.newApplication(form);
+            //= make a new redux
+            console.log(data);
+            // props.addResume(data);
+            // setForm(initialState);
         } catch (err) {
             console.log(err);
         }
@@ -98,9 +132,7 @@ function FormApplication(props) {
     return (
         <div className="container">
             <h1>
-                {form.jobTitle
-                    ? form.jobTitle.toUpperCase()
-                    : 'New Application'}
+                {form.title ? form.title.toUpperCase() : 'New Application'}
                 {form.company ? ` - ${form.company}` : ''}
             </h1>
             <form onSubmit={handleSubmit} className="form-application">
@@ -109,8 +141,8 @@ function FormApplication(props) {
                         className="form-application__title"
                         label="Job Title"
                         color="primary"
-                        name="jobTitle"
-                        value={form.jobTitle}
+                        name="title"
+                        value={form.title}
                         onChange={handleChange}
                         InputProps={{
                             startAdornment: (
@@ -163,11 +195,29 @@ function FormApplication(props) {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value="pending">Pending</MenuItem>
-                            <MenuItem value="applied">Applied</MenuItem>
-                            <MenuItem value="rejected">Rejected</MenuItem>
+                            <MenuItem value="Pending">Pending</MenuItem>
+                            <MenuItem value="Applied">Applied</MenuItem>
+                            <MenuItem value="Rejected">Rejected</MenuItem>
                         </Select>
                     </FormControl>
+
+                    <a
+                        href="/"
+                        onClick={handleStarClick}
+                        className={
+                            form.star
+                                ? 'form-application__star--true'
+                                : 'form-application__star--false'
+                        }
+                    >
+                        <Tooltip
+                            title="Save to Favorites"
+                            TransitionComponent={Zoom}
+                            arrow
+                        >
+                            <StarIcon />
+                        </Tooltip>
+                    </a>
                 </div>
                 <div className="form-application__forms">
                     <div className="form-application__form-job">
@@ -176,7 +226,7 @@ function FormApplication(props) {
                         </div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
-                            value={form.description}
+                            value={form.jobDescription}
                             init={{
                                 height: 500,
                                 width: '100%',
@@ -200,7 +250,7 @@ function FormApplication(props) {
                         </div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
-                            value={form.description}
+                            value={form.resume}
                             init={{
                                 height: 500,
                                 width: '100%',
@@ -222,9 +272,11 @@ function FormApplication(props) {
                 <div className="form-application__followup">
                     <div className="form-application__followup-list">
                         <ul>
-                            <li>called</li>
-                            <li>sent an email</li>
-                            <li>applied again for the job</li>
+                            {form.followup.length > 0
+                                ? form.followup.map((follow, idx) => {
+                                      return <li key={idx}>{follow}</li>;
+                                  })
+                                : ''}
                         </ul>
                     </div>
                     <div className="form-application__followup-list-input">
@@ -235,7 +287,7 @@ function FormApplication(props) {
                                 </div>
                                 <Editor
                                     apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
-                                    value={form.description}
+                                    value={form.coverLetter}
                                     init={{
                                         height: 500,
                                         width: '100%',
@@ -258,10 +310,16 @@ function FormApplication(props) {
                         )}
                         <div className="form-application__followup-ctrl">
                             <a
-                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall a-add"
+                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall a-show-hide"
                                 href="/"
                                 onClick={handleCoverLetterVisible}
                             >
+                                {form.coverLetterActive ? (
+                                    <VisibilityIconOff />
+                                ) : (
+                                    <VisibilityIcon />
+                                )}
+                                &nbsp;&nbsp;
                                 {form.coverLetterActive ? 'Hide CL' : 'Show CL'}
                             </a>
                             <TextField
@@ -287,16 +345,21 @@ function FormApplication(props) {
                                 }}
                             />
                         </div>
-                        <textarea
-                            name="followup"
-                            className="form-application__followup-input"
-                            placeholder="Follow-up (press Enter to save a new note)"
-                        />
+                        <div className="form-application__form-followup">
+                            <textarea
+                                name="followupNow"
+                                className="form-application__followup-input"
+                                placeholder="Follow-up (press Enter to save a new note)"
+                                onKeyPress={onKeyPress}
+                                onChange={handleChange}
+                                value={form.followupNow}
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className="form-resume__div-button">
+                <div className="form-application__ctrl">
                     <Button
-                        className="form-resume__button"
+                        className="form-application__button"
                         size="small"
                         variant="contained"
                         color="secondary"

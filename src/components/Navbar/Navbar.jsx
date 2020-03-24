@@ -21,6 +21,9 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PersonIcon from '@material-ui/icons/Person';
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
+import Zoom from '@material-ui/core/Zoom';
 
 const searchReducer = (state, action) => {
     switch (action.type) {
@@ -128,19 +131,21 @@ function Navbar(props) {
 
     const navNotLoggedin = props.fullName ? (
         <div className="navbar-logged-user">
-            <div className="tooltip">
+            <Tooltip title="New Application" TransitionComponent={Zoom} arrow>
                 <Link color="inherit" to="/new">
                     <AddCircleOutlineIcon />
                 </Link>
-                <div className="bottom">
-                    <h3>Add a new application</h3>
-                    <i></i>
-                </div>
-            </div>
-            <Link color="inherit" to="#" onClick={toggleDrawer('right', true)}>
-                {props.fullName} &nbsp;
-                <MenuIcon />
-            </Link>
+            </Tooltip>
+            <Tooltip title="Menu" TransitionComponent={Zoom} arrow>
+                <Link
+                    color="inherit"
+                    to="#"
+                    onClick={toggleDrawer('right', true)}
+                >
+                    {props.fullName} &nbsp;
+                    <MenuIcon />
+                </Link>
+            </Tooltip>
         </div>
     ) : (
         <div>
@@ -157,10 +162,16 @@ function Navbar(props) {
         <div>
             <AppBar position="static">
                 <Toolbar>
-                    <Link color="inherit" to="/">
-                        <HomeIcon />
-                        &nbsp;Home
-                    </Link>
+                    <Tooltip
+                        title="Go To Home"
+                        TransitionComponent={Zoom}
+                        arrow
+                    >
+                        <Link color="inherit" to="/">
+                            <HomeIcon />
+                            &nbsp;Home
+                        </Link>
+                    </Tooltip>
                     <div
                         className="navbar-search"
                         style={{ display: props.fullName ? '' : 'none' }}

@@ -54,6 +54,10 @@ const jobSchema = new Schema(
         status: {
             type: String,
             enum: ['Pending', 'Applied', 'Rejected']
+        },
+        star: {
+            type: Boolean,
+            default: false
         }
     },
     {

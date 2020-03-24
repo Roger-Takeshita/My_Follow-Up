@@ -88,11 +88,15 @@ footer {
   }
 }
 
-.a-add {
+.a-show-hide {
   background-color: $buttonAddBGColor !important;
   color: white !important;
+  height: 25px !important;
   svg {
     font-size: $buttonIconSize;
+  }
+  &:hover svg {
+    color: $iconColorHover;
   }
 }
 
@@ -205,51 +209,6 @@ footer {
   }
 }
 
-.tooltip {
-  position:relative;
-  &:hover .bottom {
-    display:block;
-    visibility: visible;
-  }
-  .bottom {
-    min-width:200px; 
-    top:55px;
-    left:50%;
-    transform:translate(-50%, 0);
-    padding:10px 20px;
-    color:#444444;
-    background-color:#EEEEEE;
-    font-weight:normal;
-    font-size:13px;
-    border-radius:8px;
-    position:absolute;
-    z-index:99999999;
-    box-sizing:border-box;
-    box-shadow:0 1px 8px rgba(0,0,0,0.5);
-    display:none;
-    visibility: hidden;
-  }
-  .bottom i {
-    position:absolute;
-    bottom:100%;
-    left:50%;
-    margin-left:-12px;
-    width:24px;
-    height:12px;
-    overflow:hidden;
-  }
-  .bottom i::after {
-    content:'';
-    position:absolute;
-    width:12px;
-    height:12px;
-    left:50%;
-    transform:translate(-50%,50%) rotate(45deg);
-    background-color:#EEEEEE;
-    box-shadow:0 1px 8px rgba(0,0,0,0.5);
-  }
-}
-
 .table__width {
   min-width: 100%;
 }
@@ -288,6 +247,9 @@ footer {
     display: inherit;
     flex-grow: 1 !important;
     padding: 5px !important;
+    a {
+      align-self: flex-end;
+    }
   }
   &__title {
     width: 250px;
@@ -304,6 +266,18 @@ footer {
   &__status {
     margin: auto 5px !important;
     min-width: 120px !important;
+  }
+  &__star--true {
+    color: #ffc107;
+    svg {
+      font-size: 2rem;
+    }
+  }
+  &__star--false {
+    color: lightgray;
+    svg {
+      font-size: 2rem;
+    }
   }
   &__forms {
     display: inherit;
@@ -347,10 +321,19 @@ footer {
     min-height: 60px;
     border: 1px solid lightgrey;
     border-radius: 5px;
+    font-size: 15px;
   }
   &__date {
     width: 145px;
     box-sizing: unset;
+  }
+  &__ctrl {
+    width: 100%;
+    text-align: right;
+    margin: 10px 0;
+  }
+  &__button {
+    margin-left: 5px !important;
   }
 }
 

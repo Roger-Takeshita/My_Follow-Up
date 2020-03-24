@@ -4,6 +4,7 @@ const SEARCH_URL = '/api/search';
 const RESUMES_URL = '/api/resumes';
 const RESUME_URL = '/api/resume';
 const NEW_RESUME_URL = '/api/resume/new';
+const NEW_APPLICATION_URL = '/api/application/new';
 
 function search(data) {
     const option = {
@@ -97,11 +98,28 @@ function deleteResume(id) {
     });
 }
 
+function newApplication(data) {
+    const option = {
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            Authorization: 'Baerer ' + tokenService.getToken()
+        }),
+        body: JSON.stringify(data)
+    };
+    return fetch(`${NEW_APPLICATION_URL}`, option).then(async (res) => {
+        let data = await res.json();
+        if (res.ok) return data;
+        throw new Error(data.error);
+    });
+}
+
 export default {
     search,
     getResume,
     getResumes,
     newResume,
     updateResume,
-    deleteResume
+    deleteResume,
+    newApplication
 };
