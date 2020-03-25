@@ -137,6 +137,7 @@ function FormApplication(props) {
                         label="Job Title"
                         color="primary"
                         name="title"
+                        autoComplete="off"
                         value={form.title}
                         onChange={handleChange}
                         InputProps={{
@@ -152,6 +153,7 @@ function FormApplication(props) {
                         label="Company"
                         color="primary"
                         name="company"
+                        autoComplete="off"
                         value={form.company}
                         onChange={handleChange}
                         InputProps={{
@@ -167,6 +169,7 @@ function FormApplication(props) {
                         label="Link"
                         color="primary"
                         name="link"
+                        autoComplete="off"
                         value={form.link}
                         onChange={handleChange}
                         InputProps={{
@@ -195,7 +198,6 @@ function FormApplication(props) {
                             <MenuItem value="Rejected">Rejected</MenuItem>
                         </Select>
                     </FormControl>
-
                     <a
                         href="/"
                         onClick={handleStarClick}
@@ -247,6 +249,20 @@ function FormApplication(props) {
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.resume}
                             init={{
+                                templates: [
+                                    {
+                                        title: 'Select a Resume',
+                                        description: '',
+                                        content: ''
+                                    },
+                                    ...props.resumes.map((resume) => {
+                                        return {
+                                            title: resume.title,
+                                            description: '',
+                                            content: resume.description
+                                        };
+                                    })
+                                ],
                                 height: 400,
                                 width: '100%',
                                 menubar: true,
@@ -255,7 +271,7 @@ function FormApplication(props) {
                                     pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern 
                                     noneditable help charmap emoticons`,
 
-                                toolbar: `fullscreen print | undo redo | bold italic underline strikethrough | 
+                                toolbar: `fullscreen print template | undo redo | bold italic underline strikethrough | 
                                 fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
                                 outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
                                 image media link anchor | help`

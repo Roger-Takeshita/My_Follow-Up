@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './css/App.css';
 import Navbar from './components/Navbar/Navbar';
@@ -16,6 +16,7 @@ import { setResumes } from './redux/resume';
 import { setApplications } from './redux/application';
 
 function App(props) {
+    const [fetchFlag, setFetchFlag] = useState(false);
     let pages = userService.getUser() ? (
         <Switch>
             <Route
@@ -64,6 +65,7 @@ function App(props) {
                 ]);
                 await props.setApplications(applications);
                 await props.setResumes(resumes);
+                setFetchFlag(true);
             }
         }
         getData();
@@ -72,7 +74,7 @@ function App(props) {
     return (
         <div className="App">
             <Navbar history={props.history} />
-            <main>{pages}</main>
+            <main>{fetchFlag ? pages : 'Loading...'}</main>
             <footer>
                 <div>
                     <a href="https://github.com/roger-takeshita" target="blank">
