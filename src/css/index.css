@@ -443,8 +443,19 @@ footer div a svg {
   height: 30px;
 }
 
+.form-application__followup-title {
+  font-size: 1.2rem;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
 .form-application__followup-list {
   text-align: left;
+}
+
+.form-application__followup-display, .form-application__followup-list-input {
+  width: 50%;
 }
 
 .form-application__followup-input {

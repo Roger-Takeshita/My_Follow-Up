@@ -18,39 +18,21 @@ import { setApplications } from './redux/application';
 function App(props) {
     const [fetchFlag, setFetchFlag] = useState(false);
     let pages = userService.getUser() ? (
-        <Switch>
-            <Route
-                exact
-                path="/new"
-                render={({ history }) => (
-                    <NewApplicationPage history={history} />
-                )}
-            />
-            <Route
-                exact
-                path="/profile"
-                render={({ history }) => <ProfilePage history={history} />}
-            />
-            <Route
-                exact
-                path="/resumes"
-                render={({ history }) => <ResumesPage history={history} />}
-            />
-            <Route exact path="/" render={() => <HomePage />} />
-            <Route render={() => <Redirect to={{ pathname: '/' }} />} />
-        </Switch>
+        fetchFlag ? (
+            <Switch>
+                <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
+                <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
+                <Route exact path="/resumes" render={({ history }) => <ResumesPage history={history} />} />
+                <Route exact path="/" render={() => <HomePage />} />
+                <Route render={() => <Redirect to={{ pathname: '/' }} />} />
+            </Switch>
+        ) : (
+            'Loading...'
+        )
     ) : (
         <Switch>
-            <Route
-                exact
-                path="/login"
-                render={({ history }) => <LoginPage history={history} />}
-            />
-            <Route
-                exact
-                path="/signup"
-                render={({ history }) => <SignupPage history={history} />}
-            />
+            <Route exact path="/login" render={({ history }) => <LoginPage history={history} />} />
+            <Route exact path="/signup" render={({ history }) => <SignupPage history={history} />} />
             <Route exact path="/" render={() => <HomePage />} />
             <Route render={() => <Redirect to={{ pathname: '/login' }} />} />
         </Switch>
@@ -59,10 +41,7 @@ function App(props) {
     useEffect(() => {
         async function getData() {
             if (props.userFirstName) {
-                const [resumes, applications] = await Promise.all([
-                    apiService.getData('/api/resumes'),
-                    apiService.getData('/api/applications')
-                ]);
+                const [resumes, applications] = await Promise.all([apiService.getData('/api/resumes'), apiService.getData('/api/applications')]);
                 await props.setApplications(applications);
                 await props.setResumes(resumes);
                 setFetchFlag(true);
@@ -74,7 +53,7 @@ function App(props) {
     return (
         <div className="App">
             <Navbar history={props.history} />
-            <main>{fetchFlag ? pages : 'Loading...'}</main>
+            <main>{pages}</main>
             <footer>
                 <div>
                     <a href="https://github.com/roger-takeshita" target="blank">

@@ -302,7 +302,10 @@ footer {
     padding: auto 5px!important;
     width: 50% !important;
   }
-  &__followup-ctrl{
+  &__followup-display {
+
+  }
+  &__followup-ctrl {
     display: flex;
     justify-content: space-around;
     margin-bottom: 10px;
@@ -312,8 +315,15 @@ footer {
       height: 30px;
     }
   }
+  &__followup-title {
+    font-size: 1.2rem;
+    flex-grow: 1;
+  }
   &__followup-list {
     text-align: left;
+  }
+  &__followup-display, &__followup-list-input {
+    width: 50%;
   }
   &__followup-input {
     width: -webkit-fill-available;

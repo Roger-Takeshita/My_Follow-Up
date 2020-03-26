@@ -100,23 +100,13 @@ function FormApplication(props) {
     };
 
     function isFormValid() {
-        return !(
-            form.title &&
-            form.company &&
-            form.link &&
-            form.jobDescription &&
-            form.resume &&
-            form.status
-        );
+        return !(form.title && form.company && form.link && form.jobDescription && form.resume && form.status);
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const data = await apiService.postPutData(
-                '/api/application/new',
-                form
-            );
+            const data = await apiService.postPutData('/api/application/new', form);
             props.addApplication(data);
             setForm(initialState);
         } catch (err) {
@@ -181,15 +171,8 @@ function FormApplication(props) {
                         }}
                     />
                     <FormControl className="form-application__status">
-                        <InputLabel id="demo-controlled-open-select-label">
-                            Status
-                        </InputLabel>
-                        <Select
-                            labelId="demo-controlled-open-select-label"
-                            name="status"
-                            value={form.status}
-                            onChange={handleChange}
-                        >
+                        <InputLabel id="demo-controlled-open-select-label">Status</InputLabel>
+                        <Select labelId="demo-controlled-open-select-label" name="status" value={form.status} onChange={handleChange}>
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
@@ -198,29 +181,15 @@ function FormApplication(props) {
                             <MenuItem value="Rejected">Rejected</MenuItem>
                         </Select>
                     </FormControl>
-                    <a
-                        href="/"
-                        onClick={handleStarClick}
-                        className={
-                            form.star
-                                ? 'form-application__star--true'
-                                : 'form-application__star--false'
-                        }
-                    >
-                        <Tooltip
-                            title="Save to Favorites"
-                            TransitionComponent={Zoom}
-                            arrow
-                        >
+                    <a href="/" onClick={handleStarClick} className={form.star ? 'form-application__star--true' : 'form-application__star--false'}>
+                        <Tooltip title="Save to Favorites" TransitionComponent={Zoom} arrow>
                             <StarIcon />
                         </Tooltip>
                     </a>
                 </div>
                 <div className="form-application__forms">
                     <div className="form-application__form-job">
-                        <div className="form-application__form-title">
-                            Job Description
-                        </div>
+                        <div className="form-application__form-title">Job Description</div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.jobDescription}
@@ -242,9 +211,7 @@ function FormApplication(props) {
                         />
                     </div>
                     <div className="form-application__form-resume">
-                        <div className="form-application__form-title">
-                            Resume
-                        </div>
+                        <div className="form-application__form-title">Resume</div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.resume}
@@ -281,21 +248,24 @@ function FormApplication(props) {
                     </div>
                 </div>
                 <div className="form-application__followup">
-                    <div className="form-application__followup-list">
-                        <ul>
-                            {form.followup.length > 0
-                                ? form.followup.map((follow, idx) => {
-                                      return <li key={idx}>{follow}</li>;
-                                  })
-                                : ''}
-                        </ul>
+                    <div className="form-application__followup-display">
+                        <div className="form-application__followup-title">
+                            {form.followup.length > 0 ? `Follow-ups (${form.followup.length})` : 'No Follow-ups'}
+                        </div>
+                        <div className="form-application__followup-list">
+                            <ul>
+                                {form.followup.length > 0
+                                    ? form.followup.map((follow, idx) => {
+                                          return <li key={idx}>{follow}</li>;
+                                      })
+                                    : ''}
+                            </ul>
+                        </div>
                     </div>
                     <div className="form-application__followup-list-input">
                         {form.coverLetterActive && (
                             <div className="form-application__form-cl">
-                                <div className="form-application__form-title">
-                                    Cover Letter
-                                </div>
+                                <div className="form-application__form-title">Cover Letter</div>
                                 <Editor
                                     apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                                     value={form.coverLetter}
@@ -313,9 +283,7 @@ function FormApplication(props) {
                                         outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
                                         image media link anchor | help`
                                     }}
-                                    onEditorChange={
-                                        handleCoverLetterEditorChange
-                                    }
+                                    onEditorChange={handleCoverLetterEditorChange}
                                 />
                             </div>
                         )}
@@ -325,11 +293,7 @@ function FormApplication(props) {
                                 href="/"
                                 onClick={handleCoverLetterVisible}
                             >
-                                {form.coverLetterActive ? (
-                                    <VisibilityIconOff />
-                                ) : (
-                                    <VisibilityIcon />
-                                )}
+                                {form.coverLetterActive ? <VisibilityIconOff /> : <VisibilityIcon />}
                                 &nbsp;&nbsp;
                                 {form.coverLetterActive ? 'Hide CL' : 'Show CL'}
                             </a>
@@ -366,32 +330,32 @@ function FormApplication(props) {
                                 value={form.followupNow}
                             />
                         </div>
+                        <div className="form-application__ctrl">
+                            <Button
+                                className="form-application__button"
+                                size="small"
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<CancelIcon />}
+                                onClick={handleCancelBtn}
+                            >
+                                {' '}
+                                Cancel
+                            </Button>
+                            &nbsp;&nbsp;
+                            <button
+                                disabled={isFormValid()}
+                                className={
+                                    isFormValid()
+                                        ? 'Mui-disabled MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall'
+                                        : 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall'
+                                }
+                            >
+                                <DoneIcon />
+                                Save
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className="form-application__ctrl">
-                    <Button
-                        className="form-application__button"
-                        size="small"
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<CancelIcon />}
-                        onClick={handleCancelBtn}
-                    >
-                        {' '}
-                        Cancel
-                    </Button>
-                    &nbsp;&nbsp;
-                    <button
-                        disabled={isFormValid()}
-                        className={
-                            isFormValid()
-                                ? 'Mui-disabled MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall'
-                                : 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall'
-                        }
-                    >
-                        <DoneIcon />
-                        Save
-                    </button>
                 </div>
             </form>
         </div>
