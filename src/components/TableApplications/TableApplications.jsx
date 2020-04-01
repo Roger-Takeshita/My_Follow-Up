@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { toggleStar } from '../../redux/application';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -14,16 +16,14 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import StarIcon from '@material-ui/icons/Star';
+import apiService from '../../utils/apiService';
 
-function createData(title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star) {
-    return { title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star };
+function createData(id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star) {
+    return { id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star };
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -62,7 +62,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -70,14 +70,6 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all applications' }}
-                    />
-                </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -195,14 +187,14 @@ const useStyles = makeStyles((theme) => ({
 
 function TableApplications(props) {
     const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('appliedOn');
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(15);
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('appliedOn');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
 
     const applications = props.applications.map((application) => {
         return createData(
+            application._id,
             application.title,
             application.company,
             application.link,
@@ -211,7 +203,7 @@ function TableApplications(props) {
             application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
             application.followup.length > 0 ? application.followup[application.followup.length - 1].date.split('T')[0] : '',
             application.followup.length > 0 ? application.followup[application.followup.length - 1].description : '',
-            application.star ? 'S' : ''
+            application.star
         );
     });
 
@@ -221,35 +213,9 @@ function TableApplications(props) {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = applications.map((n) => n.name);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
-
-    const handleClick = (event, name) => {
-        event.stopPropagation();
-        if (name !== 'link') {
-            const selectedIndex = selected.indexOf(name);
-            let newSelected = [];
-
-            if (selectedIndex === -1) {
-                newSelected = newSelected.concat(selected, name);
-            } else if (selectedIndex === 0) {
-                newSelected = newSelected.concat(selected.slice(1));
-            } else if (selectedIndex === selected.length - 1) {
-                newSelected = newSelected.concat(selected.slice(0, -1));
-            } else if (selectedIndex > 0) {
-                newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-            }
-
-            setSelected(newSelected);
-        } else {
-            event.preventDefault();
-        }
+    const handleStarClick = async (id) => {
+        const data = await apiService.postPutData('/api/application', {}, id);
+        props.toggleStar(data);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -261,54 +227,26 @@ function TableApplications(props) {
         setPage(0);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, applications.length - page * rowsPerPage);
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table className={classes.table} aria-labelledby="tableTitle" size="small" aria-label="enhanced table">
-                        <EnhancedTableHead
-                            classes={classes}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={applications.length}
-                        />
+                        <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={applications.length} />
                         <TableBody>
                             {stableSort(applications, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.title);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
-                                        <TableRow
-                                            hover
-                                            onClick={(event) => handleClick(event, row.title)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={index}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.title}
+                                        <TableRow hover tabIndex={-1} key={index}>
+                                            <TableCell component="th" scope="row">
+                                                <Link to={`/application/${row.id}`}>{row.title}</Link>
                                             </TableCell>
                                             <TableCell align="center">{row.company}</TableCell>
-                                            <TableCell align="center" onClick={(event) => handleClick(event, 'link')}>
+                                            <TableCell align="center">
                                                 <a href={row.link} onClick={() => window.open(row.link, '_blank')}>
                                                     Link
                                                 </a>
@@ -316,10 +254,18 @@ function TableApplications(props) {
                                             <TableCell align="center">{row.coverLetter}</TableCell>
                                             <TableCell align="center">{row.appliedOn}</TableCell>
                                             <TableCell align="center">{row.rejectedOn}</TableCell>
-                                            <TableCell align="left">
+                                            <TableCell align="center">
                                                 <strong>{row.followupDate}</strong>&nbsp;-&nbsp;{row.followup}
                                             </TableCell>
-                                            <TableCell align="center">{row.star}</TableCell>
+                                            <TableCell align="center">
+                                                <a
+                                                    href="/"
+                                                    onClick={() => handleStarClick(row.id)}
+                                                    className={row.star ? 'table-applications__star--true' : 'table-applications__star--false'}
+                                                >
+                                                    <StarIcon />
+                                                </a>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -353,4 +299,8 @@ const mapStateToProps = (state) => ({
     applications: state.application
 });
 
-export default connect(mapStateToProps)(TableApplications);
+const mapDispatchToProps = (dispatch) => ({
+    toggleStar: (id) => dispatch(toggleStar(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableApplications);

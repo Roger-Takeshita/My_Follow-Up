@@ -11,7 +11,7 @@ function search(data) {
         })
     };
     return fetch(`${SEARCH_URL}/${data}`, option).then(async (res) => {
-        let data = await res.json();
+        const data = await res.json();
         if (res.ok) return data;
         throw new Error(data.error);
     });
@@ -25,13 +25,11 @@ function getData(url, page = 1, numDocs = 100) {
             Authorization: 'Baerer ' + tokenService.getToken()
         })
     };
-    return fetch(`${url}/?page=${page}&docs=${numDocs}`, option).then(
-        async (res) => {
-            let data = await res.json();
-            if (res.ok) return data;
-            throw new Error(data.error);
-        }
-    );
+    return fetch(`${url}/?page=${page}&docs=${numDocs}`, option).then(async (res) => {
+        const data = await res.json();
+        if (res.ok) return data;
+        throw new Error(data.error);
+    });
 }
 
 function postPutData(url, data, id) {
@@ -44,7 +42,7 @@ function postPutData(url, data, id) {
         body: JSON.stringify(data)
     };
     return fetch(id ? `${url}/${id}` : url, option).then(async (res) => {
-        let data = await res.json();
+        const data = await res.json();
         if (res.ok) return data;
         throw new Error(data.error);
     });
@@ -59,7 +57,7 @@ function deleteData(url, id) {
         })
     };
     return fetch(`${url}/${id}`, option).then(async (res) => {
-        let data = await res.json();
+        const data = await res.json();
         if (res.ok) return data;
         throw new Error(data.error);
     });

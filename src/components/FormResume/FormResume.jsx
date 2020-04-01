@@ -83,11 +83,7 @@ function FormResume(props) {
     async function handleUpdate(e) {
         e.preventDefault();
         try {
-            const data = await apiService.postPutData(
-                '/api/resume',
-                form,
-                form.resumeId
-            );
+            const data = await apiService.postPutData('/api/resume', form, form.resumeId);
             props.updateResume(data);
             setForm(initialState);
         } catch (err) {
@@ -110,17 +106,8 @@ function FormResume(props) {
                 Add New Resume
             </button>
             {form.formActive && (
-                <form
-                    onSubmit={form.resumeId ? handleUpdate : handleSubmit}
-                    className="form-resume"
-                >
-                    <input
-                        className="form-resume__input"
-                        name="title"
-                        placeholder="Title"
-                        value={form.title}
-                        onChange={handleChange}
-                    />
+                <form onSubmit={form.resumeId ? handleUpdate : handleSubmit} className="form-resume">
+                    <input className="form-resume__input" name="title" placeholder="Title" value={form.title} onChange={handleChange} />
                     <Editor
                         apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                         value={form.description}
@@ -166,11 +153,7 @@ function FormResume(props) {
                 </form>
             )}
             <TableContainer component={Paper}>
-                <Table
-                    className="table__width"
-                    size="small"
-                    aria-label="a dense table"
-                >
+                <Table className="table__width" size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Resumes</TableCell>
@@ -180,19 +163,11 @@ function FormResume(props) {
                         {props.resumes.map((resume, idx) => (
                             <TableRow key={idx}>
                                 <TableCell component="th" scope="row">
-                                    <Link
-                                        onClick={() =>
-                                            handleClick(resume.title)
-                                        }
-                                        to="#"
-                                    >
+                                    <Link onClick={() => handleClick(resume.title)} to="#">
                                         {resume.title}
                                         <EditIcon />
                                     </Link>
-                                    <Link
-                                        onClick={() => handleDelete(resume._id)}
-                                        to="#"
-                                    >
+                                    <Link onClick={() => handleDelete(resume._id)} to="#">
                                         <DeleteForeverIcon />
                                     </Link>
                                 </TableCell>
@@ -200,18 +175,9 @@ function FormResume(props) {
                         ))}
                     </TableBody>
                 </Table>
-                {props.resume ? (
-                    <div className="table-message">
-                        You don't have any resume
-                    </div>
-                ) : (
-                    ''
-                )}
+                {props.resume ? <div className="table-message">You don't have any resume</div> : ''}
             </TableContainer>
-            <Prompt
-                when={form.modifiedFlag}
-                message="Are you sure you want to leave? You have unsaved chages"
-            />
+            <Prompt when={form.modifiedFlag} message="Are you sure you want to leave? You have unsaved chages" />
         </div>
     );
 }

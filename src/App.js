@@ -5,6 +5,7 @@ import Navbar from './components/Navbar/Navbar';
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
+import ApplicationPage from './pages/ApplicationPage/ApplicationPage';
 import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ResumesPage from './pages/ResumesPage/ResumesPage';
@@ -20,6 +21,7 @@ function App(props) {
     let pages = userService.getUser() ? (
         fetchFlag ? (
             <Switch>
+                <Route exact path="/application/:id" render={({ history, match }) => <ApplicationPage history={history} match={match} />} />
                 <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
                 <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
                 <Route exact path="/resumes" render={({ history }) => <ResumesPage history={history} />} />

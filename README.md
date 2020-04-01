@@ -1,5 +1,7 @@
 <h1 id='summary'>Summary</h1>
 
+* [Trello Board - Project Link](https://trello.com/b/ZjjHNpnu/follow-up-app)
+* [Project Database](#projectdatabase)
 * [Follow-Up App](#followup)
   * [Back-end Node.js](#basic)
     * [Installation](#installation)
@@ -48,7 +50,21 @@
   * [CSS Folder](#css)
   * [App.js](#app)
   * [Front-End Structure](#appstructure)
-* [Project Database](#projectdatabase)
+
+<h1 id='trello'>Trello Board</h1>
+
+[Go Back to Summary](#summary)
+
+* [Trello Board - Project Link](https://trello.com/b/ZjjHNpnu/follow-up-app)
+
+<h1 id='projectdatabase'>Project Database</h1>
+
+[Go Back to Summary](#summary)
+
+* [Lucidchart - Database Model Link](https://www.lucidchart.com/invitations/accept/e381b202-bdcb-4060-8edf-e68aa7b40e22)
+
+![](./public/images/Database.png)
+
 
 <h1 id='followup'>Follow-Up App</h1>
 
@@ -1467,11 +1483,3 @@
     ├── Procfile
     └── server.js
 ```
-
-<h1 id='projectdatabase'>Project Database</h1>
-
-[Go Back to Summary](#summary)
-
-* [Database Model](https://www.lucidchart.com/invitations/accept/e381b202-bdcb-4060-8edf-e68aa7b40e22)
-
-![](./public/images/Database.png)

@@ -12,7 +12,7 @@ function signup(info) {
     };
     return fetch(`${BASE_URL}/signup`, options)
         .then(async (res) => {
-            let data = await res.json();
+            const data = await res.json();
             if (res.ok) return data;
             throw new Error(data.error);
         })
@@ -31,7 +31,7 @@ function login(info) {
     };
     return fetch(`${BASE_URL}/login`, options)
         .then(async (res) => {
-            let data = await res.json();
+            const data = await res.json();
             if (res.ok) return data;
             throw new Error(data.error);
         })

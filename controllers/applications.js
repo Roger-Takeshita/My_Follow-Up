@@ -41,9 +41,7 @@ async function newApplication(req, res) {
             }
             const cleanFollowup = await Job.findById({
                 _id: newSavedDoc._id
-            }).select(
-                '-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v'
-            );
+            }).select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
             res.json(cleanFollowup);
         } else {
             console.log('Link already exsists');
@@ -60,9 +58,7 @@ async function getApplications(req, res) {
         const applications = await Job.find({ user: req.user._id })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
-            .select(
-                '-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v'
-            );
+            .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
         if (applications) {
             res.json(applications);
         } else {
@@ -74,6 +70,24 @@ async function getApplications(req, res) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
+
+async function updateApplication(req, res) {
+    try {
+        let application = {};
+        if (req.body.length > 0) {
+            //= update application
+            console.log('i have a body');
+        } else {
+            application = await Job.findOne({ _id: req.params.id }).select('-user -createdAt -updatedAt -__v');
+            application.star = !application.star;
+        }
+        res.json(await application.save());
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
 function capitalLetters(str) {
     str = str.split(' ');
     for (let i = 0; i < str.length; i++) {
@@ -85,5 +99,6 @@ function capitalLetters(str) {
 module.exports = {
     search,
     newApplication,
-    getApplications
+    getApplications,
+    updateApplication
 };

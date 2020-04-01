@@ -7,8 +7,7 @@ async function newResume(req, res) {
             try {
                 const newResume = new Resume(req.body);
                 newResume.user = req.user._id;
-                const resume = await newResume.save();
-                res.json(resume);
+                res.json(await newResume.save());
             } catch (err) {
                 console.log('Something went wrong', err);
                 res.status(500).json({ error: 'Something went wrong' });
@@ -43,14 +42,10 @@ async function getResumes(req, res) {
 
 async function updateResume(req, res) {
     try {
-        const resume = await Resume.findOne({ _id: req.params.id });
+        const resume = await Resume.findOne({ _id: req.params.id }).select('-user -createdAt -updatedAt -__v');
         resume.title = req.body.title;
         resume.description = req.body.description;
-        await resume.save();
-        const updatedResume = await Resume.findOne({
-            _id: req.params.id
-        }).select('-user -createdAt -updatedAt -__v');
-        res.json(updatedResume);
+        res.json(await resume.save());
     } catch (err) {
         console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });

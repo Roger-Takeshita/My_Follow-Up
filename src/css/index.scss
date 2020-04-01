@@ -298,10 +298,6 @@ footer {
     display: flex;
     margin-top: 10px;
   }
-  &__followup-list, &__followup-list-input {
-    padding: auto 5px!important;
-    width: 50% !important;
-  }
   &__followup-display {
 
   }
@@ -321,6 +317,16 @@ footer {
   }
   &__followup-list {
     text-align: left;
+    display: flex;
+    flex-direction: block;
+    flex-grow: 1;
+    padding: auto 5px!important;
+  }
+  &__followup-list-li {
+    list-style: none;
+  }
+  &__followup-list-span {
+    font-weight: bolder;
   }
   &__followup-display, &__followup-list-input {
     width: 50%;
@@ -349,4 +355,19 @@ footer {
 
 .MuiGrid-container {
   width: auto !important;
+}
+
+.table-applications {
+  &__star--true {
+    color: #ffc107;
+    svg {
+      font-size: 1.5rem;
+    }
+  }
+  &__star--false {
+    color: lightgray;
+    svg {
+      font-size: 1.5rem;
+    }
+  }
 }

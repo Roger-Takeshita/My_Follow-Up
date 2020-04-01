@@ -1,8 +1,9 @@
-const SET_APPLICATIONS = 'GET_APPLICATIONS';
+const SET_APPLICATIONS = 'SET_APPLICATIONS';
 const ADD_APPLICATION = 'ADD_APPLICATION';
 const UPDATE_APPLICATION = 'UPDATE_APPLICATION';
 const DELETE_APPLICATION = 'DELETE_APPLICATION';
 const LOGOUT = 'LOGOUT';
+const TOGGLE_STAR = 'TOGGLE_STAR';
 
 export const setApplications = (data) => ({
     type: SET_APPLICATIONS,
@@ -28,6 +29,11 @@ export const logoutApplication = () => ({
     type: LOGOUT
 });
 
+export const toggleStar = (data) => ({
+    type: TOGGLE_STAR,
+    payload: data
+});
+
 function applicationReducer(state = [], action) {
     switch (action.type) {
         case SET_APPLICATIONS:
@@ -44,35 +50,31 @@ function applicationReducer(state = [], action) {
                           link: action.payload.link,
                           jobDescription: action.payload.jobDescription,
                           resume: action.payload.resume,
-                          appliedOn:
-                              action.payload.appliedOn === null
-                                  ? ''
-                                  : action.payload.appliedOn,
-                          rejectedOn:
-                              action.payload.rejectedOn === null
-                                  ? ''
-                                  : action.payload.rejectedOn,
+                          appliedOn: action.payload.appliedOn,
+                          rejectedOn: action.payload.rejectedOn,
                           status: action.payload.status,
-                          followup: [
-                              ...application.followup,
-                              ...action.payload.followup
-                          ],
+                          followup: [...application.followup, ...action.payload.followup],
                           coverLetter: action.payload.coverLetter,
                           star: action.payload.star
                       }
                     : application
             );
         case DELETE_APPLICATION:
-            let index = state.findIndex(
-                (item) => item._id === action.payload._id
-            );
+            let index = state.findIndex((item) => item._id === action.payload._id);
 
-            return [
-                ...state.slice(0, index),
-                ...state.slice(index + 1, state.length)
-            ];
+            return [...state.slice(0, index), ...state.slice(index + 1, state.length)];
         case LOGOUT:
             return [];
+        case TOGGLE_STAR:
+            return state.map((application) =>
+                application._id === action.payload._id
+                    ? {
+                          ...application,
+                          followup: [...application.followup],
+                          star: action.payload.star
+                      }
+                    : application
+            );
         default:
             return state;
     }

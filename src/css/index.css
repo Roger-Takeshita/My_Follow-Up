@@ -420,11 +420,6 @@ footer div a svg {
   margin-top: 10px;
 }
 
-.form-application__followup-list, .form-application__followup-list-input {
-  padding: auto 5px !important;
-  width: 50% !important;
-}
-
 .form-application__followup-ctrl {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -452,6 +447,25 @@ footer div a svg {
 
 .form-application__followup-list {
   text-align: left;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: block;
+          flex-direction: block;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  padding: auto 5px !important;
+}
+
+.form-application__followup-list-li {
+  list-style: none;
+}
+
+.form-application__followup-list-span {
+  font-weight: bolder;
 }
 
 .form-application__followup-display, .form-application__followup-list-input {
@@ -485,5 +499,21 @@ footer div a svg {
 
 .MuiGrid-container {
   width: auto !important;
+}
+
+.table-applications__star--true {
+  color: #ffc107;
+}
+
+.table-applications__star--true svg {
+  font-size: 1.5rem;
+}
+
+.table-applications__star--false {
+  color: lightgray;
+}
+
+.table-applications__star--false svg {
+  font-size: 1.5rem;
 }
 /*# sourceMappingURL=index.css.map */

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
 import apiService from '../../utils/apiService';
-import { addApplication } from '../../redux/application';
+import { addApplication, updateApplication } from '../../redux/application';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -22,21 +22,39 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 
 function FormApplication(props) {
-    const initialState = {
-        title: '',
-        company: '',
-        link: '',
-        jobDescription: '',
-        resume: '',
-        appliedOn: '',
-        rejectedOn: '',
-        status: '',
-        followupNow: '',
-        followup: [],
-        coverLetter: '',
-        coverLetterActive: false,
-        star: false
-    };
+    const initialState = props.application
+        ? {
+              title: props.application.title,
+              company: props.application.company,
+              link: props.application.link,
+              jobDescription: props.application.jobDescription,
+              resume: props.application.resume,
+              appliedOn: props.application.appliedOn !== null ? props.application.appliedOn.split('T')[0] : '',
+              rejectedOn: props.application.rejectedOn !== null ? props.application.rejectedOn.split('T')[0] : '',
+              status: props.application.status,
+              followupNow: '',
+              followup: [...props.application.followup],
+              coverLetter: props.application.coverLetter,
+              coverLetterActive: false,
+              star: props.application.star,
+              applicationId: props.application.applicationId
+          }
+        : {
+              title: '',
+              company: '',
+              link: '',
+              jobDescription: '',
+              resume: '',
+              appliedOn: '',
+              rejectedOn: '',
+              status: '',
+              followupNow: '',
+              followup: [],
+              coverLetter: '',
+              coverLetterActive: false,
+              star: false,
+              applicationId: ''
+          };
 
     const [form, setForm] = useState(initialState);
 
@@ -253,10 +271,15 @@ function FormApplication(props) {
                             {form.followup.length > 0 ? `Follow-ups (${form.followup.length})` : 'No Follow-ups'}
                         </div>
                         <div className="form-application__followup-list">
-                            <ul>
+                            <ul className="form-application__followup-list-ul">
                                 {form.followup.length > 0
                                     ? form.followup.map((follow, idx) => {
-                                          return <li key={idx}>{follow}</li>;
+                                          return (
+                                              <li className="form-application__followup-list-li" key={idx}>
+                                                  <span className="form-application__followup-list-span">[{follow.date.split('T')[0]}]</span>&nbsp;-&nbsp;
+                                                  {follow.description}
+                                              </li>
+                                          );
                                       })
                                     : ''}
                             </ul>
@@ -367,7 +390,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    addApplication: (data) => dispatch(addApplication(data))
+    addApplication: (data) => dispatch(addApplication(data)),
+    updateApplication: (data) => dispatch(updateApplication(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormApplication);
