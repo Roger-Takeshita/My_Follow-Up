@@ -20,6 +20,7 @@ import VisibilityIconOff from '@material-ui/icons/VisibilityOff';
 import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 function FormApplication(props) {
     const initialState = props.application
@@ -113,9 +114,12 @@ function FormApplication(props) {
                 });
             } else {
                 const data = await apiService.postPutData(`/api/application/${form.applicationId}/new`, { description: form.followupNow });
-                //= Still need to fix the addFollowup reducer
-                props.addFollowup(data);
-                setForm(initialState);
+                await props.addFollowup({ data, applicationId: form.applicationId });
+                await setForm({
+                    ...form,
+                    followup: [...form.followup, { _id: data._id, description: data.description, date: data.date }],
+                    followupNow: ''
+                });
             }
         }
     };
@@ -137,10 +141,8 @@ function FormApplication(props) {
                 setForm(initialState);
             } else {
                 const data = await apiService.postPutData(`/api/application`, form, form.applicationId);
-                console.log(data);
-                //_ Still need to implement the upadateApplication reducer
-                // props.addApplication(data);
-                // setForm(initialState);
+                props.updateApplication(data);
+                props.history.push('/');
             }
         } catch (err) {
             console.log(err);
@@ -282,22 +284,32 @@ function FormApplication(props) {
                 </div>
                 <div className="form-application__followup">
                     <div className="form-application__followup-display">
-                        <div className="form-application__followup-title">
+                        <div className="form-application__form-title">
                             {form.followup.length > 0 ? `Follow-ups (${form.followup.length})` : 'No Follow-ups'}
                         </div>
                         <div className="form-application__followup-list">
-                            <ul className="form-application__followup-list-ul">
-                                {form.followup.length > 0
-                                    ? form.followup.map((follow, idx) => {
-                                          return (
-                                              <li className="form-application__followup-list-li" key={idx}>
-                                                  <span className="form-application__followup-list-span">[{follow.date.split('T')[0]}]</span>&nbsp;-&nbsp;
-                                                  {follow.description}
-                                              </li>
-                                          );
-                                      })
-                                    : ''}
-                            </ul>
+                            {form.followup.length > 0
+                                ? form.followup.map((follow, idx) => {
+                                      return (
+                                          <div key={idx}>
+                                              <hr />
+                                              <div className="form-application__followup-item">
+                                                  <div className="form-application__followup-date">
+                                                      <span className="form-application__followup-span">
+                                                          {props.application ? `[${follow.date.split('T')[0]}]` : new Date().toISOString().split('T')[0]}
+                                                      </span>
+                                                      <a href="/">
+                                                          <Tooltip title="Delete" TransitionComponent={Zoom} placement="right" arrow>
+                                                              <DeleteOutlineIcon />
+                                                          </Tooltip>
+                                                      </a>
+                                                  </div>
+                                                  <div className="form-application__followup-text">{props.application ? follow.description : follow}</div>
+                                              </div>
+                                          </div>
+                                      );
+                                  })
+                                : ''}
                         </div>
                     </div>
                     <div className="form-application__followup-list-input">
@@ -401,7 +413,8 @@ function FormApplication(props) {
 }
 
 const mapStateToProps = (state) => ({
-    resumes: state.resume
+    resumes: state.resume,
+    applications: state.application
 });
 
 const mapDispatchToProps = (dispatch) => ({

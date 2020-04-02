@@ -40,17 +40,18 @@ function App(props) {
         </Switch>
     );
 
+    const { setApplications, setResumes, userFirstName } = props;
     useEffect(() => {
         async function getData() {
-            if (props.userFirstName) {
+            if (userFirstName) {
                 const [resumes, applications] = await Promise.all([apiService.getData('/api/resumes'), apiService.getData('/api/applications')]);
-                await props.setApplications(applications);
-                await props.setResumes(resumes);
+                await setApplications(applications);
+                await setResumes(resumes);
                 setFetchFlag(true);
             }
         }
         getData();
-    }, [props.userFirstName]);
+    }, [userFirstName, setApplications, setResumes]);
 
     return (
         <div className="App">

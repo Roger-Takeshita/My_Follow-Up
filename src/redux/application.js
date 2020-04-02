@@ -4,6 +4,7 @@ const UPDATE_APPLICATION = 'UPDATE_APPLICATION';
 const DELETE_APPLICATION = 'DELETE_APPLICATION';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_STAR = 'TOGGLE_STAR';
+const ADD_FOLLOWUP = 'ADD_FOLLOWUP';
 
 export const setApplications = (data) => ({
     type: SET_APPLICATIONS,
@@ -17,6 +18,11 @@ export const addApplication = (data) => ({
 
 export const updateApplication = (data) => ({
     type: UPDATE_APPLICATION,
+    payload: data
+});
+
+export const addFollowup = (data) => ({
+    type: ADD_FOLLOWUP,
     payload: data
 });
 
@@ -53,7 +59,7 @@ function applicationReducer(state = [], action) {
                           appliedOn: action.payload.appliedOn,
                           rejectedOn: action.payload.rejectedOn,
                           status: action.payload.status,
-                          followup: [...application.followup, ...action.payload.followup],
+                          followup: [...application.followup],
                           coverLetter: action.payload.coverLetter,
                           star: action.payload.star
                       }
@@ -72,6 +78,17 @@ function applicationReducer(state = [], action) {
                           ...application,
                           followup: [...application.followup],
                           star: action.payload.star
+                      }
+                    : application
+            );
+        case ADD_FOLLOWUP:
+            const newComment = [{ _id: action.payload.data._id, description: action.payload.data.description, date: action.payload.data.date }];
+            // console.log(newComment);
+            return state.map((application) =>
+                application._id === action.payload.applicationId
+                    ? {
+                          ...application,
+                          followup: [...application.followup, ...newComment]
                       }
                     : application
             );

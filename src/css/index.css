@@ -402,6 +402,8 @@ footer div a svg {
 .form-application__form-title {
   text-align: left;
   margin-bottom: 5px;
+  font-size: 1.2rem;
+  font-weight: bolder;
 }
 
 .form-application__form-job, .form-application__form-resume {
@@ -438,43 +440,63 @@ footer div a svg {
   height: 30px;
 }
 
-.form-application__followup-title {
-  font-size: 1.2rem;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-}
-
 .form-application__followup-list {
   text-align: left;
+}
+
+.form-application__followup-item {
+  padding: 5px 0;
+}
+
+.form-application__followup-item:hover {
+  background-color: #d3d3d345;
+}
+
+.form-application__followup-date {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: block;
-          flex-direction: block;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  padding: auto 5px !important;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-left: 10px;
 }
 
-.form-application__followup-list-li {
-  list-style: none;
+.form-application__followup-date a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-decoration: none;
 }
 
-.form-application__followup-list-span {
+.form-application__followup-date a svg {
+  color: #ff97b9;
+  font-size: 20px;
+}
+
+.form-application__followup-date a svg:hover {
+  color: red;
+}
+
+.form-application__followup-span {
   font-weight: bolder;
+}
+
+.form-application__followup-text {
+  margin-top: 5px;
+  padding: 0 5px 0 20px;
 }
 
 .form-application__followup-display, .form-application__followup-list-input {
   width: 50%;
+  padding: 5px;
 }
 
 .form-application__followup-input {
   width: -webkit-fill-available;
-  margin: auto 5px;
   min-height: 60px;
   border: 1px solid lightgrey;
   border-radius: 5px;

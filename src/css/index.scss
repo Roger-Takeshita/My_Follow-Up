@@ -7,6 +7,8 @@ $buttonSaveBGColor: rgba(5, 117, 5, 0.788);
 $buttonCancelBGColor: #f50556;
 $buttonAddBGColor: lightblue;
 $buttonIconSize: 18px;
+$fadeRedColor: #ff97b9;
+$RedColor: red;
 
 @mixin displayFlex ($justifyContent){
   display: flex;
@@ -286,6 +288,8 @@ footer {
   &__form-title {
     text-align: left;
     margin-bottom: 5px;
+    font-size: 1.2rem;
+    font-weight: bolder;
   }
   &__form-job, &__form-resume {
     width: 50%;
@@ -298,9 +302,6 @@ footer {
     display: flex;
     margin-top: 10px;
   }
-  &__followup-display {
-
-  }
   &__followup-ctrl {
     display: flex;
     justify-content: space-around;
@@ -311,29 +312,46 @@ footer {
       height: 30px;
     }
   }
-  &__followup-title {
-    font-size: 1.2rem;
-    flex-grow: 1;
-  }
   &__followup-list {
     text-align: left;
+  }
+  &__followup-item {
+    padding: 5px 0;
+    &:hover {
+      background-color: #d3d3d345;
+    }
+  }
+  &__followup-date{
     display: flex;
-    flex-direction: block;
-    flex-grow: 1;
-    padding: auto 5px!important;
+    align-items: center;
+    padding-left: 10px;
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      svg {
+        color: $fadeRedColor;
+        font-size: 20px;
+        &:hover {
+          color: $RedColor;
+        }
+      }
+    }
   }
-  &__followup-list-li {
-    list-style: none;
-  }
-  &__followup-list-span {
+  &__followup-span {
     font-weight: bolder;
+  }
+  &__followup-text {
+    margin-top: 5px;
+    padding: 0 5px 0 20px;
   }
   &__followup-display, &__followup-list-input {
     width: 50%;
+    padding: 5px;
   }
   &__followup-input {
     width: -webkit-fill-available;
-    margin: auto 5px;
+
     min-height: 60px;
     border: 1px solid lightgrey;
     border-radius: 5px;
