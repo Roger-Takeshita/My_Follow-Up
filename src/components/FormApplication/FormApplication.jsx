@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
 import apiService from '../../utils/apiService';
-import { addApplication, updateApplication } from '../../redux/application';
+import { addApplication, updateApplication, addFollowup } from '../../redux/application';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -37,7 +37,7 @@ function FormApplication(props) {
               coverLetter: props.application.coverLetter,
               coverLetterActive: false,
               star: props.application.star,
-              applicationId: props.application.applicationId
+              applicationId: props.id
           }
         : {
               title: '',
@@ -105,11 +105,18 @@ function FormApplication(props) {
     const onKeyPress = async (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            await setForm({
-                ...form,
-                followup: [...form.followup, e.target.value],
-                followupNow: ''
-            });
+            if (form.applicationId === '') {
+                await setForm({
+                    ...form,
+                    followup: [...form.followup, e.target.value],
+                    followupNow: ''
+                });
+            } else {
+                const data = await apiService.postPutData(`/api/application/${form.applicationId}/new`, { description: form.followupNow });
+                //= Still need to fix the addFollowup reducer
+                props.addFollowup(data);
+                setForm(initialState);
+            }
         }
     };
 
@@ -124,9 +131,17 @@ function FormApplication(props) {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const data = await apiService.postPutData('/api/application/new', form);
-            props.addApplication(data);
-            setForm(initialState);
+            if (form.applicationId === '') {
+                const data = await apiService.postPutData('/api/application/new', form);
+                props.addApplication(data);
+                setForm(initialState);
+            } else {
+                const data = await apiService.postPutData(`/api/application`, form, form.applicationId);
+                console.log(data);
+                //_ Still need to implement the upadateApplication reducer
+                // props.addApplication(data);
+                // setForm(initialState);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -391,7 +406,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     addApplication: (data) => dispatch(addApplication(data)),
-    updateApplication: (data) => dispatch(updateApplication(data))
+    updateApplication: (data) => dispatch(updateApplication(data)),
+    addFollowup: (data) => dispatch(addFollowup(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormApplication);

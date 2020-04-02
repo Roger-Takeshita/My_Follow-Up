@@ -5,12 +5,7 @@ import FormApplication from '../../components/FormApplication/FormApplication';
 function ApplicationPage(props) {
     const application = props.applications.filter((application) => application._id === props.match.params.id)[0];
 
-    return (
-        <div>
-            <h1>ApplicationPage {props.match.params.id}</h1>
-            {application ? <FormApplication history={props.history} application={application} /> : 'loading...'}
-        </div>
-    );
+    return <div>{application ? <FormApplication history={props.history} application={application} id={props.match.params.id} /> : 'loading...'}</div>;
 }
 
 const mapStateToProps = (state) => ({

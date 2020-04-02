@@ -14,7 +14,7 @@ async function search(req, res) {
 
 async function newApplication(req, res) {
     try {
-        const application = await Job.findOne({ link: req.body.link });
+        const application = await Job.findOne({ link: req.body.link }).where({ user: req.user });
         if (!application) {
             const newApplication = new Job();
             newApplication.user = req.user._id;
@@ -55,7 +55,7 @@ async function newApplication(req, res) {
 
 async function getApplications(req, res) {
     try {
-        const applications = await Job.find({ user: req.user._id })
+        const applications = await Job.find({ user: req.user })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
             .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
@@ -74,14 +74,54 @@ async function getApplications(req, res) {
 async function updateApplication(req, res) {
     try {
         let application = {};
-        if (req.body.length > 0) {
-            //= update application
-            console.log('i have a body');
+        if (req.params.id) {
+            application = await Job.findOne({ _id: req.params.id })
+                .where({ user: req.user })
+                .select('-user -createdAt -updatedAt -__v');
+            if (application) {
+                application.title = req.body.title;
+                application.company = req.body.company;
+                application.link = req.body.link;
+                application.jobDescription = req.body.jobDescription;
+                application.appliedOn = req.body.appliedOn;
+                application.rejectedOn = req.body.rejectedOn;
+                application.resume = req.body.resume;
+                application.status = req.body.status;
+                application.star = req.body.star;
+                res.json(await application.save());
+            } else {
+                console.log('Application not found!');
+                res.status(400).json({ error: 'Application not found!' });
+            }
         } else {
-            application = await Job.findOne({ _id: req.params.id }).select('-user -createdAt -updatedAt -__v');
+            application = await Job.findOne({ _id: req.params.id })
+                .where({ user: req.user })
+                .select('-user -createdAt -updatedAt -__v');
             application.star = !application.star;
+            res.json(await application.save());
         }
-        res.json(await application.save());
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
+async function newComment(req, res) {
+    try {
+        const application = await Job.findById(req.params.id)
+            .where({ user: req.user })
+            .select('-title -company -link -jobDescription -appliedOn -rejectedOn -resume -coverLetter -user -status -star -createdAt -updatedAt -__v');
+        if (application) {
+            application.followup.push({
+                description: req.body.description,
+                date: new Date()
+            });
+            await application.save();
+            res.json(application.followup[application.followup.length - 1]);
+        } else {
+            console.log('Application not found!');
+            res.status(400).json({ error: 'Application not found!' });
+        }
     } catch (err) {
         console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
@@ -100,5 +140,6 @@ module.exports = {
     search,
     newApplication,
     getApplications,
-    updateApplication
+    updateApplication,
+    newComment
 };

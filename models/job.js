@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const followupSchema = new Schema(
     {
         description: {
-            type: String
+            type: String,
+            required: true
         },
         date: {
             type: Date

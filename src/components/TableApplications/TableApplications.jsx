@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleStar } from '../../redux/application';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,9 +15,6 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import apiService from '../../utils/apiService';
 
@@ -73,7 +69,7 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={'left'}
+                        align={'center'}
                         padding={headCell.disablePadding ? 'none' : 'default'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -96,69 +92,10 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
     classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired
-};
-
-const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1)
-    },
-    highlight:
-        theme.palette.type === 'light'
-            ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-              }
-            : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark
-              },
-    title: {
-        flex: '1 1 100%'
-    }
-}));
-
-const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0
-            })}
-        >
-            {numSelected > 0 ? (
-                <Typography className={classes.title} color="inherit" variant="subtitle1">
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle">
-                    Applications
-                </Typography>
-            )}
-
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                ''
-            )}
-        </Toolbar>
-    );
-};
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -232,7 +169,6 @@ function TableApplications(props) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table className={classes.table} aria-labelledby="tableTitle" size="small" aria-label="enhanced table">
                         <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={applications.length} />
@@ -254,7 +190,7 @@ function TableApplications(props) {
                                             <TableCell align="center">{row.coverLetter}</TableCell>
                                             <TableCell align="center">{row.appliedOn}</TableCell>
                                             <TableCell align="center">{row.rejectedOn}</TableCell>
-                                            <TableCell align="center">
+                                            <TableCell align="left">
                                                 <strong>{row.followupDate}</strong>&nbsp;-&nbsp;{row.followup}
                                             </TableCell>
                                             <TableCell align="center">

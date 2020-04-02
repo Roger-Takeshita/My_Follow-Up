@@ -12,6 +12,7 @@ router.put('/resume/:id', checkAuth, resumeCtrl.updateResume);
 router.delete('/resume/:id', checkAuth, resumeCtrl.deleteResume);
 router.post('/application/new', checkAuth, applicationCtrl.newApplication);
 router.put('/application/:id', checkAuth, applicationCtrl.updateApplication);
+router.post('/application/:id/new', checkAuth, applicationCtrl.newComment);
 router.get('/applications', checkAuth, applicationCtrl.getApplications);
 
 function checkAuth(req, res, next) {
