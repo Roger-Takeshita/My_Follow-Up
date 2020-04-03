@@ -16,7 +16,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-function FormResume(props) {
+function FormResume({ resumes, addResume, updateResume, deleteResume }) {
     const initialState = {
         title: '',
         description: '',
@@ -27,10 +27,10 @@ function FormResume(props) {
 
     const [form, setForm] = useState(initialState);
 
-    const handleChange = (e) => {
+    const handleChange = ({ target: { name, value } }) => {
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [name]: value
         });
     };
 
@@ -53,13 +53,13 @@ function FormResume(props) {
         }
     };
 
-    const handleClick = async (title) => {
-        const resume = props.resumes.filter((resum) => resum.title === title);
+    const handleClick = async (findTitle) => {
+        const resume = resumes.find(({ title }) => title === findTitle);
         await setForm(initialState);
         await setForm({
-            title: resume[0].title,
-            description: resume[0].description,
-            resumeId: resume[0]._id,
+            title: resume.title,
+            description: resume.description,
+            resumeId: resume._id,
             formActive: true,
             modifiedFlag: false
         });
@@ -69,116 +69,110 @@ function FormResume(props) {
         return !(form.title && form.description);
     }
 
-    async function handleSubmit(e) {
+    const handleUpdate = async (e, mode, id) => {
         e.preventDefault();
         try {
-            const data = await apiService.postPutData('/api/resume/new', form);
-            props.addResume(data);
-            setForm(initialState);
+            if (mode === 'update') {
+                const data = await apiService.postPutData('/api/resumes', form, form.resumeId);
+                updateResume(data);
+                setForm(initialState);
+            } else if (mode === 'submit') {
+                const data = await apiService.postPutData('/api/resumes/new', form);
+                addResume(data);
+                setForm(initialState);
+            } else {
+                const data = await apiService.deleteData('/api/resumes', id);
+                deleteResume(data);
+            }
         } catch (err) {
             console.log(err);
         }
-    }
-
-    async function handleUpdate(e) {
-        e.preventDefault();
-        try {
-            const data = await apiService.postPutData('/api/resume', form, form.resumeId);
-            props.updateResume(data);
-            setForm(initialState);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async function handleDelete(id) {
-        try {
-            const data = await apiService.deleteData('/api/resume', id);
-            props.deleteResume(data);
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    };
 
     return (
-        <div className="table">
-            <button onClick={handleBtnClick} hidden={form.formActive}>
-                Add New Resume
-            </button>
-            {form.formActive && (
-                <form onSubmit={form.resumeId ? handleUpdate : handleSubmit} className="form-resume">
-                    <input className="form-resume__input" name="title" placeholder="Title" value={form.title} onChange={handleChange} />
-                    <Editor
-                        apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
-                        value={form.description}
-                        init={{
-                            height: 500,
-                            width: '100%',
-                            menubar: true,
-                            plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
-                                visualblocks visualchars fullscreen image link media template codesample table charmap hr 
-                                pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern 
-                                noneditable help charmap emoticons`,
+        <>
+            {form.resumeId !== '' ? <h1>{form.title}</h1> : <h1>New Resume</h1>}
+            <div className="table">
+                <button onClick={handleBtnClick} hidden={form.formActive}>
+                    Add New Resume
+                </button>
+                {form.formActive && (
+                    <form onSubmit={form.resumeId ? (e) => handleUpdate(e, 'update') : (e) => handleUpdate(e, 'submit')} className="form-resume">
+                        <div className="form-resume__title">
+                            <input className="form-resume__input" name="title" placeholder="Title" value={form.title} onChange={handleChange} />
+                        </div>
+                        <Editor
+                            apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
+                            value={form.description}
+                            init={{
+                                height: 500,
+                                width: '100%',
+                                menubar: true,
+                                plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
+                                    visualblocks visualchars fullscreen image link media template codesample table charmap hr 
+                                    pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern 
+                                    noneditable help charmap emoticons`,
 
-                            toolbar: `fullscreen print | undo redo | bold italic underline strikethrough | 
-                            fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
-                            outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
-                            image media link anchor | help`
-                        }}
-                        onEditorChange={handleEditorChange}
-                    />
-                    <div className="form-resume__div-button">
-                        <Button
-                            className="form-resume__button"
-                            size="small"
-                            variant="contained"
-                            color="secondary"
-                            startIcon={<CancelIcon />}
-                            onClick={handleBtnClick}
-                        >
-                            {' '}
-                            Cancel
-                        </Button>
-                        <button
-                            disabled={isFormValid()}
-                            className={
-                                isFormValid()
-                                    ? 'Mui-disabled MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall form-resume__button'
-                                    : 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall form-resume__button'
-                            }
-                        >
-                            Save Resume
-                        </button>
-                    </div>
-                </form>
-            )}
-            <TableContainer component={Paper}>
-                <Table className="table__width" size="small" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Resumes</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.resumes.map((resume, idx) => (
-                            <TableRow key={idx}>
-                                <TableCell component="th" scope="row">
-                                    <Link onClick={() => handleClick(resume.title)} to="#">
-                                        {resume.title}
-                                        <EditIcon />
-                                    </Link>
-                                    <Link onClick={() => handleDelete(resume._id)} to="#">
-                                        <DeleteForeverIcon />
-                                    </Link>
-                                </TableCell>
+                                toolbar: `fullscreen print | undo redo | bold italic underline strikethrough | 
+                                fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
+                                outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
+                                image media link anchor | help`
+                            }}
+                            onEditorChange={handleEditorChange}
+                        />
+                        <div className="form-resume__div-button">
+                            <Button
+                                className="form-resume__button"
+                                size="small"
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<CancelIcon />}
+                                onClick={handleBtnClick}
+                            >
+                                {' '}
+                                Cancel
+                            </Button>
+                            <button
+                                disabled={isFormValid()}
+                                className={
+                                    isFormValid()
+                                        ? 'Mui-disabled MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall form-resume__button'
+                                        : 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall form-resume__button'
+                                }
+                            >
+                                Save Resume
+                            </button>
+                        </div>
+                    </form>
+                )}
+                <TableContainer component={Paper}>
+                    <Table className="table__width" size="small" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Resumes</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                {props.resume ? <div className="table-message">You don't have any resume</div> : ''}
-            </TableContainer>
-            <Prompt when={form.modifiedFlag} message="Are you sure you want to leave? You have unsaved chages" />
-        </div>
+                        </TableHead>
+                        <TableBody>
+                            {resumes.map((resume, idx) => (
+                                <TableRow key={idx}>
+                                    <TableCell component="th" scope="row">
+                                        <Link onClick={() => handleClick(resume.title)} to="#">
+                                            {resume.title}
+                                            <EditIcon />
+                                        </Link>
+                                        <Link onClick={(e) => handleUpdate(e, 'delete', resume._id)} to="#">
+                                            <DeleteForeverIcon />
+                                        </Link>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    {resumes ? '' : <div className="table-message">You don't have any resume</div>}
+                </TableContainer>
+                <Prompt when={form.modifiedFlag} message="Are you sure you want to leave? You have unsaved chages" />
+            </div>
+        </>
     );
 }
 

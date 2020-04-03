@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { setResumes } from './redux/resume';
 import { setApplications } from './redux/application';
 
-function App(props) {
+function App({ setApplications, setResumes, userFirstName, history }) {
     const [fetchFlag, setFetchFlag] = useState(false);
     let pages = userService.getUser() ? (
         fetchFlag ? (
@@ -40,7 +40,6 @@ function App(props) {
         </Switch>
     );
 
-    const { setApplications, setResumes, userFirstName } = props;
     useEffect(() => {
         async function getData() {
             if (userFirstName) {
@@ -55,7 +54,7 @@ function App(props) {
 
     return (
         <div className="App">
-            <Navbar history={props.history} />
+            <Navbar history={history} />
             <main>{pages}</main>
             <footer>
                 <div>

@@ -4,7 +4,7 @@ import TableApplications from '../../components/TableApplications/TableApplicati
 function HomePage(props) {
     return (
         <div className="container">
-            <h1>HomePage</h1>
+            <h1>Applications</h1>
             <TableApplications />
         </div>
     );

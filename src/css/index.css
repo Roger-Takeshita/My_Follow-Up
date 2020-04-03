@@ -311,13 +311,17 @@ footer div a svg {
           flex-direction: column;
 }
 
+.form-resume__title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 .form-resume__input {
   height: 40px;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  margin-bottom: 10px;
-  padding: 2px 10px 2px 10px;
+  width: 100%;
   font-size: 1.75em;
 }
 
@@ -355,12 +359,12 @@ footer div a svg {
 }
 
 .form-application__title {
-  width: 250px;
+  width: 320px;
   margin-right: 5px !important;
 }
 
 .form-application__company {
-  width: 200px;
+  width: 250px;
   margin: auto 5px !important;
 }
 
@@ -382,6 +386,15 @@ footer div a svg {
 
 .form-application__star--true svg {
   font-size: 2rem;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+}
+
+.form-application__star--true svg:hover {
+  -webkit-transform: scale(1.25);
+          transform: scale(1.25);
 }
 
 .form-application__star--false {
@@ -390,6 +403,15 @@ footer div a svg {
 
 .form-application__star--false svg {
   font-size: 2rem;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+}
+
+.form-application__star--false svg:hover {
+  -webkit-transform: scale(1.25);
+          transform: scale(1.25);
 }
 
 .form-application__forms {
@@ -477,10 +499,16 @@ footer div a svg {
 .form-application__followup-date a svg {
   color: #ff97b9;
   font-size: 20px;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
 }
 
 .form-application__followup-date a svg:hover {
   color: red;
+  -webkit-transform: scale(1.25);
+          transform: scale(1.25);
 }
 
 .form-application__followup-span {
@@ -531,6 +559,15 @@ footer div a svg {
 
 .table-applications__star--true svg {
   font-size: 1.5rem;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+}
+
+.table-applications__star--true svg:hover {
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
 }
 
 .table-applications__star--false {
@@ -539,5 +576,48 @@ footer div a svg {
 
 .table-applications__star--false svg {
   font-size: 1.5rem;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+}
+
+.table-applications__star--false svg:hover {
+  -webkit-transform: scale(1.4);
+          transform: scale(1.4);
+}
+
+.table-applications__row-job-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.table-applications__row-job-title a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-right: 10px;
+}
+
+.table-applications__row-job-title a svg {
+  font-size: 1.4rem;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+  color: #ff97b9;
+}
+
+.table-applications__row-job-title a svg:hover {
+  -webkit-transform: scale(1.25);
+          transform: scale(1.25);
+  color: red;
 }
 /*# sourceMappingURL=index.css.map */

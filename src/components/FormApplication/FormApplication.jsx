@@ -22,7 +22,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
-function FormApplication(props) {
+function FormApplication({ applications, application, id, resumes, deleteFollowup, addFollowup, history, addApplication, updateApplication }) {
     const initialState = {
         title: '',
         company: '',
@@ -41,13 +41,11 @@ function FormApplication(props) {
     };
 
     const [form, setForm] = useState(initialState);
-    const id = props.id;
-    const applicationProps = props.applications;
 
     useEffect(() => {
-        async function getApplication() {
-            const updateApplication = await applicationProps.filter((application) => application._id === id)[0];
-            await setForm(
+        function getApplication() {
+            const updateApplication = applications.find(({ _id }) => _id === id);
+            setForm(
                 updateApplication
                     ? {
                           title: updateApplication.title,
@@ -84,12 +82,12 @@ function FormApplication(props) {
             );
         }
         getApplication();
-    }, [applicationProps, id]);
+    }, [applications, id]);
 
-    const handleChange = (e) => {
+    const handleChange = ({ target: { name, value } }) => {
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [name]: value
         });
     };
 
@@ -103,29 +101,27 @@ function FormApplication(props) {
 
     const handleDeleteFollowup = async (e, appId, follId, idx) => {
         e.preventDefault();
-        const data = await apiService.deleteData('/api/application/', `${appId}/${follId}`);
-        props.deleteFollowup({ applicationId: appId, followId: data, idx });
+        const data = await apiService.deleteData('/api/applications/', `${appId}/${follId}`);
+        deleteFollowup({ applicationId: appId, followId: data, idx });
     };
 
-    const handleJobEditorChange = (content, editor) => {
-        setForm({
-            ...form,
-            jobDescription: content
-        });
-    };
-
-    const handleResumeEditorChange = (content, editor) => {
-        setForm({
-            ...form,
-            resume: content
-        });
-    };
-
-    const handleCoverLetterEditorChange = (content, editor) => {
-        setForm({
-            ...form,
-            coverLetter: content
-        });
+    const handleEditorChange = (content, editor) => {
+        if (editor === 'job') {
+            setForm({
+                ...form,
+                jobDescription: content
+            });
+        } else if (editor === 'resume') {
+            setForm({
+                ...form,
+                resume: content
+            });
+        } else if (editor === 'coverLetter') {
+            setForm({
+                ...form,
+                coverLetter: content
+            });
+        }
     };
 
     const handleCoverLetterVisible = (e) => {
@@ -146,8 +142,8 @@ function FormApplication(props) {
                     followupNow: ''
                 });
             } else {
-                const data = await apiService.postPutData(`/api/application/${form.applicationId}/new`, { description: form.followupNow });
-                await props.addFollowup({ data, applicationId: form.applicationId });
+                const data = await apiService.postPutData(`/api/applications/${form.applicationId}/new`, { description: form.followupNow });
+                await addFollowup({ data, applicationId: form.applicationId });
                 await setForm({
                     ...form,
                     followup: [...form.followup, { _id: data._id, description: data.description, date: data.date }],
@@ -158,7 +154,7 @@ function FormApplication(props) {
     };
 
     const handleCancelBtn = () => {
-        props.history.push('/');
+        history.push('/');
     };
 
     function isFormValid() {
@@ -169,14 +165,13 @@ function FormApplication(props) {
         e.preventDefault();
         try {
             if (form.applicationId === '') {
-                const data = await apiService.postPutData('/api/application/new', form);
-                props.addApplication(data);
-                setForm(initialState);
+                const data = await apiService.postPutData('/api/applications/new', form);
+                addApplication(data);
             } else {
-                const data = await apiService.postPutData(`/api/application`, form, form.applicationId);
-                props.updateApplication(data);
-                props.history.push('/');
+                const data = await apiService.postPutData(`/api/applications`, form, form.applicationId);
+                updateApplication(data);
             }
+            history.push('/');
         } catch (err) {
             console.log(err);
         }
@@ -262,7 +257,7 @@ function FormApplication(props) {
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.jobDescription}
                             init={{
-                                height: 400,
+                                height: 440,
                                 width: '100%',
                                 menubar: true,
                                 plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -275,7 +270,7 @@ function FormApplication(props) {
                                 outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
                                 image media link anchor | help`
                             }}
-                            onEditorChange={handleJobEditorChange}
+                            onEditorChange={(e) => handleEditorChange(e, 'job')}
                         />
                     </div>
                     <div className="form-application__form-resume">
@@ -290,7 +285,7 @@ function FormApplication(props) {
                                         description: '',
                                         content: ''
                                     },
-                                    ...props.resumes.map((resume) => {
+                                    ...resumes.map((resume) => {
                                         return {
                                             title: resume.title,
                                             description: '',
@@ -298,7 +293,7 @@ function FormApplication(props) {
                                         };
                                     })
                                 ],
-                                height: 400,
+                                height: 440,
                                 width: '100%',
                                 menubar: true,
                                 plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -311,7 +306,7 @@ function FormApplication(props) {
                                 outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
                                 image media link anchor | help`
                             }}
-                            onEditorChange={handleResumeEditorChange}
+                            onEditorChange={(e) => handleEditorChange(e, 'resume')}
                         />
                     </div>
                 </div>
@@ -329,7 +324,7 @@ function FormApplication(props) {
                                               <div className="form-application__followup-item">
                                                   <div className="form-application__followup-date">
                                                       <span className="form-application__followup-span">
-                                                          {props.application ? `[${follow.date.split('T')[0]}]` : new Date().toISOString().split('T')[0]}
+                                                          {application ? `[${follow.date.split('T')[0]}]` : new Date().toISOString().split('T')[0]}
                                                       </span>
                                                       <a href="/" onClick={(e) => handleDeleteFollowup(e, form.applicationId, follow._id, idx)}>
                                                           <Tooltip title="Delete" TransitionComponent={Zoom} placement="right" arrow>
@@ -337,7 +332,7 @@ function FormApplication(props) {
                                                           </Tooltip>
                                                       </a>
                                                   </div>
-                                                  <div className="form-application__followup-text">{props.application ? follow.description : follow}</div>
+                                                  <div className="form-application__followup-text">{application ? follow.description : follow}</div>
                                               </div>
                                           </div>
                                       );
@@ -366,7 +361,7 @@ function FormApplication(props) {
                                         outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
                                         image media link anchor | help`
                                     }}
-                                    onEditorChange={handleCoverLetterEditorChange}
+                                    onEditorChange={(e) => handleEditorChange(e, 'coverLetter')}
                                 />
                             </div>
                         )}

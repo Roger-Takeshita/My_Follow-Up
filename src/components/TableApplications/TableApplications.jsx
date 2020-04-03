@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { toggleStar } from '../../redux/application';
+import { toggleStar, deleteApplication } from '../../redux/application';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -15,6 +15,9 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import StarIcon from '@material-ui/icons/Star';
 import apiService from '../../utils/apiService';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
 
 function createData(id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star) {
     return { id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star };
@@ -52,11 +55,10 @@ const headCells = [
     { id: 'appliedOn', numeric: true, disablePadding: false, label: 'Applied On' },
     { id: 'rejectedOn', numeric: true, disablePadding: false, label: 'Rejected On' },
     { id: 'followup', numeric: true, disablePadding: false, label: 'Follow-up' },
-    { id: 'star', numeric: true, disablePadding: false, label: 'S' }
+    { id: 'star', numeric: true, disablePadding: false, label: 'Star' }
 ];
 
-function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort } = props;
+function EnhancedTableHead({ classes, order, orderBy, onRequestSort }) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -120,14 +122,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function TableApplications(props) {
+function TableApplications({ applicationsArray, toggleStar, deleteApplication }) {
     const classes = useStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('appliedOn');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
 
-    const applications = props.applications.map((application) => {
+    const applications = applicationsArray.map((application) => {
         return createData(
             application._id,
             application.title,
@@ -148,10 +150,18 @@ function TableApplications(props) {
         setOrderBy(property);
     };
 
-    const handleStarClick = async (e, id) => {
+    const handleClick = async (e, mode, id) => {
         e.preventDefault();
-        const data = await apiService.postPutData('/api/application', {}, id);
-        props.toggleStar(data);
+        if (mode === 'toggleStar') {
+            const data = await apiService.postPutData('/api/applications', {}, id);
+            toggleStar(data);
+        } else if (mode === 'delete') {
+            const data = await apiService.deleteData('/api/applications', id);
+            deleteApplication({ _id: data._id });
+        } else if (mode === 'link') {
+            const re = /((http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/;
+            window.open(re.exec(e.target)[0], '_blank');
+        }
     };
 
     const handleChangePage = (event, newPage) => {
@@ -178,11 +188,18 @@ function TableApplications(props) {
                                     return (
                                         <TableRow hover tabIndex={-1} key={index}>
                                             <TableCell component="th" scope="row">
-                                                <Link to={`/application/${row.id}`}>{row.title}</Link>
+                                                <div className="table-applications__row-job-title">
+                                                    <a href="/" onClick={(e) => handleClick(e, 'delete', row.id)}>
+                                                        <Tooltip title="Delete" TransitionComponent={Zoom} placement="left" arrow>
+                                                            <DeleteOutlineIcon />
+                                                        </Tooltip>
+                                                    </a>
+                                                    <Link to={`/application/${row.id}`}>{row.title}</Link>
+                                                </div>
                                             </TableCell>
                                             <TableCell align="center">{row.company}</TableCell>
                                             <TableCell align="center">
-                                                <a href={row.link} onClick={() => window.open(row.link, '_blank')}>
+                                                <a href={row.link} onClick={(e) => handleClick(e, 'link')}>
                                                     Link
                                                 </a>
                                             </TableCell>
@@ -190,16 +207,25 @@ function TableApplications(props) {
                                             <TableCell align="center">{row.appliedOn}</TableCell>
                                             <TableCell align="center">{row.rejectedOn}</TableCell>
                                             <TableCell align="left">
-                                                <strong>{row.followupDate}</strong>&nbsp;-&nbsp;{row.followup}
+                                                <strong>{row.followupDate}</strong>
+                                                {row.followupDate ? ` - ` : ''}
+                                                {row.followup}
                                             </TableCell>
                                             <TableCell align="center">
                                                 <a
                                                     href="/"
                                                     value="teste"
-                                                    onClick={(e) => handleStarClick(e, row.id)}
+                                                    onClick={(e) => handleClick(e, 'toggleStar', row.id)}
                                                     className={row.star ? 'table-applications__star--true' : 'table-applications__star--false'}
                                                 >
-                                                    <StarIcon />
+                                                    <Tooltip
+                                                        title={row.star ? 'Remove from Favorite' : 'Add to Favorite'}
+                                                        TransitionComponent={Zoom}
+                                                        placement="right"
+                                                        arrow
+                                                    >
+                                                        <StarIcon />
+                                                    </Tooltip>
                                                 </a>
                                             </TableCell>
                                         </TableRow>
@@ -218,7 +244,7 @@ function TableApplications(props) {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[15, 30, 45]}
+                    rowsPerPageOptions={[15, 50, 100]}
                     component="div"
                     count={applications.length}
                     rowsPerPage={rowsPerPage}
@@ -232,11 +258,12 @@ function TableApplications(props) {
 }
 
 const mapStateToProps = (state) => ({
-    applications: state.application
+    applicationsArray: state.application
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    toggleStar: (id) => dispatch(toggleStar(id))
+    toggleStar: (id) => dispatch(toggleStar(id)),
+    deleteApplication: (id) => dispatch(deleteApplication(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableApplications);

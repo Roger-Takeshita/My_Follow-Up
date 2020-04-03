@@ -18,7 +18,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 //+ API Users
 app.use('/api/users', require('./routes/users'));
 //+ API Others
-app.use('/api/', require('./routes/requests'));
+app.use('/api/applications', require('./routes/applications'));
+app.use('/api/resumes', require('./routes/resumes'));
 //+ Catch all requests
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'inde.html'));

@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FormApplication from '../../components/FormApplication/FormApplication';
 
-function ApplicationPage(props) {
-    const application = props.applications.filter((application) => application._id === props.match.params.id)[0];
+function ApplicationPage({ applications, match, history }) {
+    const application = applications.find(({ _id }) => _id === match.params.id);
 
-    return <div>{application ? <FormApplication history={props.history} application={application} id={props.match.params.id} /> : 'loading...'}</div>;
+    return <div>{application ? <FormApplication history={history} application={application} id={match.params.id} /> : 'loading...'}</div>;
 }
 
 const mapStateToProps = (state) => ({

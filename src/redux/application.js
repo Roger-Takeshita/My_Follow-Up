@@ -32,9 +32,9 @@ export const deleteFollowup = (data) => ({
     payload: data
 });
 
-export const deleteApplication = (data) => ({
+export const deleteApplication = (id) => ({
     type: DELETE_APPLICATION,
-    payload: data
+    payload: id
 });
 
 export const logoutApplication = () => ({
@@ -72,9 +72,8 @@ function applicationReducer(state = [], action) {
                     : application
             );
         case DELETE_APPLICATION:
-            let index = state.findIndex((item) => item._id === action.payload._id);
-
-            return [...state.slice(0, index), ...state.slice(index + 1, state.length)];
+            const idx = state.findIndex((application) => application._id === action.payload._id);
+            return [...state.slice(0, idx), ...state.slice(idx + 1, state.length)];
         case LOGOUT:
             return [];
         case TOGGLE_STAR:

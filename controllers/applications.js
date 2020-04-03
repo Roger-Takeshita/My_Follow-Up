@@ -55,20 +55,21 @@ async function newApplication(req, res) {
 
 async function getApplications(req, res) {
     try {
-        let applications;
-        await Job.find({ user: req.user }, function(err, docs) {
-            const temp = [...docs];
-            temp[0].followup = docs[0].followup.sort((a, b) => b.date - a.date);
-            applications = temp;
-        })
+        //= This approach is working, needs to be refactored
+        // let applications;
+        // await Job.find({ user: req.user })
+        //     .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
+        //     .limit(parseInt(req.query.docs, 10))
+        //     .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v')
+        //     .exec(async (err, docs) => {
+        //         const temp = [...docs];
+        //         temp[0].followup = await docs[0].followup.sort((a, b) => b.date - a.date);
+        //         applications = temp;
+        //     });
+        const applications = await Job.find({ user: req.user })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
             .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
-        // console.log(applications2[0].followup);
-        // const applications = await Job.find({ user: req.user })
-        // .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
-        // .limit(parseInt(req.query.docs, 10))
-        // .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
         if (applications) {
             res.json(applications);
         } else {
@@ -88,15 +89,8 @@ async function updateApplication(req, res) {
             .select('-user -createdAt -updatedAt -__v');
         if (application) {
             if (req.body.title) {
-                application.title = req.body.title;
-                application.company = req.body.company;
-                application.link = req.body.link;
-                application.jobDescription = req.body.jobDescription;
-                application.appliedOn = req.body.appliedOn;
-                application.rejectedOn = req.body.rejectedOn;
-                application.resume = req.body.resume;
-                application.status = req.body.status;
-                application.star = req.body.star;
+                const allowedKeys = ['title', 'company', 'link', 'jobDescription', 'appliedOn', 'rejectedOn', 'resume', 'coverLetter', 'status', 'star'];
+                allowedKeys.forEach((key) => (application[key] = req.body[key]));
             } else {
                 application.star = !application.star;
             }
@@ -105,6 +99,15 @@ async function updateApplication(req, res) {
             console.log('Application not found!');
             res.status(400).json({ error: 'Application not found!' });
         }
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
+async function deleteApplication(req, res) {
+    try {
+        res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user }));
     } catch (err) {
         console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
@@ -165,6 +168,7 @@ module.exports = {
     newApplication,
     getApplications,
     updateApplication,
+    deleteApplication,
     newFollowup,
     deleteFollowup
 };
