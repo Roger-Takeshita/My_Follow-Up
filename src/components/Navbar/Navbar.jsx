@@ -73,10 +73,8 @@ function Navbar(props) {
     }
 
     const toggleDrawer = (side, open) => (event) => {
-        if (
-            event.type === 'keydown' &&
-            (event.key === 'Tab' || event.key === 'Shift')
-        ) {
+        event.preventDefault();
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
 
@@ -84,12 +82,7 @@ function Navbar(props) {
     };
 
     const sideList = (side) => (
-        <div
-            className="sidebar-list"
-            role="presentation"
-            onClick={toggleDrawer(side, false)}
-            onKeyDown={toggleDrawer(side, false)}
-        >
+        <div className="sidebar-list" role="presentation" onClick={toggleDrawer(side, false)} onKeyDown={toggleDrawer(side, false)}>
             <List>
                 <ListItem button onClick={() => props.history.push('/')}>
                     <ListItemIcon>
@@ -136,11 +129,7 @@ function Navbar(props) {
                 </Link>
             </Tooltip>
             <Tooltip title="Menu" TransitionComponent={Zoom} arrow>
-                <Link
-                    color="inherit"
-                    to="#"
-                    onClick={toggleDrawer('right', true)}
-                >
+                <Link color="inherit" to="#" onClick={toggleDrawer('right', true)}>
                     {props.fullName} &nbsp;
                     <MenuIcon />
                 </Link>
@@ -161,20 +150,13 @@ function Navbar(props) {
         <div>
             <AppBar position="static">
                 <Toolbar>
-                    <Tooltip
-                        title="Go To Home"
-                        TransitionComponent={Zoom}
-                        arrow
-                    >
+                    <Tooltip title="Go To Home" TransitionComponent={Zoom} arrow>
                         <Link color="inherit" to="/">
                             <HomeIcon />
                             &nbsp;Home
                         </Link>
                     </Tooltip>
-                    <div
-                        className="navbar-search"
-                        style={{ display: props.fullName ? '' : 'none' }}
-                    >
+                    <div className="navbar-search" style={{ display: props.fullName ? '' : 'none' }}>
                         <div className="navbar-search-icon">
                             <SearchIcon />
                         </div>
@@ -191,11 +173,7 @@ function Navbar(props) {
                     {navNotLoggedin}
                 </Toolbar>
             </AppBar>
-            <Drawer
-                anchor="right"
-                open={state.right}
-                onClose={toggleDrawer('right', false)}
-            >
+            <Drawer anchor="right" open={state.right} onClose={toggleDrawer('right', false)}>
                 {sideList('right')}
             </Drawer>
         </div>

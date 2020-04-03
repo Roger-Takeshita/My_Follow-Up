@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
 import apiService from '../../utils/apiService';
-import { addApplication, updateApplication, addFollowup } from '../../redux/application';
+import { addApplication, updateApplication, addFollowup, deleteFollowup } from '../../redux/application';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -23,41 +23,68 @@ import Zoom from '@material-ui/core/Zoom';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 function FormApplication(props) {
-    const initialState = props.application
-        ? {
-              title: props.application.title,
-              company: props.application.company,
-              link: props.application.link,
-              jobDescription: props.application.jobDescription,
-              resume: props.application.resume,
-              appliedOn: props.application.appliedOn !== null ? props.application.appliedOn.split('T')[0] : '',
-              rejectedOn: props.application.rejectedOn !== null ? props.application.rejectedOn.split('T')[0] : '',
-              status: props.application.status,
-              followupNow: '',
-              followup: [...props.application.followup],
-              coverLetter: props.application.coverLetter,
-              coverLetterActive: false,
-              star: props.application.star,
-              applicationId: props.id
-          }
-        : {
-              title: '',
-              company: '',
-              link: '',
-              jobDescription: '',
-              resume: '',
-              appliedOn: '',
-              rejectedOn: '',
-              status: '',
-              followupNow: '',
-              followup: [],
-              coverLetter: '',
-              coverLetterActive: false,
-              star: false,
-              applicationId: ''
-          };
+    const initialState = {
+        title: '',
+        company: '',
+        link: '',
+        jobDescription: '',
+        resume: '',
+        appliedOn: '',
+        rejectedOn: '',
+        status: '',
+        followupNow: '',
+        followup: [],
+        coverLetter: '',
+        coverLetterActive: false,
+        star: false,
+        applicationId: ''
+    };
 
     const [form, setForm] = useState(initialState);
+    const id = props.id;
+    const applicationProps = props.applications;
+
+    useEffect(() => {
+        async function getApplication() {
+            const updateApplication = await applicationProps.filter((application) => application._id === id)[0];
+            await setForm(
+                updateApplication
+                    ? {
+                          title: updateApplication.title,
+                          company: updateApplication.company,
+                          link: updateApplication.link,
+                          jobDescription: updateApplication.jobDescription,
+                          resume: updateApplication.resume,
+                          appliedOn: updateApplication.appliedOn !== null ? updateApplication.appliedOn.split('T')[0] : '',
+                          rejectedOn: updateApplication.rejectedOn !== null ? updateApplication.rejectedOn.split('T')[0] : '',
+                          status: updateApplication.status,
+                          followupNow: '',
+                          followup: [...updateApplication.followup],
+                          coverLetter: updateApplication.coverLetter,
+                          coverLetterActive: false,
+                          star: updateApplication.star,
+                          applicationId: id
+                      }
+                    : {
+                          title: '',
+                          company: '',
+                          link: '',
+                          jobDescription: '',
+                          resume: '',
+                          appliedOn: '',
+                          rejectedOn: '',
+                          status: '',
+                          followupNow: '',
+                          followup: [],
+                          coverLetter: '',
+                          coverLetterActive: false,
+                          star: false,
+                          applicationId: ''
+                      }
+            );
+        }
+        getApplication();
+    }, [applicationProps, id]);
 
     const handleChange = (e) => {
         setForm({
@@ -72,6 +99,12 @@ function FormApplication(props) {
             ...form,
             star: !form.star
         });
+    };
+
+    const handleDeleteFollowup = async (e, appId, follId, idx) => {
+        e.preventDefault();
+        const data = await apiService.deleteData('/api/application/', `${appId}/${follId}`);
+        props.deleteFollowup({ applicationId: appId, followId: data, idx });
     };
 
     const handleJobEditorChange = (content, editor) => {
@@ -298,7 +331,7 @@ function FormApplication(props) {
                                                       <span className="form-application__followup-span">
                                                           {props.application ? `[${follow.date.split('T')[0]}]` : new Date().toISOString().split('T')[0]}
                                                       </span>
-                                                      <a href="/">
+                                                      <a href="/" onClick={(e) => handleDeleteFollowup(e, form.applicationId, follow._id, idx)}>
                                                           <Tooltip title="Delete" TransitionComponent={Zoom} placement="right" arrow>
                                                               <DeleteOutlineIcon />
                                                           </Tooltip>
@@ -420,7 +453,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     addApplication: (data) => dispatch(addApplication(data)),
     updateApplication: (data) => dispatch(updateApplication(data)),
-    addFollowup: (data) => dispatch(addFollowup(data))
+    addFollowup: (data) => dispatch(addFollowup(data)),
+    deleteFollowup: (data) => dispatch(deleteFollowup(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormApplication);

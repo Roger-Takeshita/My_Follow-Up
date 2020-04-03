@@ -5,6 +5,7 @@ const DELETE_APPLICATION = 'DELETE_APPLICATION';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_STAR = 'TOGGLE_STAR';
 const ADD_FOLLOWUP = 'ADD_FOLLOWUP';
+const DELETE_FOLLOWUP = 'DELETE_FOLLOWUP';
 
 export const setApplications = (data) => ({
     type: SET_APPLICATIONS,
@@ -23,6 +24,11 @@ export const updateApplication = (data) => ({
 
 export const addFollowup = (data) => ({
     type: ADD_FOLLOWUP,
+    payload: data
+});
+
+export const deleteFollowup = (data) => ({
+    type: DELETE_FOLLOWUP,
     payload: data
 });
 
@@ -83,15 +89,26 @@ function applicationReducer(state = [], action) {
             );
         case ADD_FOLLOWUP:
             const newComment = [{ _id: action.payload.data._id, description: action.payload.data.description, date: action.payload.data.date }];
-            // console.log(newComment);
             return state.map((application) =>
                 application._id === action.payload.applicationId
                     ? {
                           ...application,
-                          followup: [...application.followup, ...newComment]
+                          followup: [...newComment, ...application.followup]
                       }
                     : application
             );
+        case DELETE_FOLLOWUP:
+            return state.map((application) => {
+                return application._id === action.payload.applicationId
+                    ? {
+                          ...application,
+                          followup: [
+                              ...application.followup.slice(0, action.payload.idx),
+                              ...application.followup.slice(action.payload.idx + 1, application.followup.length)
+                          ]
+                      }
+                    : application;
+            });
         default:
             return state;
     }

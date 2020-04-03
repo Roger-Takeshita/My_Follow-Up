@@ -317,8 +317,10 @@ footer {
   }
   &__followup-item {
     padding: 5px 0;
+    color: grey;
     &:hover {
       background-color: #d3d3d345;
+      color: black;
     }
   }
   &__followup-date{

@@ -446,10 +446,12 @@ footer div a svg {
 
 .form-application__followup-item {
   padding: 5px 0;
+  color: grey;
 }
 
 .form-application__followup-item:hover {
   background-color: #d3d3d345;
+  color: black;
 }
 
 .form-application__followup-date {

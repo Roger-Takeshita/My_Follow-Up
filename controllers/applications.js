@@ -55,10 +55,20 @@ async function newApplication(req, res) {
 
 async function getApplications(req, res) {
     try {
-        const applications = await Job.find({ user: req.user })
+        let applications;
+        await Job.find({ user: req.user }, function(err, docs) {
+            const temp = [...docs];
+            temp[0].followup = docs[0].followup.sort((a, b) => b.date - a.date);
+            applications = temp;
+        })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
             .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
+        // console.log(applications2[0].followup);
+        // const applications = await Job.find({ user: req.user })
+        // .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
+        // .limit(parseInt(req.query.docs, 10))
+        // .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
         if (applications) {
             res.json(applications);
         } else {
@@ -73,12 +83,11 @@ async function getApplications(req, res) {
 
 async function updateApplication(req, res) {
     try {
-        let application = {};
-        if (req.params.id) {
-            application = await Job.findOne({ _id: req.params.id })
-                .where({ user: req.user })
-                .select('-user -createdAt -updatedAt -__v');
-            if (application) {
+        let application = await Job.findOne({ _id: req.params.id })
+            .where({ user: req.user })
+            .select('-user -createdAt -updatedAt -__v');
+        if (application) {
+            if (req.body.title) {
                 application.title = req.body.title;
                 application.company = req.body.company;
                 application.link = req.body.link;
@@ -88,17 +97,13 @@ async function updateApplication(req, res) {
                 application.resume = req.body.resume;
                 application.status = req.body.status;
                 application.star = req.body.star;
-                res.json(await application.save());
             } else {
-                console.log('Application not found!');
-                res.status(400).json({ error: 'Application not found!' });
+                application.star = !application.star;
             }
-        } else {
-            application = await Job.findOne({ _id: req.params.id })
-                .where({ user: req.user })
-                .select('-user -createdAt -updatedAt -__v');
-            application.star = !application.star;
             res.json(await application.save());
+        } else {
+            console.log('Application not found!');
+            res.status(400).json({ error: 'Application not found!' });
         }
     } catch (err) {
         console.log('Something went wrong', err);
@@ -106,7 +111,7 @@ async function updateApplication(req, res) {
     }
 }
 
-async function newComment(req, res) {
+async function newFollowup(req, res) {
     try {
         const application = await Job.findById(req.params.id)
             .where({ user: req.user })
@@ -128,6 +133,25 @@ async function newComment(req, res) {
     }
 }
 
+async function deleteFollowup(req, res) {
+    console.log(req.params.id, req.params.followId);
+    try {
+        const application = await Job.findOne({ _id: req.params.id });
+        if (application) {
+            const followup = application.followup.id(req.params.followId);
+            followup.remove();
+            await application.save();
+            res.json(req.params.followId);
+        } else {
+            console.log('Application not found!');
+            res.status(404).json({ error: 'Application not found!' });
+        }
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
 function capitalLetters(str) {
     str = str.split(' ');
     for (let i = 0; i < str.length; i++) {
@@ -141,5 +165,6 @@ module.exports = {
     newApplication,
     getApplications,
     updateApplication,
-    newComment
+    newFollowup,
+    deleteFollowup
 };

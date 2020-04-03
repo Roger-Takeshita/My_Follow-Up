@@ -136,8 +136,8 @@ function TableApplications(props) {
             application.coverLetter ? 'Yes' : '',
             application.appliedOn === null ? '' : application.appliedOn.split('T')[0],
             application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
-            application.followup.length > 0 ? application.followup[application.followup.length - 1].date.split('T')[0] : '',
-            application.followup.length > 0 ? application.followup[application.followup.length - 1].description : '',
+            application.followup.length > 0 ? application.followup[0].date.split('T')[0] : '',
+            application.followup.length > 0 ? application.followup[0].description : '',
             application.star
         );
     });
@@ -148,7 +148,8 @@ function TableApplications(props) {
         setOrderBy(property);
     };
 
-    const handleStarClick = async (id) => {
+    const handleStarClick = async (e, id) => {
+        e.preventDefault();
         const data = await apiService.postPutData('/api/application', {}, id);
         props.toggleStar(data);
     };
@@ -194,7 +195,8 @@ function TableApplications(props) {
                                             <TableCell align="center">
                                                 <a
                                                     href="/"
-                                                    onClick={() => handleStarClick(row.id)}
+                                                    value="teste"
+                                                    onClick={(e) => handleStarClick(e, row.id)}
                                                     className={row.star ? 'table-applications__star--true' : 'table-applications__star--false'}
                                                 >
                                                     <StarIcon />
