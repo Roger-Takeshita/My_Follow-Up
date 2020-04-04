@@ -9,6 +9,8 @@ import ApplicationPage from './pages/ApplicationPage/ApplicationPage';
 import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ResumesPage from './pages/ResumesPage/ResumesPage';
+import AboutPage from './pages/AboutPage/AboutPage';
+import HowToUsePage from './pages/HowToUsePage/HowToUSePage';
 import userService from './utils/userService';
 import apiService from './utils/apiService';
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -21,6 +23,8 @@ function App({ setApplications, setResumes, userFirstName, history }) {
     let pages = userService.getUser() ? (
         fetchFlag ? (
             <Switch>
+                <Route exact path="/howtouse" render={({ history }) => <HowToUsePage history={history} />} />
+                <Route exact path="/about" render={({ history }) => <AboutPage history={history} />} />
                 <Route exact path="/application/:id" render={({ history, match }) => <ApplicationPage history={history} match={match} />} />
                 <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
                 <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
@@ -33,9 +37,10 @@ function App({ setApplications, setResumes, userFirstName, history }) {
         )
     ) : (
         <Switch>
+            <Route exact path="/howtouse" render={({ history }) => <HowToUsePage history={history} />} />
+            <Route exact path="/about" render={({ history }) => <AboutPage history={history} />} />
             <Route exact path="/login" render={({ history }) => <LoginPage history={history} />} />
             <Route exact path="/signup" render={({ history }) => <SignupPage history={history} />} />
-            <Route exact path="/" render={() => <HomePage />} />
             <Route render={() => <Redirect to={{ pathname: '/login' }} />} />
         </Switch>
     );

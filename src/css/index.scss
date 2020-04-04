@@ -188,17 +188,29 @@ footer {
   justify-content: center;
 }
 
-.navbar-logged-user {
-  @include displayFlex(center);
-  a:first-child:hover svg {
-    color: $iconColorHover;
+
+.navbar {
+  &__logged-side {
+    @include displayFlex(center);
+    flex-direction: row;
+    a {
+      white-space: nowrap;
+    }
+    a:nth-child(2):hover svg {
+      color: $iconColorHover;
+    }
+    a:last-child {
+      @include displayFlex(center)
+    }
+    a:last-child:hover svg {
+      color: $iconColorHover;
+    }
   }
-  a:last-child {
-    @include displayFlex(center)
+  &__home-side {
+    display: flex !important;
+    align-items: center;
   }
-  a:last-child:hover svg {
-    color: $iconColorHover;
-  }
+  
 }
 
 .sidebar-list {
@@ -211,8 +223,30 @@ footer {
   }
 }
 
-.table__width {
-  min-width: 100%;
+.resume {
+  &__width {
+    min-width: 100%;
+  }
+}
+
+.login {
+  &__table {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &__column-one {
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+  }
+  &__column-two {
+    width: 200px;
+    font-weight: normal;
+    text-align: left;
+    padding-left: 5px;
+  }
 }
 
 .table-message {
@@ -426,6 +460,53 @@ footer {
           color: $redColor;
         }
       }
+    }
+  }
+}
+
+.about {
+  &__div {
+    margin-top: 5rem;
+  }
+  &__img {
+    width: 180px;
+    border-radius: 50%;
+  }
+  &__name {
+    font-size: 1.8rem;
+    margin-top: 1rem;
+    font-weight: lighter;
+  }
+  &__title {
+    font-size: 1.1rem;
+    font-weight: bolder;
+    margin-top: 0.5rem;
+  }
+  &__technologies, &__social-media {
+    margin-top: 3rem;
+    font-weight: lighter;
+    div:first-child {
+      font-size: 1.2rem;
+    }
+    div:nth-child(2) {
+      margin-top: 1rem
+    }
+  }
+  &__icons {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__icon {
+    width: 60px;
+    margin: 10px;
+  }
+  &__icon-social-media {
+    height: 20px;
+    margin: 0 15px 10px 15px;
+    transition: transform .25s;
+    &:hover {
+      transform: scale(1.80);
     }
   }
 }

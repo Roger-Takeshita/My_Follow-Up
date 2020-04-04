@@ -39,7 +39,7 @@ const searchReducer = (state, action) => {
     }
 };
 
-function Navbar(props) {
+function Navbar({ history, logoutUser, logoutResume, fullName }) {
     const [state, setState] = React.useState({
         right: false
     });
@@ -54,9 +54,9 @@ function Navbar(props) {
     }
 
     function logoutFn() {
-        props.logoutUser();
-        props.logoutResume();
-        props.history.push('/');
+        logoutUser();
+        logoutResume();
+        history.push('/');
     }
 
     async function keyPressed(e) {
@@ -84,25 +84,25 @@ function Navbar(props) {
     const sideList = (side) => (
         <div className="sidebar-list" role="presentation" onClick={toggleDrawer(side, false)} onKeyDown={toggleDrawer(side, false)}>
             <List>
-                <ListItem button onClick={() => props.history.push('/')}>
+                <ListItem button onClick={() => history.push('/')}>
                     <ListItemIcon>
                         <HomeIcon />
                     </ListItemIcon>
                     <ListItemText primary="Home" />
                 </ListItem>
-                <ListItem button onClick={() => props.history.push('/new')}>
+                <ListItem button onClick={() => history.push('/new')}>
                     <ListItemIcon>
                         <AddBoxIcon />
                     </ListItemIcon>
                     <ListItemText primary="New Application" />
                 </ListItem>
-                <ListItem button onClick={() => props.history.push('/resumes')}>
+                <ListItem button onClick={() => history.push('/resumes')}>
                     <ListItemIcon>
                         <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText primary="Resumes" />
                 </ListItem>
-                <ListItem button onClick={() => props.history.push('/profile')}>
+                <ListItem button onClick={() => history.push('/profile')}>
                     <ListItemIcon>
                         <PersonIcon />
                     </ListItemIcon>
@@ -121,22 +121,32 @@ function Navbar(props) {
         </div>
     );
 
-    const navNotLoggedin = props.fullName ? (
-        <div className="navbar-logged-user">
-            <Tooltip title="New Application" TransitionComponent={Zoom} arrow>
+    const navNotLoggedin = fullName ? (
+        <div className="navbar__logged-side">
+            <Tooltip title="How To Use" TransitionComponent={Zoom} placement="bottom">
+                <Link color="inherit" to="/howtouse">
+                    How to Use
+                </Link>
+            </Tooltip>
+            <Tooltip title="New Application" TransitionComponent={Zoom} placement="bottom">
                 <Link color="inherit" to="/new">
                     <AddCircleOutlineIcon />
                 </Link>
             </Tooltip>
-            <Tooltip title="Menu" TransitionComponent={Zoom} arrow>
+            <Tooltip title={`Open Sidebar Menu`} TransitionComponent={Zoom} placement="bottom">
                 <Link color="inherit" to="#" onClick={toggleDrawer('right', true)}>
-                    {props.fullName} &nbsp;
+                    {fullName} &nbsp;
                     <MenuIcon />
                 </Link>
             </Tooltip>
         </div>
     ) : (
         <div>
+            <Tooltip title="How To Use" TransitionComponent={Zoom} placement="bottom">
+                <Link color="inherit" to="/howtouse">
+                    How to Use
+                </Link>
+            </Tooltip>
             <Link color="inherit" to="/login">
                 Log In
             </Link>
@@ -150,13 +160,20 @@ function Navbar(props) {
         <div>
             <AppBar position="static">
                 <Toolbar>
-                    <Tooltip title="Go To Home" TransitionComponent={Zoom} arrow>
-                        <Link color="inherit" to="/">
-                            <HomeIcon />
-                            &nbsp;Home
-                        </Link>
-                    </Tooltip>
-                    <div className="navbar-search" style={{ display: props.fullName ? '' : 'none' }}>
+                    <div className="navbar__home-side">
+                        <Tooltip title="Go To Home" TransitionComponent={Zoom} placement="bottom">
+                            <Link color="inherit" to="/">
+                                <HomeIcon />
+                                &nbsp;Home
+                            </Link>
+                        </Tooltip>
+                        <Tooltip title="About Me" TransitionComponent={Zoom} placement="bottom">
+                            <Link color="inherit" to="/about">
+                                About
+                            </Link>
+                        </Tooltip>
+                    </div>
+                    <div className="navbar-search" style={{ display: fullName ? '' : 'none' }}>
                         <div className="navbar-search-icon">
                             <SearchIcon />
                         </div>

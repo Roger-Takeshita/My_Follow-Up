@@ -7,20 +7,15 @@ require('./config/database');
 
 const app = express();
 
-//! Middlewares
 app.use(logger('dev'));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'build')));
 
-//! API Routes
-//+ API Users
 app.use('/api/users', require('./routes/users'));
-//+ API Others
 app.use('/api/applications', require('./routes/applications'));
 app.use('/api/resumes', require('./routes/resumes'));
-//+ Catch all requests
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'inde.html'));
 });

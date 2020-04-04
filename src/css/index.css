@@ -237,7 +237,31 @@ footer div a svg {
           justify-content: center;
 }
 
-.navbar-logged-user {
+.navbar__logged-side {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.navbar__logged-side a {
+  white-space: nowrap;
+}
+
+.navbar__logged-side a:nth-child(2):hover svg {
+  color: #6594fa;
+}
+
+.navbar__logged-side a:last-child {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -249,24 +273,17 @@ footer div a svg {
           align-items: center;
 }
 
-.navbar-logged-user a:first-child:hover svg {
+.navbar__logged-side a:last-child:hover svg {
   color: #6594fa;
 }
 
-.navbar-logged-user a:last-child {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+.navbar__home-side {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-.navbar-logged-user a:last-child:hover svg {
-  color: #6594fa;
 }
 
 .sidebar-list {
@@ -277,8 +294,35 @@ footer div a svg {
   color: #6594fa;
 }
 
-.table__width {
+.resume__width {
   min-width: 100%;
+}
+
+.login__table {
+  padding: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.login__column-one {
+  text-align: right;
+  padding-right: 5px;
+  font-weight: bold;
+}
+
+.login__column-two {
+  width: 200px;
+  font-weight: normal;
+  text-align: left;
+  padding-left: 5px;
 }
 
 .table-message {
@@ -619,5 +663,70 @@ footer div a svg {
   -webkit-transform: scale(1.25);
           transform: scale(1.25);
   color: red;
+}
+
+.about__div {
+  margin-top: 5rem;
+}
+
+.about__img {
+  width: 180px;
+  border-radius: 50%;
+}
+
+.about__name {
+  font-size: 1.8rem;
+  margin-top: 1rem;
+  font-weight: lighter;
+}
+
+.about__title {
+  font-size: 1.1rem;
+  font-weight: bolder;
+  margin-top: 0.5rem;
+}
+
+.about__technologies, .about__social-media {
+  margin-top: 3rem;
+  font-weight: lighter;
+}
+
+.about__technologies div:first-child, .about__social-media div:first-child {
+  font-size: 1.2rem;
+}
+
+.about__technologies div:nth-child(2), .about__social-media div:nth-child(2) {
+  margin-top: 1rem;
+}
+
+.about__icons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.about__icon {
+  width: 60px;
+  margin: 10px;
+}
+
+.about__icon-social-media {
+  height: 20px;
+  margin: 0 15px 10px 15px;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+}
+
+.about__icon-social-media:hover {
+  -webkit-transform: scale(1.8);
+          transform: scale(1.8);
 }
 /*# sourceMappingURL=index.css.map */

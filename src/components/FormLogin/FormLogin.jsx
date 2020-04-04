@@ -9,12 +9,12 @@ function formReducer(state, action) {
         case 'UPDATE_INPUT':
             return {
                 ...state,
-                [action.payload.name]: action.payload.value
+                [action.payload.name]: action.payload.value,
             };
         case 'ERROR':
             return {
                 ...state,
-                message: action.payload
+                message: action.payload,
             };
         default:
             throw new Error(`Unsuported action ${action.type}`);
@@ -25,7 +25,7 @@ function FormLogin(props) {
     const initialState = {
         email: '',
         password: '',
-        message: ''
+        message: '',
     };
 
     const [info, setInfo] = useReducer(formReducer, initialState);
@@ -33,7 +33,7 @@ function FormLogin(props) {
     function handleChange(e) {
         setInfo({
             type: 'UPDATE_INPUT',
-            payload: e.target
+            payload: e.target,
         });
     }
 
@@ -47,7 +47,7 @@ function FormLogin(props) {
             console.log(err);
             setInfo({
                 type: 'ERROR',
-                payload: 'Invalid Credentials!'
+                payload: 'Invalid Credentials!',
             });
             console.log(info);
         }
@@ -58,43 +58,50 @@ function FormLogin(props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="form-login">
-                <div className="form-input-login-signup">
-                    <label>Email</label>
-                    <input
-                        name="email"
-                        type="email"
-                        autoComplete="username"
-                        placeholder="Email"
-                        value={info.email}
-                        onChange={handleChange}
-                    />
+        <>
+            <form onSubmit={handleSubmit}>
+                <div className="form-login">
+                    <div className="form-input-login-signup">
+                        <label>Email</label>
+                        <input name="email" type="email" autoComplete="username" placeholder="Email" value={info.email} onChange={handleChange} />
+                    </div>
+                    <div className="form-input-login-signup">
+                        <label>Password</label>
+                        <input
+                            name="password"
+                            type="password"
+                            autoComplete="new-password"
+                            placeholder="Password"
+                            value={info.password}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <button disabled={isFormValid()}>Log In</button>
+                        &nbsp;&nbsp;&nbsp;
+                        <Link to="/signup">Cancel</Link>
+                    </div>
                 </div>
-                <div className="form-input-login-signup">
-                    <label>Password</label>
-                    <input
-                        name="password"
-                        type="password"
-                        autoComplete="new-password"
-                        placeholder="Password"
-                        value={info.password}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <button disabled={isFormValid()}>Log In</button>
-                    &nbsp;&nbsp;&nbsp;
-                    <Link to="/signup">Cancel</Link>
-                </div>
+                <div>{info.message}</div>
+            </form>
+            <div className="login__table">
+                <table>
+                    <tr>
+                        <th className="login__column-one">Email</th>
+                        <th className="login__column-two">test@test.com</th>
+                    </tr>
+                    <tr>
+                        <td className="login__column-one">Password</td>
+                        <td className="login__column-two">test123</td>
+                    </tr>
+                </table>
             </div>
-            <div>{info.message}</div>
-        </form>
+        </>
     );
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    loginUser: () => dispatch(loginUser())
+    loginUser: () => dispatch(loginUser()),
 });
 
 export default connect(null, mapDispatchToProps)(FormLogin);
