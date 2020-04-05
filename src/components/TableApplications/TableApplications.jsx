@@ -177,7 +177,7 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={3}>
                 <TableContainer>
                     <Table className={classes.table} aria-labelledby="tableTitle" size="small" aria-label="enhanced table">
                         <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={applications.length} />

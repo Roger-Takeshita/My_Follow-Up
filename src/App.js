@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './css/App.css';
 import Navbar from './components/Navbar/Navbar';
@@ -17,11 +17,11 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import { connect } from 'react-redux';
 import { setResumes } from './redux/resume';
 import { setApplications } from './redux/application';
+import { toggleDataFlag } from './redux/dataFlag';
 
-function App({ setApplications, setResumes, userFirstName, history }) {
-    const [fetchFlag, setFetchFlag] = useState(false);
+function App({ setApplications, setResumes, userFirstName, history, dataFlag, toggleDataFlag }) {
     let pages = userService.getUser() ? (
-        fetchFlag ? (
+        dataFlag ? (
             <Switch>
                 <Route exact path="/howtouse" render={({ history }) => <HowToUsePage history={history} />} />
                 <Route exact path="/about" render={({ history }) => <AboutPage history={history} />} />
@@ -47,15 +47,15 @@ function App({ setApplications, setResumes, userFirstName, history }) {
 
     useEffect(() => {
         async function getData() {
-            if (userFirstName) {
+            if (userFirstName && !dataFlag) {
                 const [resumes, applications] = await Promise.all([apiService.getData('/api/resumes'), apiService.getData('/api/applications')]);
                 await setApplications(applications);
                 await setResumes(resumes);
-                setFetchFlag(true);
+                toggleDataFlag(true);
             }
         }
         getData();
-    }, [userFirstName, setApplications, setResumes]);
+    }, [userFirstName, setApplications, setResumes, dataFlag, toggleDataFlag]);
 
     return (
         <div className="App">
@@ -74,12 +74,14 @@ function App({ setApplications, setResumes, userFirstName, history }) {
 }
 
 const mapStateToProps = (state) => ({
-    userFirstName: state.user ? state.user.firstName : ''
+    userFirstName: state.user ? state.user.firstName : '',
+    dataFlag: state.toggleFlag
 });
 
 const mapsDispatchToProps = (dispatch) => ({
     setResumes: (data) => dispatch(setResumes(data)),
-    setApplications: (data) => dispatch(setApplications(data))
+    setApplications: (data) => dispatch(setApplications(data)),
+    toggleDataFlag: () => dispatch(toggleDataFlag())
 });
 
 export default connect(mapStateToProps, mapsDispatchToProps)(App);

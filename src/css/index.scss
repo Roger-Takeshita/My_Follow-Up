@@ -9,6 +9,7 @@ $buttonAddBGColor: lightblue;
 $buttonIconSize: 18px;
 $fadeRedColor: #ff97b9;
 $redColor: red;
+$marginBetweenEl: 10px;
 
 @mixin displayFlex ($justifyContent){
   display: flex;
@@ -87,18 +88,6 @@ footer {
   color: white !important;
   svg {
     font-size: $buttonIconSize;
-  }
-}
-
-.a-show-hide {
-  background-color: $buttonAddBGColor !important;
-  color: white !important;
-  height: 25px !important;
-  svg {
-    font-size: $buttonIconSize;
-  }
-  &:hover svg {
-    color: $iconColorHover;
   }
 }
 
@@ -188,7 +177,6 @@ footer {
   justify-content: center;
 }
 
-
 .navbar {
   &__logged-side {
     @include displayFlex(center);
@@ -217,18 +205,6 @@ footer {
   width: 230px;
 }
 
-.MuiButtonBase-root { 
-  &:hover div:first-child svg {
-    color: $iconColorHover;
-  }
-}
-
-.resume {
-  &__width {
-    min-width: 100%;
-  }
-}
-
 .login {
   &__table {
     padding: 20px;
@@ -249,32 +225,41 @@ footer {
   }
 }
 
-.table-message {
-  @include displayFlex(center);
-  min-height: 300px;
-}
-
 .form-resume {
-  @include displayFlex(center);
-  margin: auto;
-  flex-direction: column;
+  &__editor-ctrl {
+    justify-content: center;
+    margin-bottom: $marginBetweenEl*2;
+  }
+  &__form {
+    @include displayFlex(center);
+    margin: auto;
+    flex-direction: column;
+  }
   &__title {
     display: flex;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: $marginBetweenEl;
   }
   &__input {
     height: 40px; 
     width: 100%;
     font-size: 1.75em;
   }
-  &__div-button {
+  &__ctrl {
+    justify-content: right;
     width: 100%;
     text-align: right;
-    margin: 10px 0;
+    margin: $marginBetweenEl 0 $marginBetweenEl*2 0;
   }
   &__button {
-    margin-left: 5px !important;
+    margin-left: $marginBetweenEl !important;
+  }
+  &__message {
+    @include displayFlex(center);
+    margin-bottom: $marginBetweenEl;
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
   }
 }
 
@@ -344,12 +329,23 @@ footer {
   }
   &__followup {
     display: flex;
-    margin-top: 10px;
+    margin-top: $marginBetweenEl;
+  }
+  &__show-hide--icon {
+    background-color: $buttonAddBGColor !important;
+    color: white !important;
+    height: 30px !important;
+    svg {
+      font-size: $buttonIconSize;
+    }
+    &:hover svg {
+      color: $iconColorHover;
+    }
   }
   &__followup-ctrl {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 10px;
+    margin-bottom: $marginBetweenEl;
     a {
       box-sizing: unset;
       align-self: center;
@@ -370,7 +366,7 @@ footer {
   &__followup-date{
     display: flex;
     align-items: center;
-    padding-left: 10px;
+    padding-left: $marginBetweenEl;
     a {
       display: flex;
       align-items: center;
@@ -412,15 +408,18 @@ footer {
   &__ctrl {
     width: 100%;
     text-align: right;
-    margin: 10px 0;
+    margin: $marginBetweenEl 0;
   }
   &__button {
     margin-left: 5px !important;
   }
-}
-
-.MuiGrid-container {
-  width: auto !important;
+  &__message {
+    @include displayFlex(center);
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
+    margin-top: $marginBetweenEl;
+  }
 }
 
 .table-applications {
@@ -450,7 +449,7 @@ footer {
     a {
       display: flex;
       align-items: center;
-      margin-right: 10px;
+      margin-right: $marginBetweenEl;
       svg {
         font-size: 1.4rem;
         transition: transform .25s;
@@ -459,6 +458,39 @@ footer {
           transform: scale(1.25);
           color: $redColor;
         }
+      }
+    }
+  }
+}
+
+.table-resume {
+  &__table-row {
+    display: flex !important;
+    align-items: center;
+    a:first-child {
+      display: inherit;
+      align-items: inherit;
+      margin-right: 10px;
+      svg {
+        transition: transform .25s;
+        font-size: 20px;
+        color: $fadeRedColor;
+      }
+      svg:hover {
+        transform: scale(1.25);
+        color: $redColor;
+      }
+    }
+    a:nth-child(2) {
+      display: inherit;
+      align-items: inherit;
+      svg {
+        margin-left: 5px;
+        transition: transform .25s;
+        font-size: 20px;
+      }
+      svg:hover {
+        transform: scale(1.25);
       }
     }
   }
@@ -508,5 +540,72 @@ footer {
     &:hover {
       transform: scale(1.80);
     }
+  }
+}
+
+.MuiGrid-container {
+  width: auto !important;
+}
+
+.MuiButtonBase-root { 
+  &:hover div:first-child svg {
+    color: $iconColorHover;
+  }
+}
+
+.profile {
+  @include displayFlex(center);
+  flex-direction: column;
+  width: 700px;
+  padding: 40px;
+  margin: auto;
+  .MuiTextField-root {
+    margin: 5px 0;
+  }
+  &__info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+  &__pic {
+    @include displayFlex(center);
+    height: 160px;
+    width: 160px;
+    border: 1px solid lightgrey;
+    margin: $marginBetweenEl;
+    svg {
+      font-size: 100px;
+    }
+  }
+  &__name-email-pic {
+    @include displayFlex(center);
+    margin-bottom: 20px;
+  }
+  &__name-email {
+    @include displayFlex(center);
+    flex-direction: column;
+    align-items: flex-end;    
+  }
+  &__password {
+    @include displayFlex(center);
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 20px; 
+  }
+  &__ctrl {
+    display: flex;
+    justify-content: flex-end;
+  }
+  &__message {
+    @include displayFlex(center);
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
+    margin-top: $marginBetweenEl;
+  }
+  &__input {
+    width: 320px;
+    margin-right: 5px !important;
   }
 }

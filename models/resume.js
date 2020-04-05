@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const resumeSchema = new Schema(
     {
         title: {
-            type: String,
-            unique: true
+            type: String
         },
         description: {
             type: String

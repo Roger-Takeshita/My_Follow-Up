@@ -43,9 +43,7 @@ async function getResumes(req, res) {
 
 async function updateResume(req, res) {
     try {
-        const resume = await Resume.findOne({ _id: req.params.id })
-            .where({ user: req.user })
-            .select('-user -createdAt -updatedAt -__v');
+        const resume = await Resume.findOne({ _id: req.params.id }).where({ user: req.user }).select('-user -createdAt -updatedAt -__v');
         resume.title = req.body.title;
         resume.description = req.body.description;
         res.json(await resume.save());

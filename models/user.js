@@ -39,10 +39,11 @@ const userSchema = new Schema(
 
 //! Mongoose Middleware
 //+ Encrypt the password
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
     const user = this;
+    console.log(user.isModified('password'));
     if (!user.isModified('password')) return next();
-    bcrypt.hash(user.password, SALT_ROUNDS, function(err, hash) {
+    bcrypt.hash(user.password, SALT_ROUNDS, function (err, hash) {
         if (err) return next(err);
         user.password = hash;
         next();
@@ -50,13 +51,13 @@ userSchema.pre('save', function(next) {
 });
 
 //+ Compare password
-userSchema.methods.comparePassword = function(tryPassword, cb) {
+userSchema.methods.comparePassword = function (tryPassword, cb) {
     bcrypt.compare(tryPassword, this.password, cb);
 };
 
 //+ Return
 userSchema.set('toJSON', {
-    transform: function(doc, ret) {
+    transform: function (doc, ret) {
         delete ret.password;
         delete ret.createdAt;
         delete ret.updatedAt;

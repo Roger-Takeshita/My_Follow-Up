@@ -7,6 +7,12 @@ function setToken(token) {
     }
 }
 
+function updateToken(token) {
+    if (token) {
+        localStorage.setItem('token', token);
+    }
+}
+
 //! Getting token and checking if it's still valid
 function getToken() {
     let token = localStorage.getItem('token');
@@ -37,5 +43,6 @@ export default {
     setToken,
     getToken,
     getUserFromToken,
-    removeToken
+    removeToken,
+    updateToken
 };

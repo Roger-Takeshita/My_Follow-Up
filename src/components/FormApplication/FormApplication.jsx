@@ -9,7 +9,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import DoneIcon from '@material-ui/icons/Done';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import BusinessIcon from '@material-ui/icons/Business';
@@ -21,6 +20,9 @@ import StarIcon from '@material-ui/icons/Star';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import PublishIcon from '@material-ui/icons/Publish';
+import UpdateIcon from '@material-ui/icons/Update';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 
 function FormApplication({ applications, application, id, resumes, deleteFollowup, addFollowup, history, addApplication, updateApplication }) {
     const initialState = {
@@ -37,7 +39,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
         coverLetter: '',
         coverLetterActive: false,
         star: false,
-        applicationId: ''
+        applicationId: '',
+        modifiedFlag: false,
+        message: ''
     };
 
     const [form, setForm] = useState(initialState);
@@ -61,7 +65,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                           coverLetter: updateApplication.coverLetter,
                           coverLetterActive: false,
                           star: updateApplication.star,
-                          applicationId: id
+                          applicationId: id,
+                          modifiedFlag: false,
+                          message: ''
                       }
                     : {
                           title: '',
@@ -77,7 +83,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                           coverLetter: '',
                           coverLetterActive: false,
                           star: false,
-                          applicationId: ''
+                          applicationId: '',
+                          modifiedFlag: false,
+                          message: ''
                       }
             );
         }
@@ -87,7 +95,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
     const handleChange = ({ target: { name, value } }) => {
         setForm({
             ...form,
-            [name]: value
+            [name]: value,
+            modifiedFlag: true,
+            message: ''
         });
     };
 
@@ -95,7 +105,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
         e.preventDefault();
         setForm({
             ...form,
-            star: !form.star
+            star: !form.star,
+            modifiedFlag: true,
+            message: ''
         });
     };
 
@@ -109,17 +121,20 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
         if (editor === 'job') {
             setForm({
                 ...form,
-                jobDescription: content
+                jobDescription: content,
+                modifiedFlag: true
             });
         } else if (editor === 'resume') {
             setForm({
                 ...form,
-                resume: content
+                resume: content,
+                modifiedFlag: true
             });
         } else if (editor === 'coverLetter') {
             setForm({
                 ...form,
-                coverLetter: content
+                coverLetter: content,
+                modifiedFlag: true
             });
         }
     };
@@ -153,12 +168,8 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
         }
     };
 
-    const handleCancelBtn = () => {
-        history.push('/');
-    };
-
     function isFormValid() {
-        return !(form.title && form.company && form.link && form.jobDescription && form.resume && form.status);
+        return !(form.title && form.company && form.link && form.jobDescription && form.resume && form.status && form.modifiedFlag);
     }
 
     async function handleSubmit(e) {
@@ -173,6 +184,10 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
             }
             history.push('/');
         } catch (err) {
+            setForm({
+                ...form,
+                message: err.message
+            });
             console.log(err);
         }
     }
@@ -366,15 +381,15 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                             </div>
                         )}
                         <div className="form-application__followup-ctrl">
-                            <a
-                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall a-show-hide"
-                                href="/"
+                            <Button
+                                className="form-application__show-hide--icon"
+                                size="small"
+                                variant="contained"
+                                startIcon={form.coverLetterActive ? <VisibilityIconOff /> : <VisibilityIcon />}
                                 onClick={handleCoverLetterVisible}
                             >
-                                {form.coverLetterActive ? <VisibilityIconOff /> : <VisibilityIcon />}
-                                &nbsp;&nbsp;
                                 {form.coverLetterActive ? 'Hide CL' : 'Show CL'}
-                            </a>
+                            </Button>
                             <TextField
                                 className="form-application__date"
                                 label="Applied On"
@@ -415,23 +430,26 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                                 variant="contained"
                                 color="secondary"
                                 startIcon={<CancelIcon />}
-                                onClick={handleCancelBtn}
+                                onClick={() => history.push('/')}
                             >
                                 {' '}
                                 Cancel
                             </Button>
                             &nbsp;&nbsp;
-                            <button
-                                disabled={isFormValid()}
-                                className={
-                                    isFormValid()
-                                        ? 'Mui-disabled MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall'
-                                        : 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeSmall MuiButton-sizeSmall'
-                                }
+                            <Button
+                                size="small"
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                startIcon={form.applicationId !== '' ? <UpdateIcon /> : <PublishIcon />}
+                                className={isFormValid() ? 'Mui-disabled form-application__button' : 'form-application__button'}
                             >
-                                <DoneIcon />
-                                Save
-                            </button>
+                                {form.applicationId !== '' ? 'Update Application' : 'Save Application'}
+                            </Button>
+                        </div>
+                        <div className="form-application__message" style={{ display: form.message !== '' ? 'flex' : 'none' }}>
+                            <ReportProblemIcon />
+                            {form.message}
                         </div>
                     </div>
                 </div>

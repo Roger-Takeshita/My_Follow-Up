@@ -9,23 +9,23 @@ function formReducer(state, action) {
         case 'UPDATE_INPUT':
             return {
                 ...state,
-                [action.payload.name]: action.payload.value,
+                [action.payload.name]: action.payload.value
             };
         case 'ERROR':
             return {
                 ...state,
-                message: action.payload,
+                message: action.payload
             };
         default:
             throw new Error(`Unsuported action ${action.type}`);
     }
 }
 
-function FormLogin(props) {
+function FormLogin({ loginUser, history }) {
     const initialState = {
         email: '',
         password: '',
-        message: '',
+        message: ''
     };
 
     const [info, setInfo] = useReducer(formReducer, initialState);
@@ -33,7 +33,7 @@ function FormLogin(props) {
     function handleChange(e) {
         setInfo({
             type: 'UPDATE_INPUT',
-            payload: e.target,
+            payload: e.target
         });
     }
 
@@ -41,15 +41,14 @@ function FormLogin(props) {
         e.preventDefault();
         try {
             await userService.login(info);
-            props.loginUser();
-            props.history.push('/');
+            loginUser();
+            history.push('/');
         } catch (err) {
             console.log(err);
             setInfo({
                 type: 'ERROR',
-                payload: 'Invalid Credentials!',
+                payload: 'Invalid Credentials!'
             });
-            console.log(info);
         }
     }
 
@@ -86,14 +85,16 @@ function FormLogin(props) {
             </form>
             <div className="login__table">
                 <table>
-                    <tr>
-                        <th className="login__column-one">Email</th>
-                        <th className="login__column-two">test@test.com</th>
-                    </tr>
-                    <tr>
-                        <td className="login__column-one">Password</td>
-                        <td className="login__column-two">test123</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <th className="login__column-one">Email</th>
+                            <th className="login__column-two">test@test.com</th>
+                        </tr>
+                        <tr>
+                            <td className="login__column-one">Password</td>
+                            <td className="login__column-two">test123</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </>
@@ -101,7 +102,7 @@ function FormLogin(props) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    loginUser: () => dispatch(loginUser()),
+    loginUser: () => dispatch(loginUser())
 });
 
 export default connect(null, mapDispatchToProps)(FormLogin);

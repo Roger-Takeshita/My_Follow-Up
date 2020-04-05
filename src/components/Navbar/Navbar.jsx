@@ -14,6 +14,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../redux/user';
 import { logoutResume } from '../../redux/resume';
+import { toggleDataFlag } from '../../redux/dataFlag';
 import apiService from '../../utils/apiService';
 import HomeIcon from '@material-ui/icons/Home';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -39,7 +40,7 @@ const searchReducer = (state, action) => {
     }
 };
 
-function Navbar({ history, logoutUser, logoutResume, fullName }) {
+function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag }) {
     const [state, setState] = React.useState({
         right: false
     });
@@ -56,6 +57,7 @@ function Navbar({ history, logoutUser, logoutResume, fullName }) {
     function logoutFn() {
         logoutUser();
         logoutResume();
+        toggleDataFlag();
         history.push('/');
     }
 
@@ -211,7 +213,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     logoutUser: () => dispatch(logoutUser()),
-    logoutResume: () => dispatch(logoutResume())
+    logoutResume: () => dispatch(logoutResume()),
+    toggleDataFlag: () => dispatch(toggleDataFlag())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

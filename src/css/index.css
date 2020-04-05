@@ -98,20 +98,6 @@ footer div a svg {
   font-size: 18px;
 }
 
-.a-show-hide {
-  background-color: lightblue !important;
-  color: white !important;
-  height: 25px !important;
-}
-
-.a-show-hide svg {
-  font-size: 18px;
-}
-
-.a-show-hide:hover svg {
-  color: #6594fa;
-}
-
 .form-login, .form-signup {
   text-align: center;
   width: 400px;
@@ -290,14 +276,6 @@ footer div a svg {
   width: 230px;
 }
 
-.MuiButtonBase-root:hover div:first-child svg {
-  color: #6594fa;
-}
-
-.resume__width {
-  min-width: 100%;
-}
-
 .login__table {
   padding: 20px;
   display: -webkit-box;
@@ -325,20 +303,14 @@ footer div a svg {
   padding-left: 5px;
 }
 
-.table-message {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+.form-resume__editor-ctrl {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  min-height: 300px;
+  margin-bottom: 20px;
 }
 
-.form-resume {
+.form-resume__form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -369,14 +341,33 @@ footer div a svg {
   font-size: 1.75em;
 }
 
-.form-resume__div-button {
+.form-resume__ctrl {
+  -webkit-box-pack: right;
+      -ms-flex-pack: right;
+          justify-content: right;
   width: 100%;
   text-align: right;
-  margin: 10px 0;
+  margin: 10px 0 20px 0;
 }
 
 .form-resume__button {
-  margin-left: 5px !important;
+  margin-left: 10px !important;
+}
+
+.form-resume__message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+  color: red;
+  height: 40px;
+  justify-content: center;
 }
 
 .form-application {
@@ -488,6 +479,20 @@ footer div a svg {
   margin-top: 10px;
 }
 
+.form-application__show-hide--icon {
+  background-color: lightblue !important;
+  color: white !important;
+  height: 30px !important;
+}
+
+.form-application__show-hide--icon svg {
+  font-size: 18px;
+}
+
+.form-application__show-hide--icon:hover svg {
+  color: #6594fa;
+}
+
 .form-application__followup-ctrl {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -593,8 +598,20 @@ footer div a svg {
   margin-left: 5px !important;
 }
 
-.MuiGrid-container {
-  width: auto !important;
+.form-application__message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: red;
+  height: 40px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .table-applications__star--true {
@@ -665,6 +682,59 @@ footer div a svg {
   color: red;
 }
 
+.table-resume__table-row {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.table-resume__table-row a:first-child {
+  display: inherit;
+  -webkit-box-align: inherit;
+      -ms-flex-align: inherit;
+          align-items: inherit;
+  margin-right: 10px;
+}
+
+.table-resume__table-row a:first-child svg {
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+  font-size: 20px;
+  color: #ff97b9;
+}
+
+.table-resume__table-row a:first-child svg:hover {
+  -webkit-transform: scale(1.25);
+          transform: scale(1.25);
+  color: red;
+}
+
+.table-resume__table-row a:nth-child(2) {
+  display: inherit;
+  -webkit-box-align: inherit;
+      -ms-flex-align: inherit;
+          align-items: inherit;
+}
+
+.table-resume__table-row a:nth-child(2) svg {
+  margin-left: 5px;
+  -webkit-transition: -webkit-transform .25s;
+  transition: -webkit-transform .25s;
+  transition: transform .25s;
+  transition: transform .25s, -webkit-transform .25s;
+  font-size: 20px;
+}
+
+.table-resume__table-row a:nth-child(2) svg:hover {
+  -webkit-transform: scale(1.25);
+          transform: scale(1.25);
+}
+
 .about__div {
   margin-top: 5rem;
 }
@@ -728,5 +798,150 @@ footer div a svg {
 .about__icon-social-media:hover {
   -webkit-transform: scale(1.8);
           transform: scale(1.8);
+}
+
+.MuiGrid-container {
+  width: auto !important;
+}
+
+.MuiButtonBase-root:hover div:first-child svg {
+  color: #6594fa;
+}
+
+.profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 700px;
+  padding: 40px;
+  margin: auto;
+}
+
+.profile .MuiTextField-root {
+  margin: 5px 0;
+}
+
+.profile__info {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: auto;
+}
+
+.profile__pic {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 160px;
+  width: 160px;
+  border: 1px solid lightgrey;
+  margin: 10px;
+}
+
+.profile__pic svg {
+  font-size: 100px;
+}
+
+.profile__name-email-pic {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile__name-email {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.profile__password {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.profile__ctrl {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.profile__message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: red;
+  height: 40px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.profile__input {
+  width: 320px;
+  margin-right: 5px !important;
 }
 /*# sourceMappingURL=index.css.map */
