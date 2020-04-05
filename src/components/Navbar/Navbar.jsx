@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,8 +9,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../redux/user';
 import { logoutResume } from '../../redux/resume';
@@ -24,6 +22,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import PersonIcon from '@material-ui/icons/Person';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import Search from '../Search/Search';
 
 const searchReducer = (state, action) => {
     switch (action.type) {
@@ -41,11 +40,11 @@ const searchReducer = (state, action) => {
 };
 
 function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag }) {
-    const [state, setState] = React.useState({
+    const [drawer, setDrawer] = useState({
         right: false
     });
 
-    const [search, setSearch] = useReducer(searchReducer, { search: '' });
+    const [search, setSearch] = useReducer(searchReducer, { field: '' });
 
     function handleChange(e) {
         setSearch({
@@ -63,9 +62,9 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
 
     async function keyPressed(e) {
         if (e.key === 'Enter') {
-            if (search.search !== '') {
+            if (search.field !== '') {
                 try {
-                    await apiService.search(search.search);
+                    await apiService.getData('/api/applications/search', search.field);
                     setSearch({ type: 'CLEAR_INPUT' });
                 } catch (err) {
                     console.log(err);
@@ -80,11 +79,16 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
             return;
         }
 
-        setState({ [side]: open });
+        setDrawer({ [side]: open });
     };
 
     const sideList = (side) => (
-        <div className="sidebar-list" role="presentation" onClick={toggleDrawer(side, false)} onKeyDown={toggleDrawer(side, false)}>
+        <div
+            className="sidebar-list"
+            role="presentation"
+            onClick={toggleDrawer(side, false)}
+            onKeyDown={toggleDrawer(side, false)}
+        >
             <List>
                 <ListItem button onClick={() => history.push('/')}>
                     <ListItemIcon>
@@ -176,23 +180,12 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
                         </Tooltip>
                     </div>
                     <div className="navbar-search" style={{ display: fullName ? '' : 'none' }}>
-                        <div className="navbar-search-icon">
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            className="navbar-search-input"
-                            name="search"
-                            inputProps={{ 'aria-label': 'search' }}
-                            value={search.search}
-                            onChange={handleChange}
-                            onKeyPress={keyPressed}
-                        />
+                        <Search />
                     </div>
                     {navNotLoggedin}
                 </Toolbar>
             </AppBar>
-            <Drawer anchor="right" open={state.right} onClose={toggleDrawer('right', false)}>
+            <Drawer anchor="right" open={drawer.right} onClose={toggleDrawer('right', false)}>
                 {sideList('right')}
             </Drawer>
         </div>

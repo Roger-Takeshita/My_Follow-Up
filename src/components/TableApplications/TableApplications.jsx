@@ -153,10 +153,11 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
     const handleClick = async (e, mode, id) => {
         e.preventDefault();
         if (mode === 'toggleStar') {
-            const data = await apiService.postPutData('/api/applications', {}, id);
+            const data = await apiService.putData('/api/applications', { data: {}, parentId: id });
+            console.log(data[0]);
             toggleStar(data);
         } else if (mode === 'delete') {
-            const data = await apiService.deleteData('/api/applications', id);
+            const data = await apiService.deleteData('/api/applications', { parentId: id });
             deleteApplication({ _id: data._id });
         } else if (mode === 'link') {
             const re = /((http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/;

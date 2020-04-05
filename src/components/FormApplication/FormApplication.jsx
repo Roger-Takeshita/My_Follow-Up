@@ -24,7 +24,17 @@ import PublishIcon from '@material-ui/icons/Publish';
 import UpdateIcon from '@material-ui/icons/Update';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 
-function FormApplication({ applications, application, id, resumes, deleteFollowup, addFollowup, history, addApplication, updateApplication }) {
+function FormApplication({
+    applications,
+    application,
+    id,
+    resumes,
+    deleteFollowup,
+    addFollowup,
+    history,
+    addApplication,
+    updateApplication
+}) {
     const initialState = {
         title: '',
         company: '',
@@ -57,8 +67,14 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                           link: updateApplication.link,
                           jobDescription: updateApplication.jobDescription,
                           resume: updateApplication.resume,
-                          appliedOn: updateApplication.appliedOn !== null ? updateApplication.appliedOn.split('T')[0] : '',
-                          rejectedOn: updateApplication.rejectedOn !== null ? updateApplication.rejectedOn.split('T')[0] : '',
+                          appliedOn:
+                              updateApplication.appliedOn !== null
+                                  ? updateApplication.appliedOn.split('T')[0]
+                                  : '',
+                          rejectedOn:
+                              updateApplication.rejectedOn !== null
+                                  ? updateApplication.rejectedOn.split('T')[0]
+                                  : '',
                           status: updateApplication.status,
                           followupNow: '',
                           followup: [...updateApplication.followup],
@@ -111,10 +127,10 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
         });
     };
 
-    const handleDeleteFollowup = async (e, appId, follId, idx) => {
+    const handleDeleteFollowup = async (e, applicationId, followupId, idx) => {
         e.preventDefault();
-        const data = await apiService.deleteData('/api/applications/', `${appId}/${follId}`);
-        deleteFollowup({ applicationId: appId, followId: data, idx });
+        await apiService.deleteData('/api/applications/', { parentID: applicationId, childId: followupId });
+        deleteFollowup({ applicationId, idx });
     };
 
     const handleEditorChange = (content, editor) => {
@@ -157,11 +173,17 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                     followupNow: ''
                 });
             } else {
-                const data = await apiService.postPutData(`/api/applications/${form.applicationId}/new`, { description: form.followupNow });
+                const data = await apiService.postData(`/api/applications`, {
+                    parentId: form.applicationId,
+                    data: { description: form.followupNow }
+                });
                 await addFollowup({ data, applicationId: form.applicationId });
                 await setForm({
                     ...form,
-                    followup: [...form.followup, { _id: data._id, description: data.description, date: data.date }],
+                    followup: [
+                        ...form.followup,
+                        { _id: data._id, description: data.description, date: data.date }
+                    ],
                     followupNow: ''
                 });
             }
@@ -169,17 +191,30 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
     };
 
     function isFormValid() {
-        return !(form.title && form.company && form.link && form.jobDescription && form.resume && form.status && form.modifiedFlag);
+        return !(
+            form.title &&
+            form.company &&
+            form.link &&
+            form.jobDescription &&
+            form.resume &&
+            form.status &&
+            form.modifiedFlag
+        );
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
             if (form.applicationId === '') {
-                const data = await apiService.postPutData('/api/applications/new', form);
+                const data = await apiService.postData('/api/applications', { data: form });
+                console.log(data);
                 addApplication(data);
             } else {
-                const data = await apiService.postPutData(`/api/applications`, form, form.applicationId);
+                console.log(form.applicationId);
+                const data = await apiService.putData(`/api/applications`, {
+                    data: form,
+                    parentId: form.applicationId
+                });
                 updateApplication(data);
             }
             history.push('/');
@@ -250,7 +285,12 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                     />
                     <FormControl className="form-application__status">
                         <InputLabel id="demo-controlled-open-select-label">Status</InputLabel>
-                        <Select labelId="demo-controlled-open-select-label" name="status" value={form.status} onChange={handleChange}>
+                        <Select
+                            labelId="demo-controlled-open-select-label"
+                            name="status"
+                            value={form.status}
+                            onChange={handleChange}
+                        >
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
@@ -259,7 +299,13 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                             <MenuItem value="Rejected">Rejected</MenuItem>
                         </Select>
                     </FormControl>
-                    <a href="/" onClick={handleStarClick} className={form.star ? 'form-application__star--true' : 'form-application__star--false'}>
+                    <a
+                        href="/"
+                        onClick={handleStarClick}
+                        className={
+                            form.star ? 'form-application__star--true' : 'form-application__star--false'
+                        }
+                    >
                         <Tooltip title="Save to Favorites" TransitionComponent={Zoom} arrow>
                             <StarIcon />
                         </Tooltip>
@@ -328,7 +374,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                 <div className="form-application__followup">
                     <div className="form-application__followup-display">
                         <div className="form-application__form-title">
-                            {form.followup.length > 0 ? `Follow-ups (${form.followup.length})` : 'No Follow-ups'}
+                            {form.followup.length > 0
+                                ? `Follow-ups (${form.followup.length})`
+                                : 'No Follow-ups'}
                         </div>
                         <div className="form-application__followup-list">
                             {form.followup.length > 0
@@ -339,15 +387,34 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                                               <div className="form-application__followup-item">
                                                   <div className="form-application__followup-date">
                                                       <span className="form-application__followup-span">
-                                                          {application ? `[${follow.date.split('T')[0]}]` : new Date().toISOString().split('T')[0]}
+                                                          {application
+                                                              ? `[${follow.date.split('T')[0]}]`
+                                                              : new Date().toISOString().split('T')[0]}
                                                       </span>
-                                                      <a href="/" onClick={(e) => handleDeleteFollowup(e, form.applicationId, follow._id, idx)}>
-                                                          <Tooltip title="Delete" TransitionComponent={Zoom} placement="right" arrow>
+                                                      <a
+                                                          href="/"
+                                                          onClick={(e) =>
+                                                              handleDeleteFollowup(
+                                                                  e,
+                                                                  form.applicationId,
+                                                                  follow._id,
+                                                                  idx
+                                                              )
+                                                          }
+                                                      >
+                                                          <Tooltip
+                                                              title="Delete"
+                                                              TransitionComponent={Zoom}
+                                                              placement="right"
+                                                              arrow
+                                                          >
                                                               <DeleteOutlineIcon />
                                                           </Tooltip>
                                                       </a>
                                                   </div>
-                                                  <div className="form-application__followup-text">{application ? follow.description : follow}</div>
+                                                  <div className="form-application__followup-text">
+                                                      {application ? follow.description : follow}
+                                                  </div>
                                               </div>
                                           </div>
                                       );
@@ -385,7 +452,9 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                                 className="form-application__show-hide--icon"
                                 size="small"
                                 variant="contained"
-                                startIcon={form.coverLetterActive ? <VisibilityIconOff /> : <VisibilityIcon />}
+                                startIcon={
+                                    form.coverLetterActive ? <VisibilityIconOff /> : <VisibilityIcon />
+                                }
                                 onClick={handleCoverLetterVisible}
                             >
                                 {form.coverLetterActive ? 'Hide CL' : 'Show CL'}
@@ -442,12 +511,19 @@ function FormApplication({ applications, application, id, resumes, deleteFollowu
                                 color="primary"
                                 type="submit"
                                 startIcon={form.applicationId !== '' ? <UpdateIcon /> : <PublishIcon />}
-                                className={isFormValid() ? 'Mui-disabled form-application__button' : 'form-application__button'}
+                                className={
+                                    isFormValid()
+                                        ? 'Mui-disabled form-application__button'
+                                        : 'form-application__button'
+                                }
                             >
                                 {form.applicationId !== '' ? 'Update Application' : 'Save Application'}
                             </Button>
                         </div>
-                        <div className="form-application__message" style={{ display: form.message !== '' ? 'flex' : 'none' }}>
+                        <div
+                            className="form-application__message"
+                            style={{ display: form.message !== '' ? 'flex' : 'none' }}
+                        >
                             <ReportProblemIcon />
                             {form.message}
                         </div>

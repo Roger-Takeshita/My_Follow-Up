@@ -80,24 +80,6 @@ footer div a svg {
   font-size: 14px !important;
 }
 
-.a-save {
-  background-color: rgba(5, 117, 5, 0.788) !important;
-  color: white !important;
-}
-
-.a-save svg {
-  font-size: 18px;
-}
-
-.a-cancel {
-  background-color: #f50556 !important;
-  color: white !important;
-}
-
-.a-cancel svg {
-  font-size: 18px;
-}
-
 .form-login, .form-signup {
   text-align: center;
   width: 400px;
@@ -126,101 +108,6 @@ footer div a svg {
   height: 20px;
   width: 200px;
   border-radius: 3px;
-}
-
-.MuiToolbar-root {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
-.MuiToolbar-root a {
-  padding: 10px;
-  border-radius: 3px;
-  margin-left: 10px;
-  text-decoration: none;
-  font-weight: bolder;
-  color: white;
-}
-
-.MuiToolbar-root a:hover {
-  background-color: rgba(128, 128, 128, 0.15);
-}
-
-.MuiToolbar-root a:first-child {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-left: 0px;
-}
-
-.MuiToolbar-root a:first-child:hover svg {
-  color: #6594fa;
-}
-
-.MuiToolbar-root div:last-child {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.navbar-search {
-  position: relative;
-  border-radius: 3px;
-  margin-left: 10px;
-}
-
-.navbar-search:hover div svg {
-  color: #6594fa;
-  z-index: 1;
-}
-
-.navbar-search:focus div svg {
-  color: #6594fa;
-  z-index: 1;
-}
-
-.navbar-search-input {
-  background-color: rgba(255, 255, 255, 0.25);
-  color: darkgray !important;
-  border-radius: 3px;
-  padding: 2px 15px 2px 40px;
-  min-width: 130px;
-  width: 25vw;
-}
-
-.navbar-search-input:hover {
-  background-color: rgba(255, 255, 255, 0.5);
-  color: black !important;
-}
-
-.navbar-search-input input:focus {
-  color: black !important;
-}
-
-.navbar-search-icon {
-  height: 100%;
-  padding-left: 10px;
-  position: absolute;
-  pointer-events: none;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
 }
 
 .navbar__logged-side {
@@ -270,6 +157,73 @@ footer div a svg {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.search-input {
+  width: 300px;
+}
+
+.search-input svg {
+  color: gray;
+}
+
+.search-input:hover svg {
+  color: #6594fa;
+}
+
+.search-input input {
+  color: grey;
+  font-size: 18px;
+  height: 20px;
+}
+
+.search-input input:focus {
+  color: black !important;
+}
+
+.MuiToolbar-root {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.MuiToolbar-root a {
+  padding: 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+  text-decoration: none;
+  font-weight: bolder;
+  color: white;
+}
+
+.MuiToolbar-root a:hover {
+  background-color: rgba(128, 128, 128, 0.15);
+}
+
+.MuiToolbar-root a:first-child {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 0px;
+}
+
+.MuiToolbar-root a:first-child:hover svg {
+  color: #6594fa;
+}
+
+.MuiToolbar-root div:last-child {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .sidebar-list {

@@ -4,7 +4,7 @@ const applicationCtrl = require('../controllers/applications');
 
 //! Privet Routes
 router.use(require('../config/auth'));
-router.get('/search/*', checkAuth, applicationCtrl.search);
+router.get('/search', checkAuth, applicationCtrl.search);
 router.post('/new', checkAuth, applicationCtrl.newApplication);
 router.put('/:id', checkAuth, applicationCtrl.updateApplication);
 router.delete('/:id', checkAuth, applicationCtrl.deleteApplication);

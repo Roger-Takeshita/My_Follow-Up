@@ -83,12 +83,12 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
         e.preventDefault();
         try {
             if (mode === 'update') {
-                const data = await apiService.postPutData('/api/resumes', form, form.resumeId);
+                const data = await apiService.putData('/api/resumes', { data: form, parentId: form.resumeId });
                 updateResume(data);
                 setForm(initialState);
             } else if (mode === 'submit') {
                 try {
-                    const data = await apiService.postPutData('/api/resumes/new', form);
+                    const data = await apiService.postData('/api/resumes', { data: form });
                     addResume(data);
                     setForm(initialState);
                 } catch (err) {
@@ -99,7 +99,7 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                     });
                 }
             } else {
-                const data = await apiService.deleteData('/api/resumes', id);
+                const data = await apiService.deleteData('/api/resumes', { parentId: id });
                 deleteResume(data);
             }
         } catch (err) {

@@ -75,22 +75,6 @@ footer {
   }
 }
 
-.a-save {
-  background-color: $buttonSaveBGColor !important;
-  color: white !important;
-  svg {
-    font-size: $buttonIconSize;
-  }
-}
-
-.a-cancel {
-  background-color: $buttonCancelBGColor !important;
-  color: white !important;
-  svg {
-    font-size: $buttonIconSize;
-  }
-}
-
 .form-login, .form-signup {
   text-align: center;
   width: 400px;
@@ -109,6 +93,50 @@ footer {
     width: 200px;
     border-radius: $borderRadius;
   }
+}
+
+.navbar {
+  &__logged-side {
+    @include displayFlex(center);
+    flex-direction: row;
+    a {
+      white-space: nowrap;
+    }
+    a:nth-child(2):hover svg {
+      color: $iconColorHover;
+    }
+    a:last-child {
+      @include displayFlex(center)
+    }
+    a:last-child:hover svg {
+      color: $iconColorHover;
+    }
+  }
+  &__home-side {
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+.search-input {
+  width: 300px;
+  svg {
+    color: gray;
+  }
+  &:hover {
+    svg {
+      color: $iconColorHover;
+    }
+  }
+  input {
+    color: grey;
+    font-size: 18px;
+    height: 20px;
+    &:focus {
+      color: black !important;
+    }
+  }
+  
 }
 
 .MuiToolbar-root {
@@ -135,70 +163,6 @@ footer {
   div:last-child {
     display: flex;
   }
-}
-
-.navbar-search {
-  position: relative;  
-  border-radius: $borderRadius;
-  margin-left: 10px;
-  &:hover div svg {
-    color: $iconColorHover;
-    z-index: 1;
-  }
-  &:focus div svg {
-    color: $iconColorHover;
-    z-index: 1;
-  }
-}
-
-.navbar-search-input {
-  background-color: $navbarBGColor;
-  color: darkgray !important;
-  border-radius: $borderRadius;
-  padding: 2px 15px 2px 40px;
-  min-width: 130px;
-  width: 25vw;
-  &:hover {
-    background-color: $navbarInputBGColor;
-    color: black !important;
-  }
-  input:focus {
-    color: black !important;
-  }
-}
-
-.navbar-search-icon {
-  height: 100%;
-  padding-left: 10px;
-  position: absolute;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navbar {
-  &__logged-side {
-    @include displayFlex(center);
-    flex-direction: row;
-    a {
-      white-space: nowrap;
-    }
-    a:nth-child(2):hover svg {
-      color: $iconColorHover;
-    }
-    a:last-child {
-      @include displayFlex(center)
-    }
-    a:last-child:hover svg {
-      color: $iconColorHover;
-    }
-  }
-  &__home-side {
-    display: flex !important;
-    align-items: center;
-  }
-  
 }
 
 .sidebar-list {

@@ -2,10 +2,10 @@ const Job = require('../models/job');
 
 async function search(req, res) {
     try {
-        //mongo query
-        console.log(req.params[0]);
-        //response
-        res.json('ok');
+        const applications = await Job.find({
+            jobDescription: { $regex: new RegExp(req.query.search) }
+        }).where({ user: req.user });
+        res.json(applications);
     } catch (err) {
         console.log(err);
         res.json(err);
@@ -84,12 +84,23 @@ async function getApplications(req, res) {
 
 async function updateApplication(req, res) {
     try {
-        let application = await Job.findOne({ _id: req.params.id })
+        const application = await Job.findOne({ _id: req.params.id })
             .where({ user: req.user })
             .select('-user -createdAt -updatedAt -__v');
         if (application) {
             if (req.body.title) {
-                const allowedKeys = ['title', 'company', 'link', 'jobDescription', 'appliedOn', 'rejectedOn', 'resume', 'coverLetter', 'status', 'star'];
+                const allowedKeys = [
+                    'title',
+                    'company',
+                    'link',
+                    'jobDescription',
+                    'appliedOn',
+                    'rejectedOn',
+                    'resume',
+                    'coverLetter',
+                    'status',
+                    'star'
+                ];
                 allowedKeys.forEach((key) => (application[key] = req.body[key]));
             } else {
                 application.star = !application.star;
@@ -118,7 +129,9 @@ async function newFollowup(req, res) {
     try {
         const application = await Job.findById(req.params.id)
             .where({ user: req.user })
-            .select('-title -company -link -jobDescription -appliedOn -rejectedOn -resume -coverLetter -user -status -star -createdAt -updatedAt -__v');
+            .select(
+                '-title -company -link -jobDescription -appliedOn -rejectedOn -resume -coverLetter -user -status -star -createdAt -updatedAt -__v'
+            );
         if (application) {
             application.followup.push({
                 description: req.body.description,
