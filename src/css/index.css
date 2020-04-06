@@ -80,36 +80,6 @@ footer div a svg {
   font-size: 14px !important;
 }
 
-.form-login, .form-signup {
-  text-align: center;
-  width: 400px;
-  margin: auto;
-  padding: 20px;
-}
-
-.form-input-login-signup {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-bottom: 10px;
-}
-
-.form-input-login-signup label {
-  margin-right: 10px;
-}
-
-.form-input-login-signup input {
-  height: 20px;
-  width: 200px;
-  border-radius: 3px;
-}
-
 .navbar__logged-side {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -160,7 +130,7 @@ footer div a svg {
 }
 
 .search-input {
-  width: 300px;
+  width: 400px;
 }
 
 .search-input svg {
@@ -230,7 +200,37 @@ footer div a svg {
   width: 230px;
 }
 
-.login__table {
+.form-login {
+  text-align: center;
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+.form-login__input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-login__input label {
+  margin-right: 10px;
+}
+
+.form-login__input input {
+  height: 20px;
+  width: 200px;
+  border-radius: 3px;
+}
+
+.form-login__table {
   padding: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -244,17 +244,87 @@ footer div a svg {
           justify-content: center;
 }
 
-.login__column-one {
+.form-login__column-one {
   text-align: right;
   padding-right: 5px;
   font-weight: bold;
 }
 
-.login__column-two {
+.form-login__column-two {
   width: 200px;
   font-weight: normal;
   text-align: left;
   padding-left: 5px;
+}
+
+.form-login__ctrl {
+  margin-top: 20px;
+}
+
+.form-login__message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+  color: red;
+  height: 40px;
+  justify-content: center;
+}
+
+.form-signup {
+  text-align: center;
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+.form-signup__input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-signup__input label {
+  margin-right: 10px;
+}
+
+.form-signup__input input {
+  height: 20px;
+  width: 200px;
+  border-radius: 3px;
+}
+
+.form-signup__ctrl {
+  margin-top: 20px;
+}
+
+.form-signup__message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+  color: red;
+  height: 40px;
+  justify-content: center;
 }
 
 .form-resume__editor-ctrl {

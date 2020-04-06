@@ -83,7 +83,10 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
         e.preventDefault();
         try {
             if (mode === 'update') {
-                const data = await apiService.putData('/api/resumes', { data: form, parentId: form.resumeId });
+                const data = await apiService.putData('/api/resumes', {
+                    data: form,
+                    parentId: form.resumeId
+                });
                 updateResume(data);
                 setForm(initialState);
             } else if (mode === 'submit') {
@@ -115,14 +118,31 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
         <div className="form-resume">
             {form.resumeId !== '' ? <h1>{form.title}</h1> : <h1>New Resume</h1>}
             <div className="form-resume__editor-ctrl" style={{ display: form.formActive ? 'none' : 'flex' }}>
-                <Button onClick={handleBtnClick} size="small" variant="contained" color="primary" startIcon={<AddBoxIcon />}>
+                <Button
+                    onClick={handleBtnClick}
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddBoxIcon />}
+                >
                     New Resume
                 </Button>
             </div>
             {form.formActive && (
-                <form onSubmit={form.resumeId ? (e) => handleUpdate(e, 'update') : (e) => handleUpdate(e, 'submit')} className="form-resume__form">
+                <form
+                    onSubmit={
+                        form.resumeId ? (e) => handleUpdate(e, 'update') : (e) => handleUpdate(e, 'submit')
+                    }
+                    className="form-resume__form"
+                >
                     <div className="form-resume__title">
-                        <input className="form-resume__input" name="title" placeholder="Title" value={form.title} onChange={handleChange} />
+                        <input
+                            className="form-resume__input"
+                            name="title"
+                            placeholder="Title"
+                            value={form.title}
+                            onChange={handleChange}
+                        />
                     </div>
                     <Editor
                         apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
@@ -161,13 +181,19 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                             color="primary"
                             type="submit"
                             startIcon={form.resumeId !== '' ? <UpdateIcon /> : <PublishIcon />}
-                            className={isFormValid() ? 'Mui-disabled form-resume__button' : 'form-resume__button'}
+                            className={
+                                isFormValid() ? 'Mui-disabled form-resume__button' : 'form-resume__button'
+                            }
                         >
                             {form.resumeId !== '' ? 'Update Resume' : 'Save Resume'}
                         </Button>
                     </div>
-                    <div className="form-resume__message" style={{ display: form.message !== '' ? 'flex' : 'none' }}>
+                    <div
+                        className="form-resume__message"
+                        style={{ display: form.message === '' ? 'none' : 'flex' }}
+                    >
                         <ReportProblemIcon />
+                        &nbsp;&nbsp;
                         {form.message}
                     </div>
                 </form>
@@ -184,13 +210,23 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                             <TableRow key={idx}>
                                 <TableCell component="th" scope="row" className="table-resume__table-row">
                                     <Link onClick={(e) => handleUpdate(e, 'delete', resume._id)} to="#">
-                                        <Tooltip title="Delete" TransitionComponent={Zoom} placement="left" arrow>
+                                        <Tooltip
+                                            title="Delete"
+                                            TransitionComponent={Zoom}
+                                            placement="left"
+                                            arrow
+                                        >
                                             <DeleteForeverIcon />
                                         </Tooltip>
                                     </Link>
                                     <Link onClick={() => handleClick(resume.title)} to="#">
                                         {resume.title}
-                                        <Tooltip title="Edit" TransitionComponent={Zoom} placement="right" arrow>
+                                        <Tooltip
+                                            title="Edit"
+                                            TransitionComponent={Zoom}
+                                            placement="right"
+                                            arrow
+                                        >
                                             <EditIcon />
                                         </Tooltip>
                                     </Link>
@@ -201,7 +237,10 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                 </Table>
                 {resumes ? '' : <div className="form-resume__message">You don't have any resume</div>}
             </TableContainer>
-            <Prompt when={form.modifiedFlag} message="Are you sure you want to leave? You have unsaved chages" />
+            <Prompt
+                when={form.modifiedFlag}
+                message="Are you sure you want to leave? You have unsaved chages"
+            />
         </div>
     );
 }

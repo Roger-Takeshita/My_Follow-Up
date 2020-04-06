@@ -129,8 +129,21 @@ function FormApplication({
 
     const handleDeleteFollowup = async (e, applicationId, followupId, idx) => {
         e.preventDefault();
-        await apiService.deleteData('/api/applications/', { parentID: applicationId, childId: followupId });
-        deleteFollowup({ applicationId, idx });
+        if (applicationId) {
+            await apiService.deleteData('/api/applications/', {
+                parentID: applicationId,
+                childId: followupId
+            });
+            deleteFollowup({ applicationId, idx });
+        } else {
+            setForm({
+                ...form,
+                followup: [
+                    ...form.followup.slice(0, idx),
+                    ...form.followup.slice(idx + 1, form.followup.length)
+                ]
+            });
+        }
     };
 
     const handleEditorChange = (content, editor) => {
@@ -167,7 +180,7 @@ function FormApplication({
         if (e.key === 'Enter') {
             e.preventDefault();
             if (form.applicationId === '') {
-                await setForm({
+                setForm({
                     ...form,
                     followup: [...form.followup, e.target.value],
                     followupNow: ''
@@ -178,7 +191,7 @@ function FormApplication({
                     data: { description: form.followupNow }
                 });
                 await addFollowup({ data, applicationId: form.applicationId });
-                await setForm({
+                setForm({
                     ...form,
                     followup: [
                         ...form.followup,
@@ -207,10 +220,8 @@ function FormApplication({
         try {
             if (form.applicationId === '') {
                 const data = await apiService.postData('/api/applications', { data: form });
-                console.log(data);
                 addApplication(data);
             } else {
-                console.log(form.applicationId);
                 const data = await apiService.putData(`/api/applications`, {
                     data: form,
                     parentId: form.applicationId
@@ -522,9 +533,10 @@ function FormApplication({
                         </div>
                         <div
                             className="form-application__message"
-                            style={{ display: form.message !== '' ? 'flex' : 'none' }}
+                            style={{ display: form.message === '' ? 'none' : 'flex' }}
                         >
                             <ReportProblemIcon />
+                            &nbsp;&nbsp;
                             {form.message}
                         </div>
                     </div>

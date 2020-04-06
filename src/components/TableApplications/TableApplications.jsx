@@ -19,7 +19,18 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 
-function createData(id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star) {
+function createData(
+    id,
+    title,
+    company,
+    link,
+    coverLetter,
+    appliedOn,
+    rejectedOn,
+    followupDate,
+    followup,
+    star
+) {
     return { id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star };
 }
 
@@ -34,7 +45,9 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
@@ -80,7 +93,9 @@ function EnhancedTableHead({ classes, order, orderBy, onRequestSort }) {
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
-                                <span className={classes.visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span>
+                                <span className={classes.visuallyHidden}>
+                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                </span>
                             ) : null}
                         </TableSortLabel>
                     </TableCell>
@@ -124,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
 
 function TableApplications({ applicationsArray, toggleStar, deleteApplication }) {
     const classes = useStyles();
-    const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('appliedOn');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -180,8 +195,19 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
         <div className={classes.root}>
             <Paper className={classes.paper} elevation={3}>
                 <TableContainer>
-                    <Table className={classes.table} aria-labelledby="tableTitle" size="small" aria-label="enhanced table">
-                        <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={applications.length} />
+                    <Table
+                        className={classes.table}
+                        aria-labelledby="tableTitle"
+                        size="small"
+                        aria-label="enhanced table"
+                    >
+                        <EnhancedTableHead
+                            classes={classes}
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                            rowCount={applications.length}
+                        />
                         <TableBody>
                             {stableSort(applications, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -190,8 +216,16 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
                                         <TableRow hover tabIndex={-1} key={index}>
                                             <TableCell component="th" scope="row">
                                                 <div className="table-applications__row-job-title">
-                                                    <a href="/" onClick={(e) => handleClick(e, 'delete', row.id)}>
-                                                        <Tooltip title="Delete" TransitionComponent={Zoom} placement="left" arrow>
+                                                    <a
+                                                        href="/"
+                                                        onClick={(e) => handleClick(e, 'delete', row.id)}
+                                                    >
+                                                        <Tooltip
+                                                            title="Delete"
+                                                            TransitionComponent={Zoom}
+                                                            placement="left"
+                                                            arrow
+                                                        >
                                                             <DeleteOutlineIcon />
                                                         </Tooltip>
                                                     </a>
@@ -217,10 +251,18 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
                                                     href="/"
                                                     value="teste"
                                                     onClick={(e) => handleClick(e, 'toggleStar', row.id)}
-                                                    className={row.star ? 'table-applications__star--true' : 'table-applications__star--false'}
+                                                    className={
+                                                        row.star
+                                                            ? 'table-applications__star--true'
+                                                            : 'table-applications__star--false'
+                                                    }
                                                 >
                                                     <Tooltip
-                                                        title={row.star ? 'Remove from Favorite' : 'Add to Favorite'}
+                                                        title={
+                                                            row.star
+                                                                ? 'Remove from Favorite'
+                                                                : 'Add to Favorite'
+                                                        }
                                                         TransitionComponent={Zoom}
                                                         placement="right"
                                                         arrow

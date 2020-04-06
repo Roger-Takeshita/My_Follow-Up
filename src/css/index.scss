@@ -75,26 +75,6 @@ footer {
   }
 }
 
-.form-login, .form-signup {
-  text-align: center;
-  width: 400px;
-  margin: auto;
-  padding: 20px
-}
-
-.form-input-login-signup {
-  @include displayFlex(flex-end);
-  margin-bottom: 10px;
-  label {
-    margin-right: 10px;
-  }
-  input {
-    height: 20px;
-    width: 200px;
-    border-radius: $borderRadius;
-  }
-}
-
 .navbar {
   &__logged-side {
     @include displayFlex(center);
@@ -119,7 +99,7 @@ footer {
 }
 
 .search-input {
-  width: 300px;
+  width: 400px;
   svg {
     color: gray;
   }
@@ -169,7 +149,23 @@ footer {
   width: 230px;
 }
 
-.login {
+.form-login {
+  text-align: center;
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+  &__input {
+    @include displayFlex(flex-end);
+    margin-bottom: 10px;
+    label {
+      margin-right: 10px;
+    }
+    input {
+      height: 20px;
+      width: 200px;
+      border-radius: $borderRadius;
+    }
+  }
   &__table {
     padding: 20px;
     display: flex;
@@ -186,6 +182,45 @@ footer {
     font-weight: normal;
     text-align: left;
     padding-left: 5px;
+  }
+  &__ctrl {
+    margin-top: $marginBetweenEl*2;
+  }
+  &__message {
+    @include displayFlex(center);
+    margin-bottom: $marginBetweenEl;
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
+  }
+}
+
+.form-signup {
+  text-align: center;
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+  &__input {
+    @include displayFlex(flex-end);
+    margin-bottom: 10px;
+    label {
+      margin-right: 10px;
+    }
+    input {
+      height: 20px;
+      width: 200px;
+      border-radius: $borderRadius;
+    }
+  }
+  &__ctrl {
+    margin-top: $marginBetweenEl*2;
+  }
+  &__message {
+    @include displayFlex(center);
+    margin-bottom: $marginBetweenEl;
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
   }
 }
 

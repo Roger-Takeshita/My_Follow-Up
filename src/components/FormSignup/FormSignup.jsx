@@ -1,23 +1,31 @@
 import React, { useReducer } from 'react';
-import { Link } from 'react-router-dom';
 import userService from '../../utils/userService';
 import { connect } from 'react-redux';
 import { signupUser } from '../../redux/user';
 import { Prompt } from 'react-router-dom';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import Button from '@material-ui/core/Button';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 function formReducer(state, action) {
     switch (action.type) {
         case 'UPDATE_INPUT':
             return {
                 ...state,
-                [action.payload.name]: action.payload.value
+                [action.payload.name]: action.payload.value,
+                message: ''
+            };
+        case 'ERROR':
+            return {
+                ...state,
+                message: action.payload
             };
         default:
             throw new Error(`Unsupported action type ${action.type}`);
     }
 }
 
-function FormSignup(props) {
+function FormSignup({ history, signupUser }) {
     const initialState = {
         firstName: '',
         lastName: '',
@@ -39,40 +47,29 @@ function FormSignup(props) {
         e.preventDefault();
         try {
             await userService.signup(info);
-            props.signupUser();
-            props.history.push('/');
+            signupUser();
+            history.push('/');
         } catch (err) {
             console.log(err);
             setInfo({
-                ...info,
-                message: 'Invalid Credentials!'
+                type: 'ERROR',
+                payload: err.message
             });
         }
     }
 
     function isFormValid() {
-        return !(
-            info.firstName &&
-            info.lastName &&
-            info.email &&
-            info.password === info.confPassword
-        );
+        return !(info.firstName && info.lastName && info.email && info.password === info.confPassword);
     }
 
     function isFormFilled() {
-        return !!(
-            info.firstName ||
-            info.lastName ||
-            info.email ||
-            info.password ||
-            info.confPassword
-        );
+        return !!(info.firstName || info.lastName || info.email || info.password || info.confPassword);
     }
 
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-signup">
-                <div className="form-input-login-signup">
+                <div className="form-signup__input">
                     <label>First Name</label>
                     <input
                         name="firstName"
@@ -81,7 +78,7 @@ function FormSignup(props) {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-input-login-signup">
+                <div className="form-signup__input">
                     <label>Last Name</label>
                     <input
                         name="lastName"
@@ -90,7 +87,7 @@ function FormSignup(props) {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-input-login-signup">
+                <div className="form-signup__input">
                     <label>Email</label>
                     <input
                         name="email"
@@ -101,7 +98,7 @@ function FormSignup(props) {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-input-login-signup">
+                <div className="form-signup__input">
                     <label>Password</label>
                     <input
                         name="password"
@@ -112,7 +109,7 @@ function FormSignup(props) {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-input-login-signup">
+                <div className="form-signup__input">
                     <label>Confirm Password</label>
                     <input
                         name="confPassword"
@@ -123,17 +120,34 @@ function FormSignup(props) {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
-                    <button disabled={isFormValid()}>Sign Up</button>
+                <div className="form-signup__ctrl">
+                    <Button
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={isFormValid()}
+                    >
+                        Sign Up
+                    </Button>
                     &nbsp;&nbsp;&nbsp;
-                    <Link to="/login">Cancel</Link>
+                    <Button
+                        size="small"
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<CancelIcon />}
+                        onClick={() => history.push('/login')}
+                    >
+                        Cancel
+                    </Button>
                 </div>
             </div>
-            <div>{info.message}</div>
-            <Prompt
-                when={isFormFilled()}
-                message="Are you sure you want to leave?"
-            />
+            <div className="form-signup__message" style={{ display: info.message === '' ? 'none' : 'flex' }}>
+                <ReportProblemIcon />
+                &nbsp;&nbsp;
+                {info.message}
+            </div>
+            <Prompt when={isFormFilled()} message="Are you sure you want to leave?" />
         </form>
     );
 }

@@ -1,15 +1,18 @@
 import React, { useReducer } from 'react';
-import { Link } from 'react-router-dom';
 import userService from '../../utils/userService';
 import { connect } from 'react-redux';
 import { loginUser } from '../../redux/user';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import Button from '@material-ui/core/Button';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 function formReducer(state, action) {
     switch (action.type) {
         case 'UPDATE_INPUT':
             return {
                 ...state,
-                [action.payload.name]: action.payload.value
+                [action.payload.name]: action.payload.value,
+                message: ''
             };
         case 'ERROR':
             return {
@@ -47,7 +50,7 @@ function FormLogin({ loginUser, history }) {
             console.log(err);
             setInfo({
                 type: 'ERROR',
-                payload: 'Invalid Credentials!'
+                payload: err.message
             });
         }
     }
@@ -60,11 +63,18 @@ function FormLogin({ loginUser, history }) {
         <>
             <form onSubmit={handleSubmit}>
                 <div className="form-login">
-                    <div className="form-input-login-signup">
+                    <div className="form-login__input">
                         <label>Email</label>
-                        <input name="email" type="email" autoComplete="username" placeholder="Email" value={info.email} onChange={handleChange} />
+                        <input
+                            name="email"
+                            type="email"
+                            autoComplete="username"
+                            placeholder="Email"
+                            value={info.email}
+                            onChange={handleChange}
+                        />
                     </div>
-                    <div className="form-input-login-signup">
+                    <div className="form-login__input">
                         <label>Password</label>
                         <input
                             name="password"
@@ -75,24 +85,47 @@ function FormLogin({ loginUser, history }) {
                             onChange={handleChange}
                         />
                     </div>
-                    <div>
-                        <button disabled={isFormValid()}>Log In</button>
+                    <div className="form-login__ctrl">
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={isFormValid()}
+                        >
+                            Log In
+                        </Button>
                         &nbsp;&nbsp;&nbsp;
-                        <Link to="/signup">Cancel</Link>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<CancelIcon />}
+                            onClick={() => history.push('/signup')}
+                        >
+                            Cancel
+                        </Button>
                     </div>
                 </div>
-                <div>{info.message}</div>
+                <div
+                    className="form-login__message"
+                    style={{ display: info.message === '' ? 'none' : 'flex' }}
+                >
+                    <ReportProblemIcon />
+                    &nbsp;&nbsp;
+                    {info.message}
+                </div>
             </form>
-            <div className="login__table">
+            <div className="form-login__table">
                 <table>
                     <tbody>
                         <tr>
-                            <th className="login__column-one">Email</th>
-                            <th className="login__column-two">test@test.com</th>
+                            <th className="form-login__column-one">Email</th>
+                            <th className="form-login__column-two">test@test.com</th>
                         </tr>
                         <tr>
-                            <td className="login__column-one">Password</td>
-                            <td className="login__column-two">test123</td>
+                            <td className="form-login__column-one">Password</td>
+                            <td className="form-login__column-two">test123</td>
                         </tr>
                     </tbody>
                 </table>

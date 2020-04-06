@@ -2,13 +2,29 @@ const Job = require('../models/job');
 
 async function search(req, res) {
     try {
+        const words = req.query.search.split(' ');
+        const re = words.map((word) => new RegExp(word, 'i'));
         const applications = await Job.find({
-            jobDescription: { $regex: new RegExp(req.query.search) }
-        }).where({ user: req.user });
-        res.json(applications);
+            $or: [
+                { jobDescription: { $in: re } },
+                { title: { $in: re } },
+                { company: { $in: re } },
+                { link: { $in: re } },
+                { 'followup.description': { $in: re } }
+            ]
+        })
+            .where({ user: req.user })
+            .populate('followup')
+            .select('-__v -followup.__v');
+        if (applications) {
+            res.json(applications);
+        } else {
+            console.log('No applications were found');
+            res.status(404).json({ error: 'No applications were found' });
+        }
     } catch (err) {
-        console.log(err);
-        res.json(err);
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
     }
 }
 

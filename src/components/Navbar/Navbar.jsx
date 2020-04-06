@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { logoutUser } from '../../redux/user';
 import { logoutResume } from '../../redux/resume';
 import { toggleDataFlag } from '../../redux/dataFlag';
-import apiService from '../../utils/apiService';
 import HomeIcon from '@material-ui/icons/Home';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -24,34 +23,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import Search from '../Search/Search';
 
-const searchReducer = (state, action) => {
-    switch (action.type) {
-        case 'UPDATE_INPUT':
-            return {
-                [action.payload.name]: action.payload.value
-            };
-        case 'CLEAR_INPUT':
-            return {
-                search: ''
-            };
-        default:
-            return state;
-    }
-};
-
 function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag }) {
-    const [drawer, setDrawer] = useState({
+    const [sidebar, setSidebar] = useState({
         right: false
     });
-
-    const [search, setSearch] = useReducer(searchReducer, { field: '' });
-
-    function handleChange(e) {
-        setSearch({
-            type: 'UPDATE_INPUT',
-            payload: e.target
-        });
-    }
 
     function logoutFn() {
         logoutUser();
@@ -60,34 +35,21 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
         history.push('/');
     }
 
-    async function keyPressed(e) {
-        if (e.key === 'Enter') {
-            if (search.field !== '') {
-                try {
-                    await apiService.getData('/api/applications/search', search.field);
-                    setSearch({ type: 'CLEAR_INPUT' });
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-        }
-    }
-
-    const toggleDrawer = (side, open) => (event) => {
+    const toggleSidebar = (side, open) => (event) => {
         event.preventDefault();
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
 
-        setDrawer({ [side]: open });
+        setSidebar({ [side]: open });
     };
 
-    const sideList = (side) => (
+    const sidebarList = (side) => (
         <div
             className="sidebar-list"
             role="presentation"
-            onClick={toggleDrawer(side, false)}
-            onKeyDown={toggleDrawer(side, false)}
+            onClick={toggleSidebar(side, false)}
+            onKeyDown={toggleSidebar(side, false)}
         >
             <List>
                 <ListItem button onClick={() => history.push('/')}>
@@ -127,7 +89,7 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
         </div>
     );
 
-    const navNotLoggedin = fullName ? (
+    const navbar = fullName ? (
         <div className="navbar__logged-side">
             <Tooltip title="How To Use" TransitionComponent={Zoom} placement="bottom">
                 <Link color="inherit" to="/howtouse">
@@ -140,7 +102,7 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
                 </Link>
             </Tooltip>
             <Tooltip title={`Open Sidebar Menu`} TransitionComponent={Zoom} placement="bottom">
-                <Link color="inherit" to="#" onClick={toggleDrawer('right', true)}>
+                <Link color="inherit" to="#" onClick={toggleSidebar('right', true)}>
                     {fullName} &nbsp;
                     <MenuIcon />
                 </Link>
@@ -182,11 +144,11 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
                     <div className="navbar-search" style={{ display: fullName ? '' : 'none' }}>
                         <Search />
                     </div>
-                    {navNotLoggedin}
+                    {navbar}
                 </Toolbar>
             </AppBar>
-            <Drawer anchor="right" open={drawer.right} onClose={toggleDrawer('right', false)}>
-                {sideList('right')}
+            <Drawer anchor="right" open={sidebar.right} onClose={toggleSidebar('right', false)}>
+                {sidebarList('right')}
             </Drawer>
         </div>
     );
