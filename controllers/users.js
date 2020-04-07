@@ -54,26 +54,31 @@ async function login(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            console.log("User doesn't exist!");
-            return res.status(404).json({ error: "User doesn't exist!" });
-        }
-        user.comparePassword(req.body.password, async (err, isMatch) => {
-            if (isMatch) {
-                user.firstName = req.body.firstName;
-                user.lastName = req.body.lastName;
-                if (req.body.newPassword !== '') {
-                    user.password = req.body.newPassword;
-                }
-                await user.save();
-                const token = createJWT(user);
-                res.json({ token });
-            } else {
-                console.log('Wrong password');
-                return res.status(400).json({ error: 'Wrong password!' });
+        if (req.user._id === '5e8bab22dc743074b97c758b') {
+            console.log("Sorry this user can't be changed!");
+            return res.status(400).json({ error: "Sorry this user can't be changed!!" });
+        } else {
+            const user = await User.findOne({ email: req.body.email });
+            if (!user) {
+                console.log("User doesn't exist!");
+                return res.status(404).json({ error: "User doesn't exist!" });
             }
-        });
+            user.comparePassword(req.body.password, async (err, isMatch) => {
+                if (isMatch) {
+                    user.firstName = req.body.firstName;
+                    user.lastName = req.body.lastName;
+                    if (req.body.newPassword !== '') {
+                        user.password = req.body.newPassword;
+                    }
+                    await user.save();
+                    const token = createJWT(user);
+                    res.json({ token });
+                } else {
+                    console.log('Wrong password');
+                    return res.status(400).json({ error: 'Wrong password!' });
+                }
+            });
+        }
     } catch (err) {
         console.log('Something went wrong');
         res.status(500).json({ error: 'Something went wrong' });

@@ -18,6 +18,7 @@ import apiService from '../../utils/apiService';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function createData(
     id,
@@ -143,6 +144,7 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
     const [orderBy, setOrderBy] = useState('appliedOn');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [message, setMessage] = useState('');
 
     const applications = applicationsArray.map((application) => {
         return createData(
@@ -167,16 +169,20 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
 
     const handleClick = async (e, mode, id) => {
         e.preventDefault();
-        if (mode === 'toggleStar') {
-            const data = await apiService.putData('/api/applications', { data: {}, parentId: id });
-            console.log(data[0]);
-            toggleStar(data);
-        } else if (mode === 'delete') {
-            const data = await apiService.deleteData('/api/applications', { parentId: id });
-            deleteApplication({ _id: data._id });
-        } else if (mode === 'link') {
-            const re = /((http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/;
-            window.open(re.exec(e.target)[0], '_blank');
+        try {
+            if (mode === 'toggleStar') {
+                const data = await apiService.putData('/api/applications', { data: {}, parentId: id });
+                toggleStar(data);
+            } else if (mode === 'delete') {
+                const data = await apiService.deleteData('/api/applications', { parentId: id });
+                deleteApplication({ _id: data._id });
+            } else if (mode === 'link') {
+                const re = /((http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/;
+                window.open(re.exec(e.target)[0], '_blank');
+            }
+        } catch (err) {
+            console.log(err.message);
+            setMessage(err.message);
         }
     };
 
@@ -187,6 +193,10 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const doneMessage = () => {
+        setMessage('');
     };
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, applications.length - page * rowsPerPage);
@@ -296,6 +306,7 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
+            {message !== '' ? <ErrorMessage message={message} doneMessage={doneMessage} /> : ''}
         </div>
     );
 }

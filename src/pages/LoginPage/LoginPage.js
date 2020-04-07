@@ -4,7 +4,7 @@ import FormLogin from '../../components/FormLogin/FormLogin';
 function LoginPage(props) {
     return (
         <div>
-            <h1>LoginPage</h1>
+            <h1>Log In</h1>
             <FormLogin history={props.history} />
         </div>
     );

@@ -622,22 +622,6 @@ footer div a svg {
   margin-left: 5px !important;
 }
 
-.form-application__message {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  color: red;
-  height: 40px;
-  justify-content: center;
-  margin-top: 10px;
-}
-
 .table-applications__star--true {
   color: #ffc107;
 }
@@ -948,7 +932,12 @@ footer div a svg {
           justify-content: flex-end;
 }
 
-.profile__message {
+.profile__input {
+  width: 320px;
+  margin-right: 5px !important;
+}
+
+.error-message {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -962,10 +951,5 @@ footer div a svg {
   height: 40px;
   justify-content: center;
   margin-top: 10px;
-}
-
-.profile__input {
-  width: 320px;
-  margin-right: 5px !important;
 }
 /*# sourceMappingURL=index.css.map */

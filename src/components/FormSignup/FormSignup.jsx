@@ -3,9 +3,9 @@ import userService from '../../utils/userService';
 import { connect } from 'react-redux';
 import { signupUser } from '../../redux/user';
 import { Prompt } from 'react-router-dom';
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function formReducer(state, action) {
     switch (action.type) {
@@ -36,6 +36,7 @@ function FormSignup({ history, signupUser }) {
     };
 
     const [info, setInfo] = useReducer(formReducer, initialState);
+
     function handleChange(e) {
         setInfo({
             type: 'UPDATE_INPUT',
@@ -65,6 +66,10 @@ function FormSignup({ history, signupUser }) {
     function isFormFilled() {
         return !!(info.firstName || info.lastName || info.email || info.password || info.confPassword);
     }
+
+    const doneMessage = () => {
+        setInfo({ ...info, message: '' });
+    };
 
     return (
         <form onSubmit={handleSubmit}>
@@ -142,11 +147,7 @@ function FormSignup({ history, signupUser }) {
                     </Button>
                 </div>
             </div>
-            <div className="form-signup__message" style={{ display: info.message === '' ? 'none' : 'flex' }}>
-                <ReportProblemIcon />
-                &nbsp;&nbsp;
-                {info.message}
-            </div>
+            {info.message !== '' ? <ErrorMessage message={info.message} doneMessage={doneMessage} /> : ''}
             <Prompt when={isFormFilled()} message="Are you sure you want to leave?" />
         </form>
     );

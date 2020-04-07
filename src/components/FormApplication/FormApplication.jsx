@@ -22,7 +22,7 @@ import Zoom from '@material-ui/core/Zoom';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import PublishIcon from '@material-ui/icons/Publish';
 import UpdateIcon from '@material-ui/icons/Update';
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function FormApplication({
     applications,
@@ -130,11 +130,16 @@ function FormApplication({
     const handleDeleteFollowup = async (e, applicationId, followupId, idx) => {
         e.preventDefault();
         if (applicationId) {
-            await apiService.deleteData('/api/applications/', {
-                parentID: applicationId,
-                childId: followupId
-            });
-            deleteFollowup({ applicationId, idx });
+            try {
+                await apiService.deleteData('/api/applications/', {
+                    parentId: applicationId,
+                    childId: followupId
+                });
+                deleteFollowup({ applicationId, idx });
+            } catch (err) {
+                console.log(err.message);
+                setForm({ ...form, message: err.message });
+            }
         } else {
             setForm({
                 ...form,
@@ -186,19 +191,24 @@ function FormApplication({
                     followupNow: ''
                 });
             } else {
-                const data = await apiService.postData(`/api/applications`, {
-                    parentId: form.applicationId,
-                    data: { description: form.followupNow }
-                });
-                await addFollowup({ data, applicationId: form.applicationId });
-                setForm({
-                    ...form,
-                    followup: [
-                        ...form.followup,
-                        { _id: data._id, description: data.description, date: data.date }
-                    ],
-                    followupNow: ''
-                });
+                try {
+                    const data = await apiService.postData(`/api/applications`, {
+                        parentId: form.applicationId,
+                        data: { description: form.followupNow }
+                    });
+                    addFollowup({ data, applicationId: form.applicationId });
+                    setForm({
+                        ...form,
+                        followup: [
+                            ...form.followup,
+                            { _id: data._id, description: data.description, date: data.date }
+                        ],
+                        followupNow: ''
+                    });
+                } catch (err) {
+                    console.log(err.message);
+                    setForm({ ...form, message: err.message });
+                }
             }
         }
     };
@@ -230,13 +240,17 @@ function FormApplication({
             }
             history.push('/');
         } catch (err) {
+            console.log(err);
             setForm({
                 ...form,
                 message: err.message
             });
-            console.log(err);
         }
     }
+
+    const doneMessage = () => {
+        setForm({ ...form, message: '' });
+    };
 
     return (
         <div className="container">
@@ -329,7 +343,7 @@ function FormApplication({
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.jobDescription}
                             init={{
-                                height: 440,
+                                height: 400,
                                 width: '100%',
                                 menubar: true,
                                 plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -365,7 +379,7 @@ function FormApplication({
                                         };
                                     })
                                 ],
-                                height: 440,
+                                height: 400,
                                 width: '100%',
                                 menubar: true,
                                 plugins: `print preview paste importcss searchreplace autolink autosave save directionality code 
@@ -531,14 +545,11 @@ function FormApplication({
                                 {form.applicationId !== '' ? 'Update Application' : 'Save Application'}
                             </Button>
                         </div>
-                        <div
-                            className="form-application__message"
-                            style={{ display: form.message === '' ? 'none' : 'flex' }}
-                        >
-                            <ReportProblemIcon />
-                            &nbsp;&nbsp;
-                            {form.message}
-                        </div>
+                        {form.message !== '' ? (
+                            <ErrorMessage message={form.message} doneMessage={doneMessage} />
+                        ) : (
+                            ''
+                        )}
                     </div>
                 </div>
             </form>

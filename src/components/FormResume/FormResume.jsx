@@ -15,12 +15,12 @@ import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import PublishIcon from '@material-ui/icons/Publish';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import UpdateIcon from '@material-ui/icons/Update';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function FormResume({ resumes, addResume, updateResume, deleteResume }) {
     const initialState = {
@@ -63,9 +63,9 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
     };
 
     const handleClick = async (findTitle) => {
-        const resume = resumes.find(({ title }) => title === findTitle);
-        await setForm(initialState);
-        await setForm({
+        const resume = await resumes.find(({ title }) => title === findTitle);
+        setForm(initialState);
+        setForm({
             title: resume.title,
             description: resume.description,
             resumeId: resume._id,
@@ -90,17 +90,9 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                 updateResume(data);
                 setForm(initialState);
             } else if (mode === 'submit') {
-                try {
-                    const data = await apiService.postData('/api/resumes', { data: form });
-                    addResume(data);
-                    setForm(initialState);
-                } catch (err) {
-                    console.log(err);
-                    setForm({
-                        ...form,
-                        message: err.message
-                    });
-                }
+                const data = await apiService.postData('/api/resumes', { data: form });
+                addResume(data);
+                setForm(initialState);
             } else {
                 const data = await apiService.deleteData('/api/resumes', { parentId: id });
                 deleteResume(data);
@@ -112,6 +104,10 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                 message: err.message
             });
         }
+    };
+
+    const doneMessage = () => {
+        setForm({ ...form, message: '' });
     };
 
     return (
@@ -188,16 +184,9 @@ function FormResume({ resumes, addResume, updateResume, deleteResume }) {
                             {form.resumeId !== '' ? 'Update Resume' : 'Save Resume'}
                         </Button>
                     </div>
-                    <div
-                        className="form-resume__message"
-                        style={{ display: form.message === '' ? 'none' : 'flex' }}
-                    >
-                        <ReportProblemIcon />
-                        &nbsp;&nbsp;
-                        {form.message}
-                    </div>
                 </form>
             )}
+            {form.message !== '' ? <ErrorMessage message={form.message} doneMessage={doneMessage} /> : ''}
             <TableContainer component={Paper} elevation={3} className="table-resume">
                 <Table size="small" aria-label="a dense table">
                     <TableHead>

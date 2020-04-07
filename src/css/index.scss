@@ -412,13 +412,6 @@ footer {
   &__button {
     margin-left: 5px !important;
   }
-  &__message {
-    @include displayFlex(center);
-    color: $redColor;
-    height: 40px;
-    justify-content: center;
-    margin-top: $marginBetweenEl;
-  }
 }
 
 .table-applications {
@@ -596,15 +589,16 @@ footer {
     display: flex;
     justify-content: flex-end;
   }
-  &__message {
-    @include displayFlex(center);
-    color: $redColor;
-    height: 40px;
-    justify-content: center;
-    margin-top: $marginBetweenEl;
-  }
   &__input {
     width: 320px;
     margin-right: 5px !important;
   }
+}
+
+.error-message {
+  @include displayFlex(center);
+  color: $redColor;
+  height: 40px;
+  justify-content: center;
+  margin-top: $marginBetweenEl;
 }

@@ -19,4 +19,13 @@ const resumeSchema = new Schema(
     }
 );
 
+resumeSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        delete ret.user;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        return ret;
+    }
+});
+
 module.exports = mongoose.model('Resume', resumeSchema);

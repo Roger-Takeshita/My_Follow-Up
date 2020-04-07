@@ -2,7 +2,7 @@ const Job = require('../models/job');
 
 async function search(req, res) {
     try {
-        const words = req.query.search.split(' ');
+        const words = req.query.search.split(' ').filter((word) => word.length > 3);
         const re = words.map((word) => new RegExp(word, 'i'));
         const applications = await Job.find({
             $or: [
@@ -13,7 +13,7 @@ async function search(req, res) {
                 { 'followup.description': { $in: re } }
             ]
         })
-            .where({ user: req.user })
+            .where({ user: req.user._id })
             .populate('followup')
             .select('-__v -followup.__v');
         if (applications) {
@@ -30,7 +30,7 @@ async function search(req, res) {
 
 async function newApplication(req, res) {
     try {
-        const application = await Job.findOne({ link: req.body.link }).where({ user: req.user });
+        const application = await Job.findOne({ link: req.body.link }).where({ user: req.user._id });
         if (!application) {
             const newApplication = new Job();
             newApplication.user = req.user._id;
@@ -57,11 +57,11 @@ async function newApplication(req, res) {
             }
             const cleanFollowup = await Job.findById({
                 _id: newSavedDoc._id
-            }).select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
+            }).select('-__v -followup.createdAt -followup.updatedAt -followup.__v');
             res.json(cleanFollowup);
         } else {
             console.log('Link already exsists');
-            res.status(400).json({ error: 'Link aready exist' });
+            res.status(400).json({ error: 'Link aready exists' });
         }
     } catch (err) {
         console.log('Something went wrong', err);
@@ -73,7 +73,7 @@ async function getApplications(req, res) {
     try {
         //= This approach is working, needs to be refactored
         // let applications;
-        // await Job.find({ user: req.user })
+        // await Job.find({ user: req.user._id })
         //     .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
         //     .limit(parseInt(req.query.docs, 10))
         //     .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v')
@@ -82,10 +82,10 @@ async function getApplications(req, res) {
         //         temp[0].followup = await docs[0].followup.sort((a, b) => b.date - a.date);
         //         applications = temp;
         //     });
-        const applications = await Job.find({ user: req.user })
+        const applications = await Job.find({ user: req.user._id })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
-            .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v');
+            .select('-__v -followup.createdAt -followup.updatedAt -followup.__v');
         if (applications) {
             res.json(applications);
         } else {
@@ -101,8 +101,8 @@ async function getApplications(req, res) {
 async function updateApplication(req, res) {
     try {
         const application = await Job.findOne({ _id: req.params.id })
-            .where({ user: req.user })
-            .select('-user -createdAt -updatedAt -__v');
+            .where({ user: req.user._id })
+            .select('-__v');
         if (application) {
             if (req.body.title) {
                 const allowedKeys = [
@@ -134,7 +134,12 @@ async function updateApplication(req, res) {
 
 async function deleteApplication(req, res) {
     try {
-        res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user }));
+        if (req.user._id === '5e8bab22dc743074b97c758b') {
+            console.log('Sorry this user is not allowed to delete applications!');
+            return res.status(400).json({ error: 'Sorry this user is not allowed to delete applications!' });
+        } else {
+            res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
+        }
     } catch (err) {
         console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
@@ -144,9 +149,9 @@ async function deleteApplication(req, res) {
 async function newFollowup(req, res) {
     try {
         const application = await Job.findById(req.params.id)
-            .where({ user: req.user })
+            .where({ user: req.user._id })
             .select(
-                '-title -company -link -jobDescription -appliedOn -rejectedOn -resume -coverLetter -user -status -star -createdAt -updatedAt -__v'
+                '-title -company -link -jobDescription -appliedOn -rejectedOn -resume -coverLetter -user -status -star -__v -followup.createdAt -followup.updatedAt -followup.__v'
             );
         if (application) {
             application.followup.push({
@@ -166,7 +171,6 @@ async function newFollowup(req, res) {
 }
 
 async function deleteFollowup(req, res) {
-    console.log(req.params.id, req.params.followId);
     try {
         const application = await Job.findOne({ _id: req.params.id });
         if (application) {

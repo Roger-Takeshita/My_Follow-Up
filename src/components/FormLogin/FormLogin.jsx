@@ -2,9 +2,9 @@ import React, { useReducer } from 'react';
 import userService from '../../utils/userService';
 import { connect } from 'react-redux';
 import { loginUser } from '../../redux/user';
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function formReducer(state, action) {
     switch (action.type) {
@@ -59,6 +59,10 @@ function FormLogin({ loginUser, history }) {
         return !(info.email && info.password);
     }
 
+    const doneMessage = () => {
+        setInfo({ ...info, message: '' });
+    };
+
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -107,14 +111,7 @@ function FormLogin({ loginUser, history }) {
                         </Button>
                     </div>
                 </div>
-                <div
-                    className="form-login__message"
-                    style={{ display: info.message === '' ? 'none' : 'flex' }}
-                >
-                    <ReportProblemIcon />
-                    &nbsp;&nbsp;
-                    {info.message}
-                </div>
+                {info.message !== '' ? <ErrorMessage message={info.message} doneMessage={doneMessage} /> : ''}
             </form>
             <div className="form-login__table">
                 <table>

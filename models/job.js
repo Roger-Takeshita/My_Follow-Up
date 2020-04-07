@@ -66,4 +66,13 @@ const jobSchema = new Schema(
     }
 );
 
+jobSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        delete ret.user;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        return ret;
+    }
+});
+
 module.exports = mongoose.model('Job', jobSchema);

@@ -13,18 +13,20 @@ export default function Search() {
     const loading = open && options.length === 0;
 
     useEffect(() => {
+        if (!loading) return undefined;
         let active = true;
 
-        if (!loading) {
-            return undefined;
-        }
-
         (async () => {
-            const results = await apiService.getData(`/api/applications/search`, { search: search.searchValue });
+            const results = await apiService.getData(`/api/applications/search`, {
+                search: search.searchValue
+            });
 
-            console.log(results);
             if (active) {
-                // setOptions(Object.keys(results).map((key) => results[key]));
+                if (results.length > 0) {
+                    setOptions(results);
+                } else {
+                    setOptions([{ title: 'No results were found', company: '' }]);
+                }
             }
         })();
 
@@ -47,7 +49,11 @@ export default function Search() {
     const onKeyPress = async (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            setOpen(true);
+            if (search.searchValue.length > 3) {
+                setOpen(true);
+            } else {
+                setOpen(false);
+            }
         }
     };
 
@@ -58,8 +64,8 @@ export default function Search() {
             onClose={() => {
                 setOpen(false);
             }}
-            getOptionSelected={(option, value) => option.name === value.name}
-            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option.title === value.title}
+            getOptionLabel={(option) => option.title}
             options={options}
             loading={loading}
             freeSolo
@@ -71,6 +77,7 @@ export default function Search() {
                     onChange={handleChange}
                     placeholder={loading ? '' : 'Search'}
                     InputProps={{
+                        ...params.InputProps,
                         startAdornment: (
                             <>
                                 <InputAdornment position="start">
