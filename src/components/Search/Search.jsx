@@ -6,7 +6,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import apiService from '../../utils/apiService';
 
-export default function Search() {
+export default function Search({ history }) {
     const [search, setSearch] = useState({ searchValue: '' });
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -46,13 +46,14 @@ export default function Search() {
         setSearch({ [name]: value });
     };
 
-    const onKeyPress = async (e) => {
+    const onKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (search.searchValue.length > 3) {
-                setOpen(true);
+            if (search.searchValue.length > 2) {
+                history.push(`/search?what=${search.searchValue}`);
+                // setOpen(true);
             } else {
-                setOpen(false);
+                // setOpen(false);
             }
         }
     };

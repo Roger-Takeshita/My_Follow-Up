@@ -142,7 +142,7 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
                         </Tooltip>
                     </div>
                     <div className="navbar-search" style={{ display: fullName ? '' : 'none' }}>
-                        <Search />
+                        <Search history={history} />
                     </div>
                     {navbar}
                 </Toolbar>

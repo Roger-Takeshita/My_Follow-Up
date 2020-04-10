@@ -11,6 +11,7 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ResumesPage from './pages/ResumesPage/ResumesPage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import HowToUsePage from './pages/HowToUsePage/HowToUSePage';
+import SearchPage from './pages/SearchPage/SearchPage';
 import userService from './utils/userService';
 import apiService from './utils/apiService';
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -23,9 +24,14 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
     let pages = userService.getUser() ? (
         dataFlag ? (
             <Switch>
+                <Route exact path="/search" render={({ history }) => <SearchPage history={history} />} />
                 <Route exact path="/howtouse" render={({ history }) => <HowToUsePage history={history} />} />
                 <Route exact path="/about" render={({ history }) => <AboutPage history={history} />} />
-                <Route exact path="/application/:id" render={({ history, match }) => <ApplicationPage history={history} match={match} />} />
+                <Route
+                    exact
+                    path="/application/:id"
+                    render={({ history, match }) => <ApplicationPage history={history} match={match} />}
+                />
                 <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
                 <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
                 <Route exact path="/resumes" render={({ history }) => <ResumesPage history={history} />} />
@@ -48,7 +54,10 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
     useEffect(() => {
         async function getData() {
             if (userFirstName && !dataFlag) {
-                const [resumes, applications] = await Promise.all([apiService.getData('/api/resumes'), apiService.getData('/api/applications')]);
+                const [resumes, applications] = await Promise.all([
+                    apiService.getData('/api/resumes'),
+                    apiService.getData('/api/applications')
+                ]);
                 await setApplications(applications);
                 await setResumes(resumes);
                 toggleDataFlag(true);
