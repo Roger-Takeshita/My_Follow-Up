@@ -1,11 +1,11 @@
 import React from 'react';
-import TableApplications from '../../components/TableApplications/TableApplications';
 
-function HomePage(props) {
+import ApplicationsPage from '../../pages/ApplicationsPage/ApplicationsPage';
+
+function HomePage({ history }) {
     return (
         <div className="container">
-            <h1>Applications</h1>
-            <TableApplications />
+            <ApplicationsPage history={history} />
         </div>
     );
 }

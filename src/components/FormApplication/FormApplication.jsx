@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
-import { connect } from 'react-redux';
 import apiService from '../../utils/apiService';
 import { addApplication, updateApplication, addFollowup, deleteFollowup } from '../../redux/application';
+import { connect } from 'react-redux';
+
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import { Editor } from '@tinymce/tinymce-react';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -22,18 +24,17 @@ import Zoom from '@material-ui/core/Zoom';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import PublishIcon from '@material-ui/icons/Publish';
 import UpdateIcon from '@material-ui/icons/Update';
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function FormApplication({
-    applications,
     application,
-    id,
     resumes,
     deleteFollowup,
     addFollowup,
     history,
     addApplication,
-    updateApplication
+    updateApplication,
+    handleCancel,
+    handleUpdate
 }) {
     const initialState = {
         title: '',
@@ -58,30 +59,25 @@ function FormApplication({
 
     useEffect(() => {
         function getApplication() {
-            const updateApplication = applications.find(({ _id }) => _id === id);
             setForm(
-                updateApplication
+                application
                     ? {
-                          title: updateApplication.title,
-                          company: updateApplication.company,
-                          link: updateApplication.link,
-                          jobDescription: updateApplication.jobDescription,
-                          resume: updateApplication.resume,
+                          title: application.title,
+                          company: application.company,
+                          link: application.link,
+                          jobDescription: application.jobDescription,
+                          resume: application.resume,
                           appliedOn:
-                              updateApplication.appliedOn !== null
-                                  ? updateApplication.appliedOn.split('T')[0]
-                                  : '',
+                              application.appliedOn !== null ? application.appliedOn.split('T')[0] : '',
                           rejectedOn:
-                              updateApplication.rejectedOn !== null
-                                  ? updateApplication.rejectedOn.split('T')[0]
-                                  : '',
-                          status: updateApplication.status,
+                              application.rejectedOn !== null ? application.rejectedOn.split('T')[0] : '',
+                          status: application.status,
                           followupNow: '',
-                          followup: [...updateApplication.followup],
-                          coverLetter: updateApplication.coverLetter,
+                          followup: [...application.followup],
+                          coverLetter: application.coverLetter,
                           coverLetterActive: false,
-                          star: updateApplication.star,
-                          applicationId: id,
+                          star: application.star,
+                          applicationId: application._id,
                           modifiedFlag: false,
                           message: ''
                       }
@@ -106,7 +102,7 @@ function FormApplication({
             );
         }
         getApplication();
-    }, [applications, id]);
+    }, [application]);
 
     const handleChange = ({ target: { name, value } }) => {
         setForm({
@@ -231,14 +227,16 @@ function FormApplication({
             if (form.applicationId === '') {
                 const data = await apiService.postData('/api/applications', { data: form });
                 addApplication(data);
+                setForm(initialState);
             } else {
                 const data = await apiService.putData(`/api/applications`, {
                     data: form,
                     parentId: form.applicationId
                 });
                 updateApplication(data);
+                application && handleUpdate(data);
+                handleCancel();
             }
-            history.push('/');
         } catch (err) {
             console.log(err);
             setForm({
@@ -250,6 +248,14 @@ function FormApplication({
 
     const doneMessage = () => {
         setForm({ ...form, message: '' });
+    };
+
+    const handleCancelClick = () => {
+        if (application) {
+            handleCancel();
+        } else {
+            history.push('/');
+        }
     };
 
     return (
@@ -300,6 +306,7 @@ function FormApplication({
                         autoComplete="off"
                         value={form.link}
                         onChange={handleChange}
+                        helperText={application ? `ID: ${application._id}` : ''}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -324,17 +331,19 @@ function FormApplication({
                             <MenuItem value="Rejected">Rejected</MenuItem>
                         </Select>
                     </FormControl>
-                    <a
-                        href="/"
-                        onClick={handleStarClick}
-                        className={
-                            form.star ? 'form-application__star--true' : 'form-application__star--false'
-                        }
-                    >
-                        <Tooltip title="Save to Favorites" TransitionComponent={Zoom} arrow>
-                            <StarIcon />
-                        </Tooltip>
-                    </a>
+                    <div className="form-application__star">
+                        <a
+                            href="/"
+                            onClick={handleStarClick}
+                            className={
+                                form.star ? 'form-application__star--true' : 'form-application__star--false'
+                            }
+                        >
+                            <Tooltip title="Save to Favorites" TransitionComponent={Zoom} arrow>
+                                <StarIcon />
+                            </Tooltip>
+                        </a>
+                    </div>
                 </div>
                 <div className="form-application__forms">
                     <div className="form-application__form-job">
@@ -524,7 +533,7 @@ function FormApplication({
                                 variant="contained"
                                 color="secondary"
                                 startIcon={<CancelIcon />}
-                                onClick={() => history.push('/')}
+                                onClick={handleCancelClick}
                             >
                                 {' '}
                                 Cancel
@@ -558,8 +567,7 @@ function FormApplication({
 }
 
 const mapStateToProps = (state) => ({
-    resumes: state.resume,
-    applications: state.application
+    resumes: state.resume
 });
 
 const mapDispatchToProps = (dispatch) => ({

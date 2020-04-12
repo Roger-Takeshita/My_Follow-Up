@@ -90,25 +90,28 @@ function FormLogin({ loginUser, history }) {
                         />
                     </div>
                     <div className="form-login__ctrl">
-                        <Button
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={isFormValid()}
-                        >
-                            Log In
-                        </Button>
-                        &nbsp;&nbsp;&nbsp;
-                        <Button
-                            size="small"
-                            variant="contained"
-                            color="secondary"
-                            startIcon={<CancelIcon />}
-                            onClick={() => history.push('/signup')}
-                        >
-                            Cancel
-                        </Button>
+                        <div className="form-login__btn-submit">
+                            <Button
+                                size="small"
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={isFormValid()}
+                            >
+                                Log In
+                            </Button>
+                        </div>
+                        <div className="form-login__btn-cancel">
+                            <Button
+                                size="small"
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<CancelIcon />}
+                                onClick={() => history.push('/signup')}
+                            >
+                                Cancel
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 {info.message !== '' ? <ErrorMessage message={info.message} doneMessage={doneMessage} /> : ''}

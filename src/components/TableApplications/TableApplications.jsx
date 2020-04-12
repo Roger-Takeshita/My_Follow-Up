@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleStar, deleteApplication } from '../../redux/application';
 import PropTypes from 'prop-types';
+
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,7 +20,6 @@ import apiService from '../../utils/apiService';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
 function createData(
     id,
@@ -138,28 +139,42 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function TableApplications({ applicationsArray, toggleStar, deleteApplication }) {
+function TableApplications({
+    history,
+    results,
+    toggleStar,
+    deleteApplication,
+    handleSelectApplication,
+    handleDelete,
+    handleUpdate
+}) {
     const classes = useStyles();
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('appliedOn');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [message, setMessage] = useState('');
+    const [applications, setApplications] = useState([]);
 
-    const applications = applicationsArray.map((application) => {
-        return createData(
-            application._id,
-            application.title,
-            application.company,
-            application.link,
-            application.coverLetter ? 'Yes' : '',
-            application.appliedOn === null ? '' : application.appliedOn.split('T')[0],
-            application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
-            application.followup.length > 0 ? application.followup[0].date.split('T')[0] : '',
-            application.followup.length > 0 ? application.followup[0].description : '',
-            application.star
-        );
-    });
+    useEffect(() => {
+        const initialState = results
+            ? results.map((application) => {
+                  return createData(
+                      application._id,
+                      application.title,
+                      application.company,
+                      application.link,
+                      application.coverLetter ? 'Yes' : '',
+                      application.appliedOn === null ? '' : application.appliedOn.split('T')[0],
+                      application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
+                      application.followup.length > 0 ? application.followup[0].date.split('T')[0] : '',
+                      application.followup.length > 0 ? application.followup[0].description : '',
+                      application.star
+                  );
+              })
+            : '';
+        setApplications(initialState);
+    }, [results]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -173,12 +188,21 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
             if (mode === 'toggleStar') {
                 const data = await apiService.putData('/api/applications', { data: {}, parentId: id });
                 toggleStar(data);
+                handleUpdate(data);
             } else if (mode === 'delete') {
                 const data = await apiService.deleteData('/api/applications', { parentId: id });
                 deleteApplication({ _id: data._id });
-            } else if (mode === 'link') {
+                if (results) {
+                    handleDelete(data._id);
+                }
+            } else if (mode === 'company-url') {
                 const re = /((http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/;
                 window.open(re.exec(e.target)[0], '_blank');
+            } else if (mode === 'link') {
+                if (history) {
+                    e.preventDefault();
+                    handleSelectApplication(id);
+                }
             }
         } catch (err) {
             console.log(err.message);
@@ -239,12 +263,20 @@ function TableApplications({ applicationsArray, toggleStar, deleteApplication })
                                                             <DeleteOutlineIcon />
                                                         </Tooltip>
                                                     </a>
-                                                    <Link to={`/application/${row.id}`}>{row.title}</Link>
+                                                    <Link
+                                                        to={`/application/${row.id}`}
+                                                        onClick={(e) => handleClick(e, 'link', row.id)}
+                                                    >
+                                                        {row.title}
+                                                    </Link>
                                                 </div>
                                             </TableCell>
                                             <TableCell align="center">{row.company}</TableCell>
                                             <TableCell align="center">
-                                                <a href={row.link} onClick={(e) => handleClick(e, 'link')}>
+                                                <a
+                                                    href={row.link}
+                                                    onClick={(e) => handleClick(e, 'company-url')}
+                                                >
                                                     Link
                                                 </a>
                                             </TableCell>

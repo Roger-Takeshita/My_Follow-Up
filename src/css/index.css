@@ -235,18 +235,14 @@ footer div a svg {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 .form-login__column-one {
   text-align: right;
-  padding-right: 5px;
+  padding-right: 10px;
   font-weight: bold;
 }
 
@@ -254,11 +250,29 @@ footer div a svg {
   width: 200px;
   font-weight: normal;
   text-align: left;
-  padding-left: 5px;
 }
 
 .form-login__ctrl {
   margin-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-login__btn-cancel {
+  width: 206px;
+  display: inherit;
+}
+
+.form-login__btn-submit {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  display: inherit;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding-right: 10px;
 }
 
 .form-login__message {
@@ -309,6 +323,25 @@ footer div a svg {
 
 .form-signup__ctrl {
   margin-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-signup__btn-cancel {
+  width: 206px;
+  display: inherit;
+}
+
+.form-signup__btn-submit {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  display: inherit;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding-right: 10px;
 }
 
 .form-signup__message {
@@ -394,6 +427,10 @@ footer div a svg {
       -ms-flex-positive: 1 !important;
           flex-grow: 1 !important;
   padding: 5px !important;
+  -webkit-box-align: start !important;
+      -ms-flex-align: start !important;
+          align-items: flex-start !important;
+  height: 70px;
 }
 
 .form-application__header a {
@@ -403,24 +440,30 @@ footer div a svg {
 
 .form-application__title {
   width: 320px;
-  margin-right: 5px !important;
+  margin: 0 5px auto auto !important;
 }
 
 .form-application__company {
   width: 250px;
-  margin: auto 5px !important;
+  margin: 0 auto auto 5px !important;
 }
 
 .form-application__link {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  margin: auto 5px !important;
+  margin: 0 auto auto 5px !important;
 }
 
 .form-application__status {
-  margin: auto 5px !important;
+  margin: 0 auto auto 5px !important;
   min-width: 120px !important;
+}
+
+.form-application__star {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .form-application__star--true {
@@ -584,6 +627,7 @@ footer div a svg {
 
 .form-application__followup-input {
   width: -webkit-fill-available;
+  width: 100%;
   min-height: 60px;
   border: 1px solid lightgrey;
   border-radius: 5px;

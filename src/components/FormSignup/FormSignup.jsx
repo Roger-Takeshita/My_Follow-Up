@@ -126,25 +126,28 @@ function FormSignup({ history, signupUser }) {
                     />
                 </div>
                 <div className="form-signup__ctrl">
-                    <Button
-                        size="small"
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        disabled={isFormValid()}
-                    >
-                        Sign Up
-                    </Button>
-                    &nbsp;&nbsp;&nbsp;
-                    <Button
-                        size="small"
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<CancelIcon />}
-                        onClick={() => history.push('/login')}
-                    >
-                        Cancel
-                    </Button>
+                    <div className="form-signup__btn-submit">
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={isFormValid()}
+                        >
+                            Sign Up
+                        </Button>
+                    </div>
+                    <div className="form-signup__btn-cancel">
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<CancelIcon />}
+                            onClick={() => history.push('/login')}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
                 </div>
             </div>
             {info.message !== '' ? <ErrorMessage message={info.message} doneMessage={doneMessage} /> : ''}

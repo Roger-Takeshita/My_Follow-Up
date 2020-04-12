@@ -1,11 +1,16 @@
 import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import { setResumes } from './redux/resume';
+import { setApplications } from './redux/application';
+import { toggleDataFlag } from './redux/dataFlag';
+import { connect } from 'react-redux';
+
 import './css/App.css';
 import Navbar from './components/Navbar/Navbar';
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
-import ApplicationPage from './pages/ApplicationPage/ApplicationPage';
+import ApplicationsPage from './pages/ApplicationsPage/ApplicationsPage';
 import NewApplicationPage from './pages/NewApplicationPage/NewApplicationPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ResumesPage from './pages/ResumesPage/ResumesPage';
@@ -15,10 +20,6 @@ import SearchPage from './pages/SearchPage/SearchPage';
 import userService from './utils/userService';
 import apiService from './utils/apiService';
 import GitHubIcon from '@material-ui/icons/GitHub';
-import { connect } from 'react-redux';
-import { setResumes } from './redux/resume';
-import { setApplications } from './redux/application';
-import { toggleDataFlag } from './redux/dataFlag';
 
 function App({ setApplications, setResumes, userFirstName, history, dataFlag, toggleDataFlag }) {
     let pages = userService.getUser() ? (
@@ -29,18 +30,18 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
                 <Route exact path="/about" render={({ history }) => <AboutPage history={history} />} />
                 <Route
                     exact
-                    path="/application/:id"
-                    render={({ history, match }) => <ApplicationPage history={history} match={match} />}
+                    path="/applications"
+                    render={({ history }) => <ApplicationsPage history={history} />}
                 />
+                <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
+                <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
                 <Route
                     exact
                     path="/resumes/:id"
                     render={({ history, match }) => <ResumesPage history={history} match={match} />}
                 />
-                <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
-                <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
                 <Route exact path="/resumes" render={({ history }) => <ResumesPage history={history} />} />
-                <Route exact path="/" render={() => <HomePage />} />
+                <Route exact path="/" render={({ history }) => <HomePage history={history} />} />
                 <Route render={() => <Redirect to={{ pathname: '/' }} />} />
             </Switch>
         ) : (
