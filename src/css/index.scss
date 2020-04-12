@@ -253,13 +253,6 @@ footer {
   &__button {
     margin-left: $marginBetweenEl !important;
   }
-  &__message {
-    @include displayFlex(center);
-    margin-bottom: $marginBetweenEl;
-    color: $redColor;
-    height: 40px;
-    justify-content: center;
-  }
 }
 
 .form-application {
@@ -455,7 +448,7 @@ footer {
   }
 }
 
-.table-resume {
+.table-simple {
   &__table-row {
     display: flex !important;
     align-items: center;
@@ -485,6 +478,13 @@ footer {
         transform: scale(1.25);
       }
     }
+  }
+  &__message {
+    @include displayFlex(center);
+    margin-bottom: $marginBetweenEl;
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
   }
 }
 

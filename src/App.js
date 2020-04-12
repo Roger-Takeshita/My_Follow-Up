@@ -32,6 +32,11 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
                     path="/application/:id"
                     render={({ history, match }) => <ApplicationPage history={history} match={match} />}
                 />
+                <Route
+                    exact
+                    path="/resumes/:id"
+                    render={({ history, match }) => <ResumesPage history={history} match={match} />}
+                />
                 <Route exact path="/new" render={({ history }) => <NewApplicationPage history={history} />} />
                 <Route exact path="/profile" render={({ history }) => <ProfilePage history={history} />} />
                 <Route exact path="/resumes" render={({ history }) => <ResumesPage history={history} />} />

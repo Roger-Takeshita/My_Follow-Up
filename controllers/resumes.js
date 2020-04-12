@@ -43,12 +43,21 @@ async function getResumes(req, res) {
 
 async function updateResume(req, res) {
     try {
-        const resume = await Resume.findOne({ _id: req.params.id })
-            .where({ user: req.user._id })
-            .select('-__v');
-        resume.title = req.body.title;
-        resume.description = req.body.description;
-        res.json(await resume.save());
+        const resume = await Resume.findById(req.params.id).where({ user: req.user._id }).select('-__v');
+        if (resume) {
+            const resumeCheck = await Resume.findOne({ title: req.body.title });
+            if (!resumeCheck || `${resumeCheck._id}` === `${resume._id}`) {
+                resume.title = req.body.title;
+                resume.description = req.body.description;
+                res.json(await resume.save());
+            } else {
+                console.log('Title already exists');
+                res.status(400).json({ error: 'Title already exists' });
+            }
+        } else {
+            console.log('Resume not found');
+            res.status(400).json({ error: 'Resume not found' });
+        }
     } catch (err) {
         console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });

@@ -378,22 +378,6 @@ footer div a svg {
   margin-left: 10px !important;
 }
 
-.form-resume__message {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-bottom: 10px;
-  color: red;
-  height: 40px;
-  justify-content: center;
-}
-
 .form-application {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -690,7 +674,7 @@ footer div a svg {
   color: red;
 }
 
-.table-resume__table-row {
+.table-simple__table-row {
   display: -webkit-box !important;
   display: -ms-flexbox !important;
   display: flex !important;
@@ -699,7 +683,7 @@ footer div a svg {
           align-items: center;
 }
 
-.table-resume__table-row a:first-child {
+.table-simple__table-row a:first-child {
   display: inherit;
   -webkit-box-align: inherit;
       -ms-flex-align: inherit;
@@ -707,7 +691,7 @@ footer div a svg {
   margin-right: 10px;
 }
 
-.table-resume__table-row a:first-child svg {
+.table-simple__table-row a:first-child svg {
   -webkit-transition: -webkit-transform .25s;
   transition: -webkit-transform .25s;
   transition: transform .25s;
@@ -716,20 +700,20 @@ footer div a svg {
   color: #ff97b9;
 }
 
-.table-resume__table-row a:first-child svg:hover {
+.table-simple__table-row a:first-child svg:hover {
   -webkit-transform: scale(1.25);
           transform: scale(1.25);
   color: red;
 }
 
-.table-resume__table-row a:nth-child(2) {
+.table-simple__table-row a:nth-child(2) {
   display: inherit;
   -webkit-box-align: inherit;
       -ms-flex-align: inherit;
           align-items: inherit;
 }
 
-.table-resume__table-row a:nth-child(2) svg {
+.table-simple__table-row a:nth-child(2) svg {
   margin-left: 5px;
   -webkit-transition: -webkit-transform .25s;
   transition: -webkit-transform .25s;
@@ -738,9 +722,25 @@ footer div a svg {
   font-size: 20px;
 }
 
-.table-resume__table-row a:nth-child(2) svg:hover {
+.table-simple__table-row a:nth-child(2) svg:hover {
   -webkit-transform: scale(1.25);
           transform: scale(1.25);
+}
+
+.table-simple__message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+  color: red;
+  height: 40px;
+  justify-content: center;
 }
 
 .about__div {

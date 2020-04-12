@@ -26,7 +26,6 @@ function getData(url, data = { page: undefined, results: undefined, search: unde
 }
 
 function postData(url, data = { data: undefined, parentId: undefined }) {
-    if (data.parentId === undefined) throw new Error('Bad parameter Id');
     const path = `${url}${data.parentId !== undefined ? `/${data.parentId}/new` : '/new'}`;
     return requestHelper('POST', path, data.data);
 }

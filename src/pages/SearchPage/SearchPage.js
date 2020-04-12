@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import apiService from '../../utils/apiService';
+import FormApplication from '../../components/FormApplication/FormApplication';
 
-function SeachPage({ history }) {
+function SearchPage({ history }) {
     const query = queryString.parse(history.location.search).what;
     const [data, setData] = useState([]);
+    const [application, setApplication] = useState({});
 
     useEffect(() => {
         async function searchQuery() {
@@ -19,8 +21,9 @@ function SeachPage({ history }) {
 
     const handleClick = async (e, idx) => {
         e.preventDefault();
-        // const application = await applications.find(({ _id }) => _id === id);
-        console.log(data[idx]);
+        setApplication(data[idx]);
+        // console.log(data[idx]);
+        console.log(application);
     };
 
     return (
@@ -32,6 +35,11 @@ function SeachPage({ history }) {
                         : `Found ${data.length} result for: ${query}`
                     : ` No results for: ${query}`}
             </h1>
+            <div>
+                {application.title && (
+                    <FormApplication history={history} application={application} id={application._id} />
+                )}
+            </div>
             <ul>
                 {data.map((application, idx) => {
                     return (
@@ -47,4 +55,4 @@ function SeachPage({ history }) {
     );
 }
 
-export default SeachPage;
+export default SearchPage;
