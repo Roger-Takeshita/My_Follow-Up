@@ -3,9 +3,12 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { setResumes } from './redux/resume';
 import { setApplications } from './redux/application';
 import { toggleDataFlag } from './redux/dataFlag';
+import userService from './utils/userService';
+import apiService from './utils/apiService';
 import { connect } from 'react-redux';
 
 import './css/App.css';
+import Footer from './components/Footer/Footer';
 import Navbar from './components/Navbar/Navbar';
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
@@ -17,9 +20,7 @@ import ResumesPage from './pages/ResumesPage/ResumesPage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import HowToUsePage from './pages/HowToUsePage/HowToUSePage';
 import SearchPage from './pages/SearchPage/SearchPage';
-import userService from './utils/userService';
-import apiService from './utils/apiService';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import Loading from './components/Loading/Loading';
 
 function App({ setApplications, setResumes, userFirstName, history, dataFlag, toggleDataFlag }) {
     let pages = userService.getUser() ? (
@@ -45,7 +46,7 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
                 <Route render={() => <Redirect to={{ pathname: '/' }} />} />
             </Switch>
         ) : (
-            'Loading...'
+            <Loading />
         )
     ) : (
         <Switch>
@@ -76,14 +77,7 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
         <div className="App">
             <Navbar history={history} />
             <main>{pages}</main>
-            <footer>
-                <div>
-                    <a href="https://github.com/roger-takeshita" target="blank">
-                        <span>Developed by</span>&nbsp;Roger Takeshita&nbsp;
-                        <GitHubIcon />
-                    </a>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }

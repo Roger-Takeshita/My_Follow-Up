@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
+import { logoutUser } from '../../redux/user';
+import { logoutResume } from '../../redux/resume';
+import { toggleDataFlag } from '../../redux/dataFlag';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import logoPng from '../../assets/images/logo.png';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -9,10 +15,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { connect } from 'react-redux';
-import { logoutUser } from '../../redux/user';
-import { logoutResume } from '../../redux/resume';
-import { toggleDataFlag } from '../../redux/dataFlag';
 import HomeIcon from '@material-ui/icons/Home';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -22,6 +24,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import Search from '../Search/Search';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag }) {
     const [sidebar, setSidebar] = useState({
@@ -78,6 +81,13 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
                 </ListItem>
             </List>
             <Divider />
+            <ListItem button onClick={() => history.push('/howtouse')}>
+                <ListItemIcon>
+                    <HelpOutlineIcon />
+                </ListItemIcon>
+                <ListItemText primary="How To Use" />
+            </ListItem>
+            <Divider />
             <List>
                 <ListItem button onClick={() => logoutFn()}>
                     <ListItemIcon>
@@ -91,18 +101,18 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
 
     const navbar = fullName ? (
         <div className="navbar__logged-side">
-            <Tooltip title="How To Use" TransitionComponent={Zoom} placement="bottom">
-                <Link color="inherit" to="/howtouse">
-                    How to Use
-                </Link>
-            </Tooltip>
             <Tooltip title="New Application" TransitionComponent={Zoom} placement="bottom">
-                <Link color="inherit" to="/new">
+                <Link color="inherit" to="/new" className="navbar__button-icon">
                     <AddCircleOutlineIcon />
                 </Link>
             </Tooltip>
             <Tooltip title={`Open Sidebar Menu`} TransitionComponent={Zoom} placement="bottom">
-                <Link color="inherit" to="#" onClick={toggleSidebar('right', true)}>
+                <Link
+                    color="inherit"
+                    to="#"
+                    onClick={toggleSidebar('right', true)}
+                    className="navbar__button"
+                >
                     {fullName} &nbsp;
                     <MenuIcon />
                 </Link>
@@ -111,46 +121,45 @@ function Navbar({ history, logoutUser, logoutResume, fullName, toggleDataFlag })
     ) : (
         <div>
             <Tooltip title="How To Use" TransitionComponent={Zoom} placement="bottom">
-                <Link color="inherit" to="/howtouse">
+                <Link color="inherit" to="/howtouse" className="navbar__button">
                     How to Use
                 </Link>
             </Tooltip>
-            <Link color="inherit" to="/login">
+            <Link color="inherit" to="/login" className="navbar__button">
                 Log In
             </Link>
-            <Link color="inherit" to="/signup">
+            <Link color="inherit" to="/signup" className="navbar__button">
                 Sign Up
             </Link>
         </div>
     );
 
     return (
-        <div>
+        <>
             <AppBar position="static">
                 <Toolbar>
                     <div className="navbar__home-side">
                         <Tooltip title="Go To Home" TransitionComponent={Zoom} placement="bottom">
                             <Link color="inherit" to="/">
+                                <img src={logoPng} alt="logo" className="navbar__logo" />
                                 <HomeIcon />
                                 &nbsp;Home
                             </Link>
                         </Tooltip>
                         <Tooltip title="About Me" TransitionComponent={Zoom} placement="bottom">
-                            <Link color="inherit" to="/about">
+                            <Link color="inherit" to="/about" className="navbar__button">
                                 About
                             </Link>
                         </Tooltip>
                     </div>
-                    <div className="navbar-search" style={{ display: fullName ? '' : 'none' }}>
-                        <Search history={history} />
-                    </div>
+                    {fullName ? <Search history={history} /> : ''}
                     {navbar}
                 </Toolbar>
             </AppBar>
             <Drawer anchor="right" open={sidebar.right} onClose={toggleSidebar('right', false)}>
                 {sidebarList('right')}
             </Drawer>
-        </div>
+        </>
     );
 }
 

@@ -1,15 +1,17 @@
 import React from 'react';
 import { iconsSvg } from '../../assets/iconsSvg';
 import { iconsSocialMedia } from '../../assets/iconsSocialMedia';
+
+import RogerTakeshita from '../../assets/images/RogerTakeshita.jpeg';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 
-function AboutPage(props) {
+function AboutPage({ history }) {
     return (
         <div className="container">
             <h1>About Me</h1>
             <div className="about__div">
-                <img className="about__img" src="https://avatars3.githubusercontent.com/u/32579177?s=460&v=4" alt="profile-pic" />
+                <img className="about__img" src={RogerTakeshita} alt="profile-pic" />
                 <div className="about__name">Roger Takeshita</div>
                 <div className="about__title">
                     <strong>Full-Stack Developer</strong>
@@ -31,9 +33,18 @@ function AboutPage(props) {
                     <div className="about__icons">
                         {iconsSocialMedia.map((icon, idx) => {
                             return (
-                                <Tooltip key={idx} title={icon.name} TransitionComponent={Zoom} placement={icon.placement}>
-                                    <a href={icon.link} target="blank">
-                                        <img src={icon.iconSvg} alt="logo" className="about__icon-social-media" />
+                                <Tooltip
+                                    key={idx}
+                                    title={icon.name}
+                                    TransitionComponent={Zoom}
+                                    placement={icon.placement}
+                                >
+                                    <a rel="noopener noreferrer" href={icon.link} target="_blank">
+                                        <img
+                                            src={icon.iconSvg}
+                                            alt="logo"
+                                            className="about__icon-social-media"
+                                        />
                                     </a>
                                 </Tooltip>
                             );
@@ -41,7 +52,7 @@ function AboutPage(props) {
                     </div>
                 </div>
                 <div className="about__website">
-                    <a href="www.rogertakeshita.com" target="blank">
+                    <a rel="noopener noreferrer" href="http://www.rogertakeshita.com" target="_blank">
                         www.rogertakeshita.com
                     </a>
                 </div>

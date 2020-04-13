@@ -8,7 +8,6 @@ import { Editor } from '@tinymce/tinymce-react';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
@@ -24,6 +23,7 @@ import Zoom from '@material-ui/core/Zoom';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import PublishIcon from '@material-ui/icons/Publish';
 import UpdateIcon from '@material-ui/icons/Update';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 function FormApplication({
     application,
@@ -267,6 +267,7 @@ function FormApplication({
             <form onSubmit={handleSubmit} className="form-application">
                 <div className="form-application__header">
                     <TextField
+                        required
                         className="form-application__title"
                         label="Job Title"
                         color="primary"
@@ -274,6 +275,7 @@ function FormApplication({
                         autoComplete="off"
                         value={form.title}
                         onChange={handleChange}
+                        helperText="* Required"
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -283,6 +285,7 @@ function FormApplication({
                         }}
                     />
                     <TextField
+                        required
                         className="form-application__company"
                         label="Company"
                         color="primary"
@@ -290,6 +293,7 @@ function FormApplication({
                         autoComplete="off"
                         value={form.company}
                         onChange={handleChange}
+                        helperText="* Required"
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -299,6 +303,7 @@ function FormApplication({
                         }}
                     />
                     <TextField
+                        required
                         className="form-application__link"
                         label="Link"
                         color="primary"
@@ -306,7 +311,7 @@ function FormApplication({
                         autoComplete="off"
                         value={form.link}
                         onChange={handleChange}
-                        helperText={application ? `ID: ${application._id}` : ''}
+                        helperText={application ? `ID: ${application._id}` : '* Required'}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -315,21 +320,23 @@ function FormApplication({
                             )
                         }}
                     />
-                    <FormControl className="form-application__status">
-                        <InputLabel id="demo-controlled-open-select-label">Status</InputLabel>
+                    <FormControl required className="form-application__status">
+                        <InputLabel htmlFor="status-app">Status</InputLabel>
                         <Select
-                            labelId="demo-controlled-open-select-label"
-                            name="status"
+                            native
                             value={form.status}
                             onChange={handleChange}
+                            name="status"
+                            inputProps={{
+                                id: 'status-app'
+                            }}
                         >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="Pending">Pending</MenuItem>
-                            <MenuItem value="Applied">Applied</MenuItem>
-                            <MenuItem value="Rejected">Rejected</MenuItem>
+                            <option aria-label="None" value="" />
+                            <option value={'Pending'}>Pending</option>
+                            <option value={'Applied'}>Applied</option>
+                            <option value={'Rejected'}>Rejected</option>
                         </Select>
+                        <FormHelperText>* Required</FormHelperText>
                     </FormControl>
                     <div className="form-application__star">
                         <a
@@ -347,7 +354,8 @@ function FormApplication({
                 </div>
                 <div className="form-application__forms">
                     <div className="form-application__form-job">
-                        <div className="form-application__form-title">Job Description</div>
+                        <div className="form-application__form-title">Job Description*</div>
+                        <div className="form-application__form-title-req">* Required</div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.jobDescription}
@@ -369,7 +377,8 @@ function FormApplication({
                         />
                     </div>
                     <div className="form-application__form-resume">
-                        <div className="form-application__form-title">Resume</div>
+                        <div className="form-application__form-title">Resume*</div>
+                        <div className="form-application__form-title-req">* Required</div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.resume}

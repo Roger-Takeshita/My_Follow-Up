@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import apiService from '../../utils/apiService';
 import { addResume, updateResume } from '../../redux/resume';
 import { connect } from 'react-redux';
-import { Prompt } from 'react-router-dom';
+// import { Prompt } from 'react-router-dom';
 
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { Editor } from '@tinymce/tinymce-react';

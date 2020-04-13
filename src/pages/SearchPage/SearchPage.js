@@ -9,6 +9,7 @@ function SearchPage({ history }) {
     const query = queryString.parse(history.location.search).what;
     const [results, setResults] = useState([]);
     const [application, setApplication] = useState({});
+    const [fetchFlag, setFetchFlag] = useState(false);
 
     useEffect(() => {
         async function searchQuery() {
@@ -16,8 +17,13 @@ function SearchPage({ history }) {
                 search: query
             });
             setResults(results);
+            setApplication({});
+            setFetchFlag(true);
         }
         searchQuery();
+        return () => {
+            setFetchFlag(false);
+        };
     }, [query]);
 
     const handleSelectApplication = async (id) => {
@@ -44,17 +50,30 @@ function SearchPage({ history }) {
         setApplication({});
     };
 
+    const title = application.title ? (
+        ''
+    ) : results.length > 0 ? (
+        results.length > 1 ? (
+            <p>
+                <span>Found {results.length} Results for: </span>
+                <span className="search__query">{query}</span>
+            </p>
+        ) : (
+            <p>
+                <span>Found {results.length} Result for: </span>
+                <span className="search__query">{query}</span>
+            </p>
+        )
+    ) : (
+        <p>
+            <span>No Result for: </span>
+            <span className="search__query--no-result">{query}</span>
+        </p>
+    );
+
     return (
         <div className="container">
-            <h1>
-                {application.title
-                    ? ''
-                    : results.length > 0
-                    ? results.length > 1
-                        ? `Found ${results.length} results for: ${query}`
-                        : `Found ${results.length} result for: ${query}`
-                    : ` No results for: ${query}`}
-            </h1>
+            <h1>{fetchFlag ? title : ''}</h1>
             <div>
                 {application.title && (
                     <FormApplication

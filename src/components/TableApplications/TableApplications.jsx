@@ -195,9 +195,6 @@ function TableApplications({
                 if (results) {
                     handleDelete(data._id);
                 }
-            } else if (mode === 'company-url') {
-                const re = /((http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/;
-                window.open(re.exec(e.target)[0], '_blank');
             } else if (mode === 'link') {
                 if (history) {
                     e.preventDefault();
@@ -273,10 +270,7 @@ function TableApplications({
                                             </TableCell>
                                             <TableCell align="center">{row.company}</TableCell>
                                             <TableCell align="center">
-                                                <a
-                                                    href={row.link}
-                                                    onClick={(e) => handleClick(e, 'company-url')}
-                                                >
+                                                <a href={row.link} rel="noopener noreferrer" target="_blank">
                                                     Link
                                                 </a>
                                             </TableCell>

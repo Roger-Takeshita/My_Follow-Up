@@ -20,7 +20,6 @@ export default function Search({ history }) {
             const results = await apiService.getData(`/api/applications/search`, {
                 search: search.searchValue
             });
-
             if (active) {
                 if (results.length > 0) {
                     setOptions(results);

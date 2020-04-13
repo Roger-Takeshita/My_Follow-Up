@@ -15,14 +15,14 @@ function ResumesPage({ history, resumes, match }) {
     };
 
     useEffect(() => {
-        async function findApplication() {
+        async function findResume() {
             const resume = await resumes.find(({ _id }) => _id === match.params.id);
             if (resume) {
                 setResume(resume);
             }
         }
-        match && findApplication();
-    }, [resumes, match, setResume]);
+        match && findResume();
+    }, [resumes, match]);
 
     return (
         <div className="container">
