@@ -139,15 +139,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function TableApplications({
-    history,
-    results,
-    toggleStar,
-    deleteApplication,
-    handleSelectApplication,
-    handleDelete,
-    handleUpdate
-}) {
+function TableApplications({ history, results, toggleStar, deleteApplication, handleDelete, handleUpdate }) {
     const classes = useStyles();
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('appliedOn');
@@ -194,11 +186,6 @@ function TableApplications({
                 deleteApplication({ _id: data._id });
                 if (results) {
                     handleDelete(data._id);
-                }
-            } else if (mode === 'link') {
-                if (history) {
-                    e.preventDefault();
-                    handleSelectApplication(id);
                 }
             }
         } catch (err) {
@@ -260,12 +247,7 @@ function TableApplications({
                                                             <DeleteOutlineIcon />
                                                         </Tooltip>
                                                     </a>
-                                                    <Link
-                                                        to={`/application/${row.id}`}
-                                                        onClick={(e) => handleClick(e, 'link', row.id)}
-                                                    >
-                                                        {row.title}
-                                                    </Link>
+                                                    <Link to={`/applications/${row.id}`}>{row.title}</Link>
                                                 </div>
                                             </TableCell>
                                             <TableCell align="center">{row.company}</TableCell>

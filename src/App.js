@@ -31,6 +31,11 @@ function App({ setApplications, setResumes, userFirstName, history, dataFlag, to
                 <Route exact path="/about" render={({ history }) => <AboutPage history={history} />} />
                 <Route
                     exact
+                    path="/applications/:id"
+                    render={({ history, match }) => <ApplicationsPage history={history} match={match} />}
+                />
+                <Route
+                    exact
                     path="/applications"
                     render={({ history }) => <ApplicationsPage history={history} />}
                 />

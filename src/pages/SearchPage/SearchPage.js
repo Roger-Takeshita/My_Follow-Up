@@ -46,10 +46,6 @@ function SearchPage({ history }) {
         setResults(updateResults);
     };
 
-    const handleCancel = () => {
-        setApplication({});
-    };
-
     const title = application.title ? (
         ''
     ) : results.length > 0 ? (
@@ -79,7 +75,6 @@ function SearchPage({ history }) {
                     <FormApplication
                         history={history}
                         application={application}
-                        handleCancel={handleCancel}
                         handleUpdate={handleUpdate}
                     />
                 )}

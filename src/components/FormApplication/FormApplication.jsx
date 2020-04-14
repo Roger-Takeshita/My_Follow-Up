@@ -33,7 +33,6 @@ function FormApplication({
     history,
     addApplication,
     updateApplication,
-    handleCancel,
     handleUpdate
 }) {
     const initialState = {
@@ -235,7 +234,6 @@ function FormApplication({
                 });
                 updateApplication(data);
                 application && handleUpdate(data);
-                handleCancel();
             }
         } catch (err) {
             console.log(err);
@@ -248,14 +246,6 @@ function FormApplication({
 
     const doneMessage = () => {
         setForm({ ...form, message: '' });
-    };
-
-    const handleCancelClick = () => {
-        if (application) {
-            handleCancel();
-        } else {
-            history.push('/');
-        }
     };
 
     return (
@@ -542,7 +532,7 @@ function FormApplication({
                                 variant="contained"
                                 color="secondary"
                                 startIcon={<CancelIcon />}
-                                onClick={handleCancelClick}
+                                onClick={() => history.goBack()}
                             >
                                 {' '}
                                 Cancel

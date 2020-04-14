@@ -12,6 +12,7 @@ function ResumesPage({ history, resumes, match }) {
 
     const handleDisplayForm = (status) => {
         setDisplayForm(status);
+        setResume({});
     };
 
     useEffect(() => {
