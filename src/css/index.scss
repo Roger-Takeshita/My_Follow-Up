@@ -624,6 +624,31 @@ footer {
       transform: scale(1.80);
     }
   }
+  &__website {
+    a {
+      text-decoration: none;
+      &:hover {
+        color: $iconColorHover;
+      }
+    }
+  }
+  &__repo {
+    @include displayFlex(center);
+    margin-top: 1.5rem;
+    height: 20px;
+    font-size: 0.9rem;
+    a {
+      display: inherit;
+      align-items: inherit;
+      text-decoration: none;
+      svg {
+        margin-right: 5px;
+      }
+      &:hover {
+        color: $iconColorHover;
+      }
+    }
+  }
 }
 
 .MuiGrid-container {

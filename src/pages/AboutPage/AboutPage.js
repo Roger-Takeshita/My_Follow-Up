@@ -5,6 +5,7 @@ import { iconsSocialMedia } from '../../assets/iconsSocialMedia';
 import RogerTakeshita from '../../assets/images/RogerTakeshita.jpeg';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import LinkIcon from '@material-ui/icons/Link';
 
 function AboutPage({ history }) {
     return (
@@ -54,6 +55,16 @@ function AboutPage({ history }) {
                 <div className="about__website">
                     <a rel="noopener noreferrer" href="http://www.rogertakeshita.com" target="_blank">
                         www.rogertakeshita.com
+                    </a>
+                </div>
+                <div className="about__repo">
+                    <a
+                        rel="noopener noreferrer"
+                        href="https://github.com/Roger-Takeshita/MyFollowUp"
+                        target="_blank"
+                    >
+                        <LinkIcon />
+                        Repo
                     </a>
                 </div>
             </div>

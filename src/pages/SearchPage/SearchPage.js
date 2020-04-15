@@ -76,6 +76,7 @@ function SearchPage({ history }) {
                         history={history}
                         application={application}
                         handleUpdate={handleUpdate}
+                        fromPage={'search'}
                     />
                 )}
             </div>

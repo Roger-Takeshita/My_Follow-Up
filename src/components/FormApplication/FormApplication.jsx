@@ -33,7 +33,8 @@ function FormApplication({
     history,
     addApplication,
     updateApplication,
-    handleUpdate
+    handleUpdate,
+    fromPage
 }) {
     const initialState = {
         title: '',
@@ -233,7 +234,8 @@ function FormApplication({
                     parentId: form.applicationId
                 });
                 updateApplication(data);
-                application && handleUpdate(data);
+                application && fromPage && handleUpdate(data);
+                history.goBack();
             }
         } catch (err) {
             console.log(err);

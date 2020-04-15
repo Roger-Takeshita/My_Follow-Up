@@ -20,13 +20,6 @@ function ApplicationsPage({ applications, history, match }) {
         match && findApplication();
     }, [match, applications]);
 
-    // const handleSelectApplication = async (id, idx) => {
-    //     const findApplication = await applications.find(({ _id }) => _id === id);
-    //     if (findApplication) {
-    //         setApplication(findApplication);
-    //     }
-    // };
-
     const handleUpdate = (data) => {
         const updateResults = applications.map((application) => {
             if (application._id === data._id) application = data;
@@ -50,7 +43,6 @@ function ApplicationsPage({ applications, history, match }) {
                     results={applications}
                     handleDelete={handleDelete}
                     handleUpdate={handleUpdate}
-                    // handleSelectApplication={handleSelectApplication}
                 />
             </div>
         </div>
