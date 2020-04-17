@@ -9,6 +9,7 @@ router.post('/new', checkAuth, applicationCtrl.newApplication);
 router.put('/:id', checkAuth, applicationCtrl.updateApplication);
 router.delete('/:id', checkAuth, applicationCtrl.deleteApplication);
 router.post('/:id/new', checkAuth, applicationCtrl.newFollowup);
+router.put('/:id/:followId', checkAuth, applicationCtrl.updateFollowup);
 router.delete('/:id/:followId', checkAuth, applicationCtrl.deleteFollowup);
 router.get('/', checkAuth, applicationCtrl.getApplications);
 

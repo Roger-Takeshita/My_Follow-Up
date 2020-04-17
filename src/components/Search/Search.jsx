@@ -48,7 +48,7 @@ export default function Search({ history }) {
     const onKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (search.searchValue.length > 2) {
+            if (search.searchValue.length >= 2) {
                 history.push(`/search?what=${search.searchValue}`);
                 // setOpen(true);
             } else {

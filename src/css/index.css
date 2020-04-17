@@ -723,6 +723,24 @@ footer:hover {
   margin-left: 5px !important;
 }
 
+.form-followup__info {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.form-followup__date {
+  width: 45%;
+}
+
+.form-followup__input {
+  height: 100px;
+}
+
 .table-applications__star--true {
   color: #ffc107;
 }

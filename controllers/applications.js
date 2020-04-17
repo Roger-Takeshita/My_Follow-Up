@@ -2,7 +2,7 @@ const Job = require('../models/job');
 
 async function search(req, res) {
     try {
-        const words = req.query.search.split(' ').filter((word) => word.length > 3);
+        const words = req.query.search.split(' ').filter((word) => word.length >= 2);
         const re = words.map((word) => new RegExp(word, 'i'));
         const applications = await Job.find({
             $or: [
@@ -71,17 +71,6 @@ async function newApplication(req, res) {
 
 async function getApplications(req, res) {
     try {
-        //= This approach is working, needs to be refactored
-        // let applications;
-        // await Job.find({ user: req.user._id })
-        //     .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
-        //     .limit(parseInt(req.query.docs, 10))
-        //     .select('-createdAt -updatedAt -user -followup.createdAt -followup.updatedAt -__v')
-        //     .exec(async (err, docs) => {
-        //         const temp = [...docs];
-        //         temp[0].followup = await docs[0].followup.sort((a, b) => b.date - a.date);
-        //         applications = temp;
-        //     });
         const applications = await Job.find({ user: req.user._id })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
@@ -170,9 +159,31 @@ async function newFollowup(req, res) {
     }
 }
 
+async function updateFollowup(req, res) {
+    try {
+        const application = await Job.findOne({ _id: req.params.id, user: req.user._id }).select(
+            '-title -company -link -jobDescription -appliedOn -rejectedOn -resume -coverLetter -user -status -star -__v -followup.createdAt -followup.updatedAt -followup.__v'
+        );
+        if (application) {
+            const followup = application.followup.id(req.params.followId);
+            if (followup.date.toString().split('T')[0] !== req.body.date)
+                followup.date = new Date(req.body.date);
+            followup.description = req.body.description;
+            await application.save();
+            res.json(followup);
+        } else {
+            console.log('Follow-up not found!');
+            res.status(404).json({ error: 'Follow-up not found!' });
+        }
+    } catch (err) {
+        console.log('Something went wrong', err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
 async function deleteFollowup(req, res) {
     try {
-        const application = await Job.findOne({ _id: req.params.id });
+        const application = await Job.findOne({ _id: req.params.id, user: req.user._id });
         if (application) {
             const followup = application.followup.id(req.params.followId);
             followup.remove();
@@ -203,5 +214,6 @@ module.exports = {
     updateApplication,
     deleteApplication,
     newFollowup,
+    updateFollowup,
     deleteFollowup
 };

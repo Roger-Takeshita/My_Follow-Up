@@ -159,8 +159,12 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                       application.coverLetter ? 'Yes' : '',
                       application.appliedOn === null ? '' : application.appliedOn.split('T')[0],
                       application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
-                      application.followup.length > 0 ? application.followup[0].date.split('T')[0] : '',
-                      application.followup.length > 0 ? application.followup[0].description : '',
+                      application.followup.length > 0
+                          ? application.followup[application.followup.length - 1].date.split('T')[0]
+                          : '',
+                      application.followup.length > 0
+                          ? application.followup[application.followup.length - 1].description
+                          : '',
                       application.star
                   );
               })
@@ -247,13 +251,29 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                                                             <DeleteOutlineIcon />
                                                         </Tooltip>
                                                     </a>
-                                                    <Link to={`/applications/${row.id}`}>{row.title}</Link>
+                                                    <Link to={`/applications/${row.id}`}>
+                                                        <Tooltip
+                                                            title="Click to Edit"
+                                                            TransitionComponent={Zoom}
+                                                            placement="right"
+                                                            arrow
+                                                        >
+                                                            <span>{row.title}</span>
+                                                        </Tooltip>
+                                                    </Link>
                                                 </div>
                                             </TableCell>
                                             <TableCell align="center">{row.company}</TableCell>
                                             <TableCell align="center">
                                                 <a href={row.link} rel="noopener noreferrer" target="_blank">
-                                                    Link
+                                                    <Tooltip
+                                                        title="Go to Link"
+                                                        TransitionComponent={Zoom}
+                                                        placement="right"
+                                                        arrow
+                                                    >
+                                                        <span>Link</span>
+                                                    </Tooltip>
                                                 </a>
                                             </TableCell>
                                             <TableCell align="center">{row.coverLetter}</TableCell>

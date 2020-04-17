@@ -12,7 +12,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -59,14 +58,13 @@ function TableSimple({ resumes, deleteResume }) {
                                         </Tooltip>
                                     </Link>
                                     <Link to={`/resumes/${resume._id}`}>
-                                        {resume.title}
                                         <Tooltip
-                                            title="Edit"
+                                            title="Click to Edit"
                                             TransitionComponent={Zoom}
                                             placement="right"
                                             arrow
                                         >
-                                            <EditIcon />
+                                            <span>{resume.title}</span>
                                         </Tooltip>
                                     </Link>
                                 </TableCell>

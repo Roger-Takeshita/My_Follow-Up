@@ -485,6 +485,19 @@ footer {
   }
 }
 
+.form-followup {
+  &__info {
+    display: flex !important;
+    flex-direction: column;
+  }
+  &__date {
+    width: 45%;
+  }
+  &__input{
+    height: 100px;
+  }
+}
+
 .table-applications {
   &__star--true {
     color: #ffc107;

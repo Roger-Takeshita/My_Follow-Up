@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import apiService from '../../utils/apiService';
-import { addApplication, updateApplication, addFollowup, deleteFollowup } from '../../redux/application';
+import {
+    addApplication,
+    updateApplication,
+    addFollowup,
+    updateFollowup,
+    deleteFollowup
+} from '../../redux/application';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import FormDialog from '../../components/FormDialog/FormDialog';
 import { Editor } from '@tinymce/tinymce-react';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -28,8 +36,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 function FormApplication({
     application,
     resumes,
-    deleteFollowup,
     addFollowup,
+    updateFollowup,
+    deleteFollowup,
     history,
     addApplication,
     updateApplication,
@@ -54,8 +63,15 @@ function FormApplication({
         modifiedFlag: false,
         message: ''
     };
-
     const [form, setForm] = useState(initialState);
+    const [formFollowup, setFormFollowup] = useState({
+        parentIdx: '',
+        parentId: '',
+        followupId: '',
+        description: '',
+        date: '',
+        toggle: false
+    });
 
     useEffect(() => {
         function getApplication() {
@@ -120,6 +136,18 @@ function FormApplication({
             star: !form.star,
             modifiedFlag: true,
             message: ''
+        });
+    };
+
+    const handleToggleFormFollowup = (e, data) => {
+        e.preventDefault();
+        setFormFollowup({
+            parentIdx: data.parentIdx,
+            parentId: form.applicationId,
+            followupId: data.followupId,
+            description: data.description,
+            date: data.date,
+            toggle: true
         });
     };
 
@@ -207,6 +235,15 @@ function FormApplication({
                 }
             }
         }
+    };
+
+    const handleUpdateFollowup = async (data) => {
+        const followup = await apiService.putData('/api/applications', {
+            parentId: data.parentId,
+            childId: data.followupId,
+            data: data
+        });
+        updateFollowup({ idx: formFollowup.parentIdx, data: followup });
     };
 
     function isFormValid() {
@@ -421,11 +458,6 @@ function FormApplication({
                                               <hr />
                                               <div className="form-application__followup-item">
                                                   <div className="form-application__followup-date">
-                                                      <span className="form-application__followup-span">
-                                                          {application
-                                                              ? `[${follow.date.split('T')[0]}]`
-                                                              : new Date().toISOString().split('T')[0]}
-                                                      </span>
                                                       <a
                                                           href="/"
                                                           onClick={(e) =>
@@ -440,15 +472,41 @@ function FormApplication({
                                                           <Tooltip
                                                               title="Delete"
                                                               TransitionComponent={Zoom}
-                                                              placement="right"
+                                                              placement="left"
                                                               arrow
                                                           >
                                                               <DeleteOutlineIcon />
                                                           </Tooltip>
                                                       </a>
+                                                      <Tooltip
+                                                          title="Click to Edit"
+                                                          TransitionComponent={Zoom}
+                                                          placement="right"
+                                                          arrow
+                                                      >
+                                                          <Link
+                                                              to="/"
+                                                              onClick={(e) =>
+                                                                  handleToggleFormFollowup(e, {
+                                                                      parentIdx: idx,
+                                                                      followupId: follow._id,
+                                                                      description: follow.description,
+                                                                      date: follow.date
+                                                                  })
+                                                              }
+                                                          >
+                                                              <span className="form-application__followup-span">
+                                                                  {application
+                                                                      ? `[${follow.date.split('T')[0]}]`
+                                                                      : new Date()
+                                                                            .toISOString()
+                                                                            .split('T')[0]}
+                                                              </span>
+                                                          </Link>
+                                                      </Tooltip>
                                                   </div>
                                                   <div className="form-application__followup-text">
-                                                      {application ? follow.description : follow}
+                                                      <span>{application ? follow.description : follow}</span>
                                                   </div>
                                               </div>
                                           </div>
@@ -456,6 +514,7 @@ function FormApplication({
                                   })
                                 : ''}
                         </div>
+                        <FormDialog formFollowup={formFollowup} handleUpdateFollowup={handleUpdateFollowup} />
                     </div>
                     <div className="form-application__followup-list-input">
                         {form.coverLetterActive && (
@@ -575,6 +634,7 @@ const mapDispatchToProps = (dispatch) => ({
     addApplication: (data) => dispatch(addApplication(data)),
     updateApplication: (data) => dispatch(updateApplication(data)),
     addFollowup: (data) => dispatch(addFollowup(data)),
+    updateFollowup: (data) => dispatch(updateFollowup(data)),
     deleteFollowup: (data) => dispatch(deleteFollowup(data))
 });
 

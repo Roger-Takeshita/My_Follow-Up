@@ -5,6 +5,7 @@ const DELETE_APPLICATION = 'DELETE_APPLICATION';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_STAR = 'TOGGLE_STAR';
 const ADD_FOLLOWUP = 'ADD_FOLLOWUP';
+const UPDATE_FOLLOWUP = 'UPDATE_FOLLOWUP';
 const DELETE_FOLLOWUP = 'DELETE_FOLLOWUP';
 
 export const setApplications = (data) => ({
@@ -24,6 +25,11 @@ export const updateApplication = (data) => ({
 
 export const addFollowup = (data) => ({
     type: ADD_FOLLOWUP,
+    payload: data
+});
+
+export const updateFollowup = (data) => ({
+    type: UPDATE_FOLLOWUP,
     payload: data
 });
 
@@ -87,15 +93,24 @@ function applicationReducer(state = [], action) {
                     : application
             );
         case ADD_FOLLOWUP:
-            const newComment = [{ _id: action.payload.data._id, description: action.payload.data.description, date: action.payload.data.date }];
+            const newComment = [
+                {
+                    _id: action.payload.data._id,
+                    description: action.payload.data.description,
+                    date: action.payload.data.date
+                }
+            ];
             return state.map((application) =>
                 application._id === action.payload.applicationId
                     ? {
                           ...application,
-                          followup: [...newComment, ...application.followup]
+                          followup: [...application.followup, ...newComment]
                       }
                     : application
             );
+        case UPDATE_FOLLOWUP:
+            // TODO Update Followup reducer
+            return state;
         case DELETE_FOLLOWUP:
             return state.map((application) => {
                 return application._id === action.payload.applicationId
@@ -103,7 +118,10 @@ function applicationReducer(state = [], action) {
                           ...application,
                           followup: [
                               ...application.followup.slice(0, action.payload.idx),
-                              ...application.followup.slice(action.payload.idx + 1, application.followup.length)
+                              ...application.followup.slice(
+                                  action.payload.idx + 1,
+                                  application.followup.length
+                              )
                           ]
                       }
                     : application;
