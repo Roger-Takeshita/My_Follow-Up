@@ -65,7 +65,7 @@ function FormApplication({
     };
     const [form, setForm] = useState(initialState);
     const [formFollowup, setFormFollowup] = useState({
-        parentIdx: '',
+        followupIdx: '',
         parentId: '',
         followupId: '',
         description: '',
@@ -142,7 +142,7 @@ function FormApplication({
     const handleToggleFormFollowup = (e, data) => {
         e.preventDefault();
         setFormFollowup({
-            parentIdx: data.parentIdx,
+            followupIdx: data.followupIdx,
             parentId: form.applicationId,
             followupId: data.followupId,
             description: data.description,
@@ -243,7 +243,7 @@ function FormApplication({
             childId: data.followupId,
             data: data
         });
-        updateFollowup({ idx: formFollowup.parentIdx, data: followup });
+        updateFollowup({ followupIdx: formFollowup.followupIdx, parentId: data.parentId, data: followup });
     };
 
     function isFormValid() {
@@ -488,7 +488,7 @@ function FormApplication({
                                                               to="/"
                                                               onClick={(e) =>
                                                                   handleToggleFormFollowup(e, {
-                                                                      parentIdx: idx,
+                                                                      followupIdx: idx,
                                                                       followupId: follow._id,
                                                                       description: follow.description,
                                                                       date: follow.date

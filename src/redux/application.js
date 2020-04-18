@@ -109,8 +109,25 @@ function applicationReducer(state = [], action) {
                     : application
             );
         case UPDATE_FOLLOWUP:
-            // TODO Update Followup reducer
-            return state;
+            const application = state.map((application) =>
+                application._id === action.payload.parentId
+                    ? {
+                          ...application,
+                          followup: [
+                              ...application.followup.map((follow) =>
+                                  follow._id === action.payload.data._id
+                                      ? {
+                                            ...follow,
+                                            description: action.payload.data.description,
+                                            date: action.payload.data.date
+                                        }
+                                      : follow
+                              )
+                          ]
+                      }
+                    : application
+            );
+            return [...application];
         case DELETE_FOLLOWUP:
             return state.map((application) => {
                 return application._id === action.payload.applicationId
