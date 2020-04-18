@@ -6,6 +6,44 @@ function createJWT(user) {
     return jwt.sign({ user }, SECRET, { expiresIn: '24h' });
 }
 
+async function addTries(user, res) {
+    try {
+        let count = (user.unsuccessfulLogins += 1);
+        let tries = 6;
+        await user.save();
+        if (tries - user.unsuccessfulLogins !== 0) {
+            res.status(400).json({
+                error: `Wrong password, you have ${tries - count} more ${
+                    tries - count === 1 ? 'try' : 'tries'
+                }`
+            });
+        } else {
+            res.status(400).json({
+                error: `You have been blocked for 5 min`
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+}
+
+async function checkTimeElapsed(user) {
+    let tries = user.unsuccessfulLogins;
+    switch (true) {
+        case tries <= 5:
+            return true;
+        case tries > 5:
+            if ((new Date() - user.updatedAt) / 1000 / 60 >= 5) {
+                user.unsuccessfulLogins = 0;
+                await user.save();
+                return true;
+            }
+            return false;
+        default:
+            return false;
+    }
+}
+
 async function signup(req, res) {
     try {
         const user = await User.findOne({ email: req.body.email });
@@ -17,37 +55,39 @@ async function signup(req, res) {
 
                 res.json({ token });
             } catch (err) {
-                console.log('Something went wrong', err);
                 res.status(500).json({ error: 'Something went wrong' });
             }
         } else {
-            console.log('Email already taken');
             res.status(400).json({ error: 'Email already taken' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
 
 async function login(req, res) {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        let user = await User.findOne({ email: req.body.email });
         if (!user) {
-            console.log("User doesn't exist!");
             return res.status(404).json({ error: "User doesn't exist!" });
         }
-        user.comparePassword(req.body.password, (err, isMatch) => {
-            if (isMatch) {
-                const token = createJWT(user);
-                res.json({ token });
-            } else {
-                console.log('Wrong password');
-                return res.status(400).json({ error: 'Wrong password!' });
-            }
-        });
+        if (await checkTimeElapsed(user)) {
+            user.comparePassword(req.body.password, async (err, isMatch) => {
+                if (isMatch) {
+                    user.unsuccessfulLogins = 0;
+                    await user.save();
+                    const token = createJWT(user);
+                    return res.json({ token });
+                } else {
+                    addTries(user, res);
+                }
+            });
+        } else {
+            res.status(400).json({
+                error: `You have been blocked for 5 min`
+            });
+        }
     } catch (err) {
-        console.log('Something went wrong');
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -55,12 +95,10 @@ async function login(req, res) {
 async function updateUser(req, res) {
     try {
         if (req.user._id === '5e8bab22dc743074b97c758b') {
-            console.log("Sorry this user can't be changed!");
             return res.status(400).json({ error: "Sorry this user can't be changed!!" });
         } else {
             const user = await User.findOne({ email: req.body.email });
             if (!user) {
-                console.log("User doesn't exist!");
                 return res.status(404).json({ error: "User doesn't exist!" });
             }
             user.comparePassword(req.body.password, async (err, isMatch) => {
@@ -74,13 +112,11 @@ async function updateUser(req, res) {
                     const token = createJWT(user);
                     res.json({ token });
                 } else {
-                    console.log('Wrong password');
-                    return res.status(400).json({ error: 'Wrong password!' });
+                    res.status(400).json({ error: 'Wrong password!' });
                 }
             });
         }
     } catch (err) {
-        console.log('Something went wrong');
         res.status(500).json({ error: 'Something went wrong' });
     }
 }

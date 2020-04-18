@@ -30,6 +30,10 @@ const userSchema = new Schema(
         },
         googleId: {
             type: String
+        },
+        unsuccessfulLogins: {
+            type: Number,
+            default: 0
         }
     },
     {

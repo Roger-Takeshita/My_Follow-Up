@@ -19,11 +19,9 @@ async function search(req, res) {
         if (applications) {
             res.json(applications);
         } else {
-            console.log('No applications were found');
             res.status(404).json({ error: 'No applications were found' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -60,11 +58,9 @@ async function newApplication(req, res) {
             }).select('-__v -followup.createdAt -followup.updatedAt -followup.__v');
             res.json(cleanFollowup);
         } else {
-            console.log('Link already exsists');
             res.status(400).json({ error: 'Link aready exists' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -78,11 +74,9 @@ async function getApplications(req, res) {
         if (applications) {
             res.json(applications);
         } else {
-            console.log("You don't have applications atm!");
             res.status(400).json({ error: "You don't have applications atm!" });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -112,11 +106,9 @@ async function updateApplication(req, res) {
             }
             res.json(await application.save());
         } else {
-            console.log('Application not found!');
             res.status(400).json({ error: 'Application not found!' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -124,13 +116,11 @@ async function updateApplication(req, res) {
 async function deleteApplication(req, res) {
     try {
         if (req.user._id === '5e8bab22dc743074b97c758b') {
-            console.log('Sorry this user is not allowed to delete applications!');
             return res.status(400).json({ error: 'Sorry this user is not allowed to delete applications!' });
         } else {
             res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -150,11 +140,9 @@ async function newFollowup(req, res) {
             await application.save();
             res.json(application.followup[application.followup.length - 1]);
         } else {
-            console.log('Application not found!');
             res.status(400).json({ error: 'Application not found!' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -172,11 +160,9 @@ async function updateFollowup(req, res) {
             await application.save();
             res.json(followup);
         } else {
-            console.log('Follow-up not found!');
             res.status(404).json({ error: 'Follow-up not found!' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -190,11 +176,9 @@ async function deleteFollowup(req, res) {
             await application.save();
             res.json(req.params.followId);
         } else {
-            console.log('Application not found!');
             res.status(404).json({ error: 'Application not found!' });
         }
     } catch (err) {
-        console.log('Something went wrong', err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 }

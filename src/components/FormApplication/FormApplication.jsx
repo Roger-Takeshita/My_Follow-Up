@@ -238,12 +238,24 @@ function FormApplication({
     };
 
     const handleUpdateFollowup = async (data) => {
-        const followup = await apiService.putData('/api/applications', {
-            parentId: data.parentId,
-            childId: data.followupId,
-            data: data
-        });
-        updateFollowup({ followupIdx: formFollowup.followupIdx, parentId: data.parentId, data: followup });
+        try {
+            const followup = await apiService.putData('/api/applications', {
+                parentId: data.parentId,
+                childId: data.followupId,
+                data: data
+            });
+            updateFollowup({
+                followupIdx: formFollowup.followupIdx,
+                parentId: data.parentId,
+                data: followup
+            });
+        } catch (err) {
+            console.log(err.message);
+            setForm({
+                ...form,
+                message: err.message
+            });
+        }
     };
 
     function isFormValid() {

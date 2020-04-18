@@ -20,6 +20,11 @@ function formReducer(state, action) {
                 ...state,
                 message: action.payload
             };
+        case 'CLEAN_MSG':
+            return {
+                ...state,
+                message: ''
+            };
         default:
             throw new Error(`Unsupported action type ${action.type}`);
     }
@@ -68,7 +73,9 @@ function FormSignup({ history, signupUser }) {
     }
 
     const doneMessage = () => {
-        setInfo({ ...info, message: '' });
+        setInfo({
+            type: 'CLEAN_MSG'
+        });
     };
 
     return (

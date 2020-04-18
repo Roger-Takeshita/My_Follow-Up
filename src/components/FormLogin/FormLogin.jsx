@@ -19,6 +19,11 @@ function formReducer(state, action) {
                 ...state,
                 message: action.payload
             };
+        case 'CLEAN_MSG':
+            return {
+                ...state,
+                message: ''
+            };
         default:
             throw new Error(`Unsuported action ${action.type}`);
     }
@@ -60,7 +65,9 @@ function FormLogin({ loginUser, history }) {
     }
 
     const doneMessage = () => {
-        setInfo({ ...info, message: '' });
+        setInfo({
+            type: 'CLEAN_MSG'
+        });
     };
 
     return (
