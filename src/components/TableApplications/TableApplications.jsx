@@ -181,19 +181,24 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
     const handleClick = async (e, mode, id) => {
         e.preventDefault();
         try {
-            if (mode === 'toggleStar') {
-                const data = await apiService.putData('/api/applications', { data: {}, parentId: id });
-                toggleStar(data);
-                handleUpdate(data);
-            } else if (mode === 'delete') {
-                const data = await apiService.deleteData('/api/applications', { parentId: id });
-                deleteApplication({ _id: data._id });
-                if (results) {
-                    handleDelete(data._id);
-                }
+            let data;
+            switch (mode) {
+                case 'toggleStar':
+                    data = await apiService.putData('/api/applications', { data: {}, parentId: id });
+                    toggleStar(data);
+                    handleUpdate(data);
+                    break;
+                case 'delete':
+                    data = await apiService.deleteData('/api/applications', { parentId: id });
+                    deleteApplication({ _id: data._id });
+                    if (results) {
+                        handleDelete(data._id);
+                    }
+                    break;
+                default:
+                    break;
             }
         } catch (err) {
-            console.log(err.message);
             setMessage(err.message);
         }
     };

@@ -50,7 +50,12 @@ function ProfilePage({ user, history, loginUser }) {
     };
 
     function isFormValid() {
-        return !(form.firstName && form.lastName && form.password && form.newPassword === form.confNewPassword);
+        return !(
+            form.firstName &&
+            form.lastName &&
+            form.password &&
+            form.newPassword === form.confNewPassword
+        );
     }
 
     const handleSubmit = async (e) => {
@@ -60,7 +65,6 @@ function ProfilePage({ user, history, loginUser }) {
             loginUser();
             history.push('/');
         } catch (err) {
-            console.log(err);
             setForm({
                 ...form,
                 message: err.message
@@ -141,8 +145,15 @@ function ProfilePage({ user, history, loginUser }) {
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton aria-label="toggle password visibility" onClick={() => handleClickShowPassword('passTwo')}>
-                                                {form.showPassword.passTwo ? <Visibility /> : <VisibilityOff />}
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={() => handleClickShowPassword('passTwo')}
+                                            >
+                                                {form.showPassword.passTwo ? (
+                                                    <Visibility />
+                                                ) : (
+                                                    <VisibilityOff />
+                                                )}
                                             </IconButton>
                                         </InputAdornment>
                                     )
@@ -159,8 +170,15 @@ function ProfilePage({ user, history, loginUser }) {
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton aria-label="toggle password visibility" onClick={() => handleClickShowPassword('passThree')}>
-                                                {form.showPassword.passThree ? <Visibility /> : <VisibilityOff />}
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={() => handleClickShowPassword('passThree')}
+                                            >
+                                                {form.showPassword.passThree ? (
+                                                    <Visibility />
+                                                ) : (
+                                                    <VisibilityOff />
+                                                )}
                                             </IconButton>
                                         </InputAdornment>
                                     )
@@ -180,8 +198,15 @@ function ProfilePage({ user, history, loginUser }) {
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton aria-label="toggle password visibility" onClick={() => handleClickShowPassword('passOne')}>
-                                                {form.showPassword.passOne ? <Visibility /> : <VisibilityOff />}
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={() => handleClickShowPassword('passOne')}
+                                            >
+                                                {form.showPassword.passOne ? (
+                                                    <Visibility />
+                                                ) : (
+                                                    <VisibilityOff />
+                                                )}
                                             </IconButton>
                                         </InputAdornment>
                                     )

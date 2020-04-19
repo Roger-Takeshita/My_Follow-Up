@@ -161,7 +161,6 @@ function FormApplication({
                 });
                 deleteFollowup({ applicationId, idx });
             } catch (err) {
-                console.log(err.message);
                 setForm({ ...form, message: err.message });
             }
         } else {
@@ -230,7 +229,6 @@ function FormApplication({
                         followupNow: ''
                     });
                 } catch (err) {
-                    console.log(err.message);
                     setForm({ ...form, message: err.message });
                 }
             }
@@ -250,7 +248,6 @@ function FormApplication({
                 data: followup
             });
         } catch (err) {
-            console.log(err.message);
             setForm({
                 ...form,
                 message: err.message
@@ -287,7 +284,6 @@ function FormApplication({
                 history.goBack();
             }
         } catch (err) {
-            console.log(err);
             setForm({
                 ...form,
                 message: err.message

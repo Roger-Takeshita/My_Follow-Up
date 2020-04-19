@@ -1,5 +1,21 @@
 const Job = require('../models/job');
 
+function allowedKeys(application, body) {
+    const allowedKeys = [
+        'title',
+        'company',
+        'link',
+        'jobDescription',
+        'appliedOn',
+        'rejectedOn',
+        'resume',
+        'coverLetter',
+        'status',
+        'star'
+    ];
+    allowedKeys.forEach((key) => (application[key] = body[key]));
+}
+
 async function search(req, res) {
     try {
         const words = req.query.search.split(' ').filter((word) => word.length >= 2);
@@ -31,17 +47,10 @@ async function newApplication(req, res) {
         const application = await Job.findOne({ link: req.body.link }).where({ user: req.user._id });
         if (!application) {
             const newApplication = new Job();
-            newApplication.user = req.user._id;
-            newApplication.title = capitalLetters(req.body.title);
-            newApplication.company = capitalLetters(req.body.company);
-            newApplication.link = req.body.link;
-            newApplication.jobDescription = req.body.jobDescription;
-            newApplication.resume = req.body.resume;
-            newApplication.appliedOn = req.body.appliedOn;
-            newApplication.rejectedOn = req.body.rejectedOn;
-            newApplication.status = req.body.status;
-            newApplication.coverLetter = req.body.coverLetter;
-            newApplication.star = req.body.star;
+            req.body.title = capitalLetters(req.body.title);
+            req.body.company = capitalLetters(req.body.company);
+            allowedKeys(newApplication, req.body);
+            newApplication['user'] = req.user._id;
             const newSavedDoc = await newApplication.save();
             const followup = req.body.followup;
             if (followup.length > 0) {
@@ -87,24 +96,17 @@ async function updateApplication(req, res) {
             .where({ user: req.user._id })
             .select('-__v');
         if (application) {
-            if (req.body.title) {
-                const allowedKeys = [
-                    'title',
-                    'company',
-                    'link',
-                    'jobDescription',
-                    'appliedOn',
-                    'rejectedOn',
-                    'resume',
-                    'coverLetter',
-                    'status',
-                    'star'
-                ];
-                allowedKeys.forEach((key) => (application[key] = req.body[key]));
+            const isLinkExist = await Job.findOne({ link: req.body.link }).select('_id');
+            if (!isLinkExist || `${isLinkExist._id}` === `${application._id}`) {
+                if (req.body.title) {
+                    allowedKeys(application, req.body);
+                } else {
+                    application.star = !application.star;
+                }
+                res.json(await application.save());
             } else {
-                application.star = !application.star;
+                res.status(400).json({ error: 'Link already exists' });
             }
-            res.json(await application.save());
         } else {
             res.status(400).json({ error: 'Application not found!' });
         }
@@ -115,11 +117,7 @@ async function updateApplication(req, res) {
 
 async function deleteApplication(req, res) {
     try {
-        if (req.user._id === '5e8bab22dc743074b97c758b') {
-            return res.status(400).json({ error: 'Sorry this user is not allowed to delete applications!' });
-        } else {
-            res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
-        }
+        res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
     } catch (err) {
         res.status(500).json({ error: 'Something went wrong' });
     }

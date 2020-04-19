@@ -66,7 +66,6 @@ function FormResume({ history, resume, addResume, updateResume, handleDisplayFor
                 handleDisplayForm(false);
             }
         } catch (err) {
-            console.log(err);
             setForm({
                 ...form,
                 message: err.message

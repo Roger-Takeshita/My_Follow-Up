@@ -52,7 +52,6 @@ function FormLogin({ loginUser, history }) {
             loginUser();
             history.push('/');
         } catch (err) {
-            console.log(err);
             setInfo({
                 type: 'ERROR',
                 payload: err.message

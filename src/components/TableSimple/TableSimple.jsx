@@ -25,7 +25,6 @@ function TableSimple({ resumes, deleteResume }) {
             const data = await apiService.deleteData('/api/resumes', { parentId: id });
             deleteResume(data);
         } catch (err) {
-            console.log(err.message);
             setMessage(err.message);
         }
     };

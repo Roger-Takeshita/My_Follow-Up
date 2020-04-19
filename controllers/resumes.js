@@ -40,8 +40,8 @@ async function updateResume(req, res) {
     try {
         const resume = await Resume.findById(req.params.id).where({ user: req.user._id }).select('-__v');
         if (resume) {
-            const resumeCheck = await Resume.findOne({ title: req.body.title });
-            if (!resumeCheck || `${resumeCheck._id}` === `${resume._id}`) {
+            const isTitleExist = await Resume.findOne({ title: req.body.title }).select('_id');
+            if (!isTitleExist || `${isTitleExist._id}` === `${resume._id}`) {
                 resume.title = req.body.title;
                 resume.description = req.body.description;
                 res.json(await resume.save());
@@ -58,11 +58,7 @@ async function updateResume(req, res) {
 
 async function deleteResume(req, res) {
     try {
-        if (req.user._id === '5e8bab22dc743074b97c758b') {
-            return res.status(400).json({ error: 'Sorry this user is not allowed to delete resumes!' });
-        } else {
-            res.json(await Resume.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
-        }
+        res.json(await Resume.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
     } catch (err) {
         res.status(500).json({ error: 'Something went wrong' });
     }
