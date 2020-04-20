@@ -104,7 +104,7 @@ function applicationReducer(state = [], action) {
                 application._id === action.payload.applicationId
                     ? {
                           ...application,
-                          followup: [...application.followup, ...newComment]
+                          followup: [...newComment, ...application.followup]
                       }
                     : application
             );
@@ -114,15 +114,17 @@ function applicationReducer(state = [], action) {
                     ? {
                           ...application,
                           followup: [
-                              ...application.followup.map((follow) =>
-                                  follow._id === action.payload.data._id
-                                      ? {
-                                            ...follow,
-                                            description: action.payload.data.description,
-                                            date: action.payload.data.date
-                                        }
-                                      : follow
-                              )
+                              ...application.followup
+                                  .map((follow) =>
+                                      follow._id === action.payload.data._id
+                                          ? {
+                                                ...follow,
+                                                description: action.payload.data.description,
+                                                date: action.payload.data.date
+                                            }
+                                          : follow
+                                  )
+                                  .sort((a, b) => new Date(b.date) - new Date(a.date))
                           ]
                       }
                     : application
