@@ -76,15 +76,34 @@ async function newApplication(req, res) {
 
 async function getApplications(req, res) {
     try {
-        const applications = await Job.find({ user: req.user._id })
+        await Job.find({ user: req.user._id })
             .skip((req.query.page - 1) * parseInt(req.query.docs, 10))
             .limit(parseInt(req.query.docs, 10))
-            .select('-__v -followup.createdAt -followup.updatedAt -followup.__v');
-        if (applications) {
-            res.json(applications);
-        } else {
-            res.status(400).json({ error: "You don't have applications atm!" });
-        }
+            .select('-createdAt -updatedAt -__v -followup.createdAt -followup.updatedAt -followup.__v')
+            .exec(async (err, docs) => {
+                if (docs) {
+                    const applications = await docs.map((application) => {
+                        return {
+                            star: application.star,
+                            _id: application._id,
+                            title: application.title,
+                            company: application.company,
+                            link: application.link,
+                            jobDescription: application.jobDescription,
+                            appliedOn: application.appliedOn,
+                            rejectedOn: application.rejectedOn,
+                            resume: application.resume,
+                            coverLetter: application.coverLetter,
+                            status: application.status,
+                            user: application.user,
+                            followup: [...application.followup.sort((a, b) => b.date - a.date)]
+                        };
+                    });
+                    res.json(applications);
+                } else {
+                    res.status(400).json({ error: "You don't have applications atm!" });
+                }
+            });
     } catch (err) {
         res.status(500).json({ error: 'Something went wrong' });
     }

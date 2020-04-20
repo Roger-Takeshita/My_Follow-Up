@@ -83,8 +83,11 @@ async function login(req, res) {
                 }
             });
         } else {
+            const remainingTime = Math.ceil(5 - (new Date() - user.updatedAt) / 1000 / 60);
             res.status(400).json({
-                error: `You have been blocked for 5 min`
+                error: `You have been blocked for 5 min, try again in ${remainingTime} ${
+                    remainingTime === 1 ? 'min' : 'mins'
+                }`
             });
         }
     } catch (err) {

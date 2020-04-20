@@ -159,12 +159,8 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                       application.coverLetter ? 'Yes' : '',
                       application.appliedOn === null ? '' : application.appliedOn.split('T')[0],
                       application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
-                      application.followup.length > 0
-                          ? application.followup[application.followup.length - 1].date.split('T')[0]
-                          : '',
-                      application.followup.length > 0
-                          ? application.followup[application.followup.length - 1].description
-                          : '',
+                      application.followup.length > 0 ? application.followup[0].date.split('T')[0] : '',
+                      application.followup.length > 0 ? application.followup[0].description : '',
                       application.star
                   );
               })
