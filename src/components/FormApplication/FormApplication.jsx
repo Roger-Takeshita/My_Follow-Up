@@ -143,9 +143,9 @@ function FormApplication({
         e.preventDefault();
         setFormFollowup({
             followupIdx: data.followupIdx,
-            parentId: form.applicationId,
+            parentId: form.applicationId ? form.applicationId : '',
             followupId: data.followupId,
-            description: data.description,
+            description: data.description ? data.description : form.followup[data.followupIdx],
             date: data.date,
             toggle: true
         });
@@ -207,10 +207,17 @@ function FormApplication({
     const onKeyPress = async (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (form.applicationId === '') {
+            if (!form.applicationId) {
                 setForm({
                     ...form,
-                    followup: [...form.followup, e.target.value],
+                    followup: [
+                        {
+                            _id: '',
+                            description: form.followupNow,
+                            date: new Date().toISOString()
+                        },
+                        ...form.followup
+                    ],
                     followupNow: ''
                 });
             } else {
@@ -223,8 +230,8 @@ function FormApplication({
                     setForm({
                         ...form,
                         followup: [
-                            ...form.followup,
-                            { _id: data._id, description: data.description, date: data.date }
+                            { _id: data._id, description: data.description, date: data.date },
+                            ...form.followup
                         ],
                         followupNow: ''
                     });
@@ -237,16 +244,27 @@ function FormApplication({
 
     const handleUpdateFollowup = async (data) => {
         try {
-            const followup = await apiService.putData('/api/applications', {
-                parentId: data.parentId,
-                childId: data.followupId,
-                data: data
-            });
-            updateFollowup({
-                followupIdx: formFollowup.followupIdx,
-                parentId: data.parentId,
-                data: followup
-            });
+            if (form.applicationId) {
+                const followup = await apiService.putData('/api/applications', {
+                    parentId: data.parentId,
+                    childId: data.followupId,
+                    data: data
+                });
+                updateFollowup({
+                    followupIdx: formFollowup.followupIdx,
+                    parentId: data.parentId,
+                    data: followup
+                });
+            } else {
+                const updateFollowup = form.followup;
+                updateFollowup[data.followupIdx].description = data.description;
+                updateFollowup[data.followupIdx].date = data.date;
+                setForm({
+                    ...form,
+                    followup: [...updateFollowup.sort((a, b) => new Date(b.date) - new Date(a.date))],
+                    followupNow: ''
+                });
+            }
         } catch (err) {
             setForm({
                 ...form,
@@ -270,7 +288,7 @@ function FormApplication({
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            if (form.applicationId === '') {
+            if (!form.applicationId) {
                 const data = await apiService.postData('/api/applications', { data: form });
                 addApplication(data);
                 setForm(initialState);
@@ -499,22 +517,18 @@ function FormApplication({
                                                                       followupIdx: idx,
                                                                       followupId: follow._id,
                                                                       description: follow.description,
-                                                                      date: follow.date
+                                                                      date: follow.date.split('T')[0]
                                                                   })
                                                               }
                                                           >
                                                               <span className="form-application__followup-span">
-                                                                  {application
-                                                                      ? `[${follow.date.split('T')[0]}]`
-                                                                      : new Date()
-                                                                            .toISOString()
-                                                                            .split('T')[0]}
+                                                                  {`[${follow.date.split('T')[0]}]`}
                                                               </span>
                                                           </Link>
                                                       </Tooltip>
                                                   </div>
                                                   <div className="form-application__followup-text">
-                                                      <span>{application ? follow.description : follow}</span>
+                                                      <span>{follow.description}</span>
                                                   </div>
                                               </div>
                                           </div>

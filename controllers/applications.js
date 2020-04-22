@@ -56,8 +56,8 @@ async function newApplication(req, res) {
             if (followup.length > 0) {
                 for (let i = 0; i < followup.length; i++) {
                     newSavedDoc.followup.push({
-                        description: followup[i],
-                        date: new Date()
+                        description: followup[i].description,
+                        date: new Date(followup[i].date)
                     });
                     await newSavedDoc.save();
                 }

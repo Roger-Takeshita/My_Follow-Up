@@ -10,6 +10,7 @@ export default function FormDialog({ formFollowup, handleUpdateFollowup }) {
     const [followup, setFollowup] = useState({
         parentId: '',
         followupId: '',
+        followupIdx: '',
         description: '',
         date: '',
         modifiedFlag: false
@@ -20,8 +21,9 @@ export default function FormDialog({ formFollowup, handleUpdateFollowup }) {
         setFollowup({
             parentId: formFollowup.parentId,
             followupId: formFollowup.followupId,
+            followupIdx: formFollowup.followupIdx,
             description: formFollowup.description,
-            date: formFollowup.date !== null ? formFollowup.date.split('T')[0] : '',
+            date: formFollowup.date,
             modifiedFlag: false
         });
         if (formFollowup.toggle) {
