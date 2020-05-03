@@ -12,17 +12,16 @@ async function addTries(user, res) {
         let tries = 6;
         await user.save();
         if (tries - user.unsuccessfulLogins !== 0) {
-            res.status(400).json({
+            return res.status(400).json({
                 error: `Wrong password, you have ${tries - count} more ${
                     tries - count === 1 ? 'try' : 'tries'
                 }`
             });
-        } else {
-            res.status(400).json({
-                error: `You have been blocked for 5 min`
-            });
         }
-    } catch (err) {
+        res.status(400).json({
+            error: `You have been blocked for 5 min`
+        });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -49,18 +48,12 @@ async function signup(req, res) {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
             const newUser = new User(req.body);
-            try {
-                await newUser.save();
-                const token = createJWT(newUser);
-
-                res.json({ token });
-            } catch (err) {
-                res.status(500).json({ error: 'Something went wrong' });
-            }
-        } else {
-            res.status(400).json({ error: 'Email already taken' });
+            await newUser.save();
+            const token = createJWT(newUser);
+            return res.json({ token });
         }
-    } catch (err) {
+        res.status(400).json({ error: 'Email already taken' });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -68,9 +61,7 @@ async function signup(req, res) {
 async function login(req, res) {
     try {
         let user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            return res.status(404).json({ error: "User doesn't exist!" });
-        }
+        if (!user) return res.status(404).json({ error: "User doesn't exist!" });
         if (await checkTimeElapsed(user)) {
             user.comparePassword(req.body.password, async (err, isMatch) => {
                 if (isMatch) {
@@ -90,36 +81,29 @@ async function login(req, res) {
                 }`
             });
         }
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
 
 async function updateUser(req, res) {
     try {
-        if (req.user._id === '5e8bab22dc743074b97c758b') {
+        if (req.user._id === '5e8bab22dc743074b97c758b')
             return res.status(400).json({ error: "Sorry this user can't be changed!!" });
-        } else {
-            const user = await User.findOne({ email: req.body.email });
-            if (!user) {
-                return res.status(404).json({ error: "User doesn't exist!" });
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) return res.status(404).json({ error: "User doesn't exist!" });
+        user.comparePassword(req.body.password, async (err, isMatch) => {
+            if (isMatch) {
+                user.firstName = req.body.firstName;
+                user.lastName = req.body.lastName;
+                if (req.body.newPassword !== '') user.password = req.body.newPassword;
+                await user.save();
+                const token = createJWT(user);
+                return res.json({ token });
             }
-            user.comparePassword(req.body.password, async (err, isMatch) => {
-                if (isMatch) {
-                    user.firstName = req.body.firstName;
-                    user.lastName = req.body.lastName;
-                    if (req.body.newPassword !== '') {
-                        user.password = req.body.newPassword;
-                    }
-                    await user.save();
-                    const token = createJWT(user);
-                    res.json({ token });
-                } else {
-                    res.status(400).json({ error: 'Wrong password!' });
-                }
-            });
-        }
-    } catch (err) {
+            res.status(400).json({ error: 'Wrong password!' });
+        });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }

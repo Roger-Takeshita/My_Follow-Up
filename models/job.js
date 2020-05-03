@@ -5,10 +5,12 @@ const followupSchema = new Schema(
     {
         description: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         date: {
-            type: Date
+            type: Date,
+            required: true
         }
     },
     {
@@ -20,16 +22,19 @@ const jobSchema = new Schema(
     {
         title: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         company: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         link: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
+            trim: true
         },
         jobDescription: {
             type: String,
@@ -42,14 +47,16 @@ const jobSchema = new Schema(
             type: Date
         },
         resume: {
-            type: String
+            type: String,
+            required: true
         },
         coverLetter: {
             type: String
         },
         user: {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         },
         followup: [followupSchema],
         status: {

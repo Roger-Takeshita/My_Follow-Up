@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const validator = require('validator');
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 6;
 
@@ -7,15 +8,23 @@ const userSchema = new Schema(
     {
         firstName: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         lastName: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         email: {
             type: String,
-            required: true
+            required: true,
+            trim: true,
+            validate: async (value) => {
+                if (!(await validator.isEmail(value))) {
+                    throw new Error('Email is invalid');
+                }
+            }
         },
         password: {
             type: String,
@@ -43,14 +52,10 @@ const userSchema = new Schema(
 
 //! Mongoose Middleware
 //+ Encrypt the password
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
     const user = this;
-    if (!user.isModified('password')) return next();
-    bcrypt.hash(user.password, SALT_ROUNDS, function (err, hash) {
-        if (err) return next(err);
-        user.password = hash;
-        next();
-    });
+    if (user.isModified('password')) user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+    next();
 });
 
 //+ Compare password

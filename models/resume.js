@@ -4,10 +4,13 @@ const Schema = mongoose.Schema;
 const resumeSchema = new Schema(
     {
         title: {
-            type: String
+            type: String,
+            required: true,
+            trim: true
         },
         description: {
-            type: String
+            type: String,
+            required: true
         },
         user: {
             type: Schema.Types.ObjectId,

@@ -33,11 +33,10 @@ async function search(req, res) {
             .populate('followup')
             .select('-__v -followup.__v');
         if (applications) {
-            res.json(applications);
-        } else {
-            res.status(404).json({ error: 'No applications were found' });
+            return res.json(applications);
         }
-    } catch (err) {
+        res.status(404).json({ error: 'No applications were found' });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -45,6 +44,7 @@ async function search(req, res) {
 async function newApplication(req, res) {
     try {
         const application = await Job.findOne({ link: req.body.link }).where({ user: req.user._id });
+
         if (!application) {
             const newApplication = new Job();
             req.body.title = capitalLetters(req.body.title);
@@ -53,6 +53,7 @@ async function newApplication(req, res) {
             newApplication['user'] = req.user._id;
             const newSavedDoc = await newApplication.save();
             const followup = req.body.followup;
+
             if (followup.length > 0) {
                 for (let i = 0; i < followup.length; i++) {
                     newSavedDoc.followup.push({
@@ -62,14 +63,16 @@ async function newApplication(req, res) {
                     await newSavedDoc.save();
                 }
             }
+
             const cleanFollowup = await Job.findById({
                 _id: newSavedDoc._id
             }).select('-__v -followup.createdAt -followup.updatedAt -followup.__v');
+
             res.json(cleanFollowup);
         } else {
             res.status(400).json({ error: 'Link aready exists' });
         }
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -104,7 +107,7 @@ async function getApplications(req, res) {
                     res.status(400).json({ error: "You don't have applications atm!" });
                 }
             });
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -122,14 +125,12 @@ async function updateApplication(req, res) {
                 } else {
                     application.star = !application.star;
                 }
-                res.json(await application.save());
-            } else {
-                res.status(400).json({ error: 'Link already exists' });
+                return res.json(await application.save());
             }
-        } else {
-            res.status(400).json({ error: 'Application not found!' });
+            return res.status(400).json({ error: 'Link already exists' });
         }
-    } catch (err) {
+        res.status(400).json({ error: 'Application not found!' });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -137,7 +138,7 @@ async function updateApplication(req, res) {
 async function deleteApplication(req, res) {
     try {
         res.json(await Job.findOneAndDelete({ _id: req.params.id, user: req.user._id }));
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -155,11 +156,10 @@ async function newFollowup(req, res) {
                 date: new Date()
             });
             await application.save();
-            res.json(application.followup[application.followup.length - 1]);
-        } else {
-            res.status(400).json({ error: 'Application not found!' });
+            return res.json(application.followup[application.followup.length - 1]);
         }
-    } catch (err) {
+        res.status(400).json({ error: 'Application not found!' });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -175,11 +175,10 @@ async function updateFollowup(req, res) {
                 followup.date = new Date(req.body.date);
             followup.description = req.body.description;
             await application.save();
-            res.json(followup);
-        } else {
-            res.status(404).json({ error: 'Follow-up not found!' });
+            return res.json(followup);
         }
-    } catch (err) {
+        res.status(404).json({ error: 'Follow-up not found!' });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
@@ -191,11 +190,10 @@ async function deleteFollowup(req, res) {
             const followup = application.followup.id(req.params.followId);
             followup.remove();
             await application.save();
-            res.json(req.params.followId);
-        } else {
-            res.status(404).json({ error: 'Application not found!' });
+            return res.json(req.params.followId);
         }
-    } catch (err) {
+        res.status(404).json({ error: 'Application not found!' });
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 }
