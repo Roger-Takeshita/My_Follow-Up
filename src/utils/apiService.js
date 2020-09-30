@@ -5,8 +5,8 @@ function requestHelper(type, path, data) {
         method: type,
         headers: new Headers({
             'Content-Type': 'application/json',
-            Authorization: 'Baerer ' + tokenService.getToken()
-        })
+            Authorization: 'Baerer ' + tokenService.getToken(),
+        }),
     };
     if (type === 'POST' || type === 'PUT') option.body = JSON.stringify(data);
     return fetch(path, option).then(async (res) => {
@@ -16,9 +16,12 @@ function requestHelper(type, path, data) {
     });
 }
 
-function getData(url, data = { page: undefined, results: undefined, search: undefined }) {
+function getData(
+    url,
+    data = { page: undefined, results: undefined, search: undefined }
+) {
     if (data.page === undefined) data.page = 1;
-    if (data.results === undefined) data.results = 100;
+    if (data.results === undefined) data.results = 1000;
     const path = `${url}/?page=${data.page}&docs=${data.results}${
         data.search !== undefined ? `&search=${data.search}` : ''
     }`;
@@ -26,19 +29,28 @@ function getData(url, data = { page: undefined, results: undefined, search: unde
 }
 
 function postData(url, data = { data: undefined, parentId: undefined }) {
-    const path = `${url}${data.parentId !== undefined ? `/${data.parentId}/new` : '/new'}`;
+    const path = `${url}${
+        data.parentId !== undefined ? `/${data.parentId}/new` : '/new'
+    }`;
     return requestHelper('POST', path, data.data);
 }
 
-function putData(url, data = { data: undefined, parentId: undefined, childId: undefined }) {
+function putData(
+    url,
+    data = { data: undefined, parentId: undefined, childId: undefined }
+) {
     if (data.parentId === undefined) throw new Error('Bad parameter Id');
-    const path = `${url}/${data.parentId}${data.childId !== undefined ? `/${data.childId}` : ''}`;
+    const path = `${url}/${data.parentId}${
+        data.childId !== undefined ? `/${data.childId}` : ''
+    }`;
     return requestHelper('PUT', path, data.data);
 }
 
 function deleteData(url, data = { parentId: undefined, childId: undefined }) {
     if (data.parentId === undefined) throw new Error('Bad parameter Id');
-    const path = `${url}/${data.parentId}${data.childId !== undefined ? `/${data.childId}` : ''}`;
+    const path = `${url}/${data.parentId}${
+        data.childId !== undefined ? `/${data.childId}` : ''
+    }`;
     return requestHelper('DELETE', path);
 }
 
@@ -46,5 +58,5 @@ export default {
     getData,
     postData,
     putData,
-    deleteData
+    deleteData,
 };
