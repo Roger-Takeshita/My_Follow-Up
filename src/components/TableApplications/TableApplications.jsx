@@ -179,7 +179,7 @@ function TableApplications({
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('appliedOn');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [message, setMessage] = useState('');
     const [applications, setApplications] = useState([]);
 
@@ -430,7 +430,7 @@ function TableApplications({
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[15, 50, 100]}
+                    rowsPerPageOptions={[10, 50, 100]}
                     component="div"
                     count={applications.length}
                     rowsPerPage={rowsPerPage}

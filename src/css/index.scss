@@ -33,17 +33,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
+#root,
+.App {
     display: flex;
     flex-direction: column;
     min-height: inherit;
     width: 100%;
-}
-
-.App {
-    display: inherit;
-    flex-direction: inherit;
-    min-height: inherit;
+    height: 100%;
 }
 
 header {
@@ -534,7 +530,7 @@ footer {
         // white-space: nowrap;
         // text-overflow: ellipsis !important;
         // overflow: hidden;
-        min-width: 300px !important;
+        min-width: 250px !important;
 
         a {
             display: flex;
@@ -552,6 +548,7 @@ footer {
         }
     }
     &__followup {
+        max-width: 250px;
         // display: block; /* or inline-block */
         // text-overflow: ellipsis;
         // word-wrap: break-word;

@@ -13,7 +13,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
+#root,
+.App {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -23,15 +24,7 @@ body {
           flex-direction: column;
   min-height: inherit;
   width: 100%;
-}
-
-.App {
-  display: inherit;
-  -webkit-box-orient: inherit;
-  -webkit-box-direction: inherit;
-      -ms-flex-direction: inherit;
-          flex-direction: inherit;
-  min-height: inherit;
+  height: 100%;
 }
 
 header {
@@ -791,7 +784,7 @@ footer:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  min-width: 300px !important;
+  min-width: 250px !important;
 }
 
 .table-applications__row-job-title a {
@@ -817,6 +810,10 @@ footer:hover {
   -webkit-transform: scale(1.25);
           transform: scale(1.25);
   color: red;
+}
+
+.table-applications__followup {
+  max-width: 250px;
 }
 
 .table-simple__table-row {
