@@ -6,15 +6,15 @@ const followupSchema = new Schema(
         description: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
         date: {
             type: Date,
-            required: true
-        }
+            required: true,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
@@ -23,53 +23,52 @@ const jobSchema = new Schema(
         title: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
         company: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
         link: {
             type: String,
             required: true,
             unique: true,
-            trim: true
+            trim: true,
         },
         jobDescription: {
             type: String,
-            required: true
+            required: true,
         },
         appliedOn: {
-            type: Date
+            type: Date,
         },
         rejectedOn: {
-            type: Date
+            type: Date,
         },
         resume: {
             type: String,
-            required: true
         },
         coverLetter: {
-            type: String
+            type: String,
         },
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            required: true
+            required: true,
         },
         followup: [followupSchema],
         status: {
             type: String,
-            enum: ['Pending', 'Applied', 'Rejected']
+            enum: ['Pending', 'Applied', 'Rejected'],
         },
         star: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
@@ -79,7 +78,7 @@ jobSchema.set('toJSON', {
         delete ret.createdAt;
         delete ret.updatedAt;
         return ret;
-    }
+    },
 });
 
 module.exports = mongoose.model('Job', jobSchema);

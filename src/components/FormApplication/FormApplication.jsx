@@ -296,7 +296,6 @@ function FormApplication({
             form.company &&
             form.link &&
             form.jobDescription &&
-            form.resume &&
             form.status &&
             form.modifiedFlag
         );
