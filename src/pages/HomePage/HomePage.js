@@ -3,11 +3,7 @@ import React from 'react';
 import ApplicationsPage from '../../pages/ApplicationsPage/ApplicationsPage';
 
 function HomePage({ history }) {
-    return (
-        <div className="container">
-            <ApplicationsPage history={history} />
-        </div>
-    );
+    return <ApplicationsPage history={history} />;
 }
 
 export default HomePage;

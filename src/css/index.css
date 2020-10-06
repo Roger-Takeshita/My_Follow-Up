@@ -1,7 +1,12 @@
+html {
+  height: 100vh;
+  width: 100vw;
+}
+
 body {
   margin: 0;
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100%;
+  width: 100%;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -38,7 +43,7 @@ header div {
 }
 
 .container {
-  width: 80vw;
+  width: 95vw;
 }
 
 main {
@@ -186,7 +191,7 @@ footer:hover {
 }
 
 .search__query {
-  color: #3F50B5;
+  color: #3f50b5;
 }
 
 .search__query--no-result {
@@ -536,10 +541,10 @@ footer:hover {
 
 .form-application__star--true svg {
   font-size: 2rem;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .form-application__star--true svg:hover {
@@ -553,10 +558,10 @@ footer:hover {
 
 .form-application__star--false svg {
   font-size: 2rem;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .form-application__star--false svg:hover {
@@ -582,7 +587,7 @@ footer:hover {
   text-align: left;
   font-size: 0.75rem;
   margin-bottom: 5px;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   color: grey;
 }
 
@@ -672,10 +677,10 @@ footer:hover {
 .form-application__followup-date a svg {
   color: #ff97b9;
   font-size: 20px;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .form-application__followup-date a svg:hover {
@@ -741,16 +746,20 @@ footer:hover {
   height: 100px;
 }
 
+.applications {
+  width: 100%;
+}
+
 .table-applications__star--true {
   color: #ffc107;
 }
 
 .table-applications__star--true svg {
   font-size: 1.5rem;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .table-applications__star--true svg:hover {
@@ -764,10 +773,10 @@ footer:hover {
 
 .table-applications__star--false svg {
   font-size: 1.5rem;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .table-applications__star--false svg:hover {
@@ -782,6 +791,7 @@ footer:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  min-width: 300px !important;
 }
 
 .table-applications__row-job-title a {
@@ -796,10 +806,10 @@ footer:hover {
 
 .table-applications__row-job-title a svg {
   font-size: 1.4rem;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
   color: #ff97b9;
 }
 
@@ -827,10 +837,10 @@ footer:hover {
 }
 
 .table-simple__table-row a:first-child svg {
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
   font-size: 20px;
   color: #ff97b9;
 }
@@ -850,10 +860,10 @@ footer:hover {
 
 .table-simple__table-row a:nth-child(2) svg {
   margin-left: 5px;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
   font-size: 20px;
 }
 
@@ -928,10 +938,10 @@ footer:hover {
   width: 30px;
   height: 30px;
   margin: 25px;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .about__icon > svg:hover {
@@ -942,10 +952,10 @@ footer:hover {
 .about__icon-local {
   width: 30px;
   height: 30px;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .about__icon-local:hover {
@@ -956,10 +966,10 @@ footer:hover {
 .about__icon-social-media {
   height: 20px;
   margin: 10px 15px 20px 15px;
-  -webkit-transition: -webkit-transform .25s;
-  transition: -webkit-transform .25s;
-  transition: transform .25s;
-  transition: transform .25s, -webkit-transform .25s;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: -webkit-transform 0.25s;
+  transition: transform 0.25s;
+  transition: transform 0.25s, -webkit-transform 0.25s;
 }
 
 .about__icon-social-media:hover {
@@ -1150,4 +1160,3 @@ footer:hover {
   justify-content: center;
   margin-top: 10px;
 }
-/*# sourceMappingURL=index.css.map */

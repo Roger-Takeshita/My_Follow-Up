@@ -11,723 +11,746 @@ $fadeRedColor: #ff97b9;
 $redColor: red;
 $marginBetweenEl: 10px;
 
-@mixin displayFlex ($justifyContent){
-  display: flex;
-  justify-content: $justifyContent;
-  align-items: center;
+@mixin displayFlex($justifyContent) {
+    display: flex;
+    justify-content: $justifyContent;
+    align-items: center;
 }
 
+html {
+    height: 100vh;
+    width: 100vw;
+}
 body {
-  margin: 0;
-  min-height: 100vh;
-  min-width: 100vw;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  display: flex;
-  flex-direction: column;
-  min-height: inherit;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: inherit;
+    width: 100%;
 }
 
 .App {
-  display: inherit;
-  flex-direction: inherit;
-  min-height: inherit;
+    display: inherit;
+    flex-direction: inherit;
+    min-height: inherit;
 }
 
 header {
-  position: fixed !important;
-  div {
-    background-color: lightgrey;
-  }
+    position: fixed !important;
+    div {
+        background-color: lightgrey;
+    }
 }
 
 .container {
-  width: 80vw;
+    width: 95vw;
 }
 
 main {
-  @include displayFlex(center);
-  align-items: flex-start;
-  padding: 65px 0 20px 0;
-  flex-grow: 1;
+    @include displayFlex(center);
+    align-items: flex-start;
+    padding: 65px 0 20px 0;
+    flex-grow: 1;
 }
 
 .loading {
-  align-self: center;
+    align-self: center;
 }
 
 footer {
-  width: 100%;
-  opacity: 0.3;
-  -webkit-transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
-   -ms-transition: opacity 1s ease-in-out;
+    width: 100%;
+    opacity: 0.3;
+    -webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -ms-transition: opacity 1s ease-in-out;
     -o-transition: opacity 1s ease-in-out;
-       transition: opacity 1s ease-in-out;
-  div {
-    @include displayFlex(center);
-    background-color: lightgray;
-    
-    height: 50px;
-    a {
-      @include displayFlex(center);
-      text-decoration: none;
-      color: black;
-      font-size: 13px;
-      span {
-        font-family: 'Dancing Script', cursive;
-        font-size: 13px;
-      }
-      svg {
-        font-size: 14px !important;
-      }
+    transition: opacity 1s ease-in-out;
+    div {
+        @include displayFlex(center);
+        background-color: lightgray;
+
+        height: 50px;
+        a {
+            @include displayFlex(center);
+            text-decoration: none;
+            color: black;
+            font-size: 13px;
+            span {
+                font-family: 'Dancing Script', cursive;
+                font-size: 13px;
+            }
+            svg {
+                font-size: 14px !important;
+            }
+        }
     }
-  }
-  &:hover {
-    // filter: alpha(opacity=50);
-    opacity: 1;
-  }
+    &:hover {
+        // filter: alpha(opacity=50);
+        opacity: 1;
+    }
 }
 
 .navbar {
-  &__logged-side {
-    @include displayFlex(center);
-    flex-direction: row;
-    a {
-      white-space: nowrap;
+    &__logged-side {
+        @include displayFlex(center);
+        flex-direction: row;
+        a {
+            white-space: nowrap;
+        }
+        a:nth-child(2):hover svg {
+            color: $iconColorHover;
+        }
+        a:last-child {
+            @include displayFlex(center);
+        }
+        a:last-child:hover svg {
+            color: $iconColorHover;
+        }
     }
-    a:nth-child(2):hover svg {
-      color: $iconColorHover;
+    &__home-side {
+        display: flex !important;
+        align-items: center;
     }
-    a:last-child {
-      @include displayFlex(center)
+    &__logo {
+        height: 45px;
+        margin-right: 10px;
     }
-    a:last-child:hover svg {
-      color: $iconColorHover;
+    &__button-icon {
+        display: flex;
+        align-items: center;
+        height: 45px;
+        line-height: 45px;
     }
-  }
-  &__home-side {
-    display: flex !important;
-    align-items: center;
-  }
-  &__logo {
-    height: 45px;
-    margin-right: 10px;
-  }
-  &__button-icon {
-    display: flex;
-    align-items: center;
-    height: 45px;
-    line-height: 45px;
-  }
-  &__button {
-    height: 45px;
-    line-height: 45px;
-  }
+    &__button {
+        height: 45px;
+        line-height: 45px;
+    }
 }
 
 .search {
-  &__query {
-    color: #3F50B5;
-    &--no-result {
-      color: $redColor;
+    &__query {
+        color: #3f50b5;
+        &--no-result {
+            color: $redColor;
+        }
     }
-  }
 }
 
 .search-input {
-  width: 400px;
-  svg {
-    color: gray;
-  }
-  &:hover {
+    width: 400px;
     svg {
-      color: $iconColorHover;
+        color: gray;
     }
-  }
-  input {
-    color: grey;
-    font-size: 18px;
-    height: 20px;
-    &:focus {
-      color: black !important;
+    &:hover {
+        svg {
+            color: $iconColorHover;
+        }
     }
-  }
-  
+    input {
+        color: grey;
+        font-size: 18px;
+        height: 20px;
+        &:focus {
+            color: black !important;
+        }
+    }
 }
 
 .MuiToolbar-root {
-  flex-grow: 1;
-  justify-content: space-between;
-  a {
-    padding: 10px;
-    border-radius: $borderRadius;
-    margin-left: 10px;
-    text-decoration: none;
-    font-weight: bolder;
-    color: white;
-    &:hover {
-      background-color: $navbarButtonColorHover;
+    flex-grow: 1;
+    justify-content: space-between;
+    a {
+        padding: 10px;
+        border-radius: $borderRadius;
+        margin-left: 10px;
+        text-decoration: none;
+        font-weight: bolder;
+        color: white;
+        &:hover {
+            background-color: $navbarButtonColorHover;
+        }
+        &:first-child {
+            @include displayFlex(center);
+            margin-left: 0px;
+        }
+        &:first-child:hover svg {
+            color: $iconColorHover;
+        }
     }
-    &:first-child {
-      @include displayFlex(center);
-      margin-left: 0px;
+    div:last-child {
+        display: flex;
     }
-    &:first-child:hover svg {
-      color: $iconColorHover;
-    }
-  }
-  div:last-child {
-    display: flex;
-  }
 }
 
 .sidebar-list {
-  width: 230px;
+    width: 230px;
 }
 
 .form-login {
-  text-align: center;
-  width: 400px;
-  margin: auto;
-  padding: 20px;
-  &__input {
-    @include displayFlex(flex-end);
-    margin-bottom: 10px;
-    label {
-      margin-right: 10px;
-    }
-    input {
-      height: 20px;
-      width: 200px;
-      border-radius: $borderRadius;
-    }
-  }
-  &__table {
+    text-align: center;
+    width: 400px;
+    margin: auto;
     padding: 20px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  &__column-one {
-    text-align: right;
-    padding-right: 10px;
-    font-weight: bold;
-  }
-  &__column-two {
-    width: 200px;
-    font-weight: normal;
-    text-align: left;
-  }
-  &__ctrl {
-    margin-top: $marginBetweenEl*2;
-    display: flex;
-  }
-  &__btn-cancel {
-    width: 206px;
-    display: inherit;
-  }
-  &__btn-submit {
-    flex-grow: 1;
-    display: inherit;
-    justify-content: flex-end;
-    padding-right: 10px;
-  }
-  &__message {
-    @include displayFlex(center);
-    margin-bottom: $marginBetweenEl;
-    color: $redColor;
-    height: 40px;
-    justify-content: center;
-  }
+    &__input {
+        @include displayFlex(flex-end);
+        margin-bottom: 10px;
+        label {
+            margin-right: 10px;
+        }
+        input {
+            height: 20px;
+            width: 200px;
+            border-radius: $borderRadius;
+        }
+    }
+    &__table {
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    &__column-one {
+        text-align: right;
+        padding-right: 10px;
+        font-weight: bold;
+    }
+    &__column-two {
+        width: 200px;
+        font-weight: normal;
+        text-align: left;
+    }
+    &__ctrl {
+        margin-top: $marginBetweenEl * 2;
+        display: flex;
+    }
+    &__btn-cancel {
+        width: 206px;
+        display: inherit;
+    }
+    &__btn-submit {
+        flex-grow: 1;
+        display: inherit;
+        justify-content: flex-end;
+        padding-right: 10px;
+    }
+    &__message {
+        @include displayFlex(center);
+        margin-bottom: $marginBetweenEl;
+        color: $redColor;
+        height: 40px;
+        justify-content: center;
+    }
 }
 
 .form-signup {
-  text-align: center;
-  width: 400px;
-  margin: auto;
-  padding: 20px;
-  &__input {
-    @include displayFlex(flex-end);
-    margin-bottom: 10px;
-    label {
-      margin-right: 10px;
+    text-align: center;
+    width: 400px;
+    margin: auto;
+    padding: 20px;
+    &__input {
+        @include displayFlex(flex-end);
+        margin-bottom: 10px;
+        label {
+            margin-right: 10px;
+        }
+        input {
+            height: 20px;
+            width: 200px;
+            border-radius: $borderRadius;
+        }
     }
-    input {
-      height: 20px;
-      width: 200px;
-      border-radius: $borderRadius;
+    &__ctrl {
+        margin-top: $marginBetweenEl * 2;
+        display: flex;
     }
-  }
-  &__ctrl {
-    margin-top: $marginBetweenEl*2;
-    display: flex;
-  }
-  &__btn-cancel {
-    width: 206px;
-    display: inherit;
-  }
-  &__btn-submit {
-    flex-grow: 1;
-    display: inherit;
-    justify-content: flex-end;
-    padding-right: 10px;
-  }
-  &__message {
-    @include displayFlex(center);
-    margin-bottom: $marginBetweenEl;
-    color: $redColor;
-    height: 40px;
-    justify-content: center;
-  }
+    &__btn-cancel {
+        width: 206px;
+        display: inherit;
+    }
+    &__btn-submit {
+        flex-grow: 1;
+        display: inherit;
+        justify-content: flex-end;
+        padding-right: 10px;
+    }
+    &__message {
+        @include displayFlex(center);
+        margin-bottom: $marginBetweenEl;
+        color: $redColor;
+        height: 40px;
+        justify-content: center;
+    }
 }
 
 .form-resume {
-  &__editor-ctrl {
-    justify-content: center;
-    margin-bottom: $marginBetweenEl*2;
-  }
-  &__form {
-    @include displayFlex(center);
-    margin: auto;
-    flex-direction: column;
-  }
-  &__title {
-    display: flex;
-    width: 100%;
-    margin-bottom: $marginBetweenEl;
-  }
-  &__input {
-    height: 40px; 
-    width: 100%;
-    font-size: 1.75em;
-  }
-  &__ctrl {
-    justify-content: right;
-    width: 100%;
-    text-align: right;
-    margin: $marginBetweenEl 0 $marginBetweenEl*2 0;
-  }
-  &__button {
-    margin-left: $marginBetweenEl !important;
-  }
+    &__editor-ctrl {
+        justify-content: center;
+        margin-bottom: $marginBetweenEl * 2;
+    }
+    &__form {
+        @include displayFlex(center);
+        margin: auto;
+        flex-direction: column;
+    }
+    &__title {
+        display: flex;
+        width: 100%;
+        margin-bottom: $marginBetweenEl;
+    }
+    &__input {
+        height: 40px;
+        width: 100%;
+        font-size: 1.75em;
+    }
+    &__ctrl {
+        justify-content: right;
+        width: 100%;
+        text-align: right;
+        margin: $marginBetweenEl 0 $marginBetweenEl * 2 0;
+    }
+    &__button {
+        margin-left: $marginBetweenEl !important;
+    }
 }
 
 .form-application {
-  display: flex;
-  flex-direction: column;
-  &__header {
-    display: inherit;
-    flex-grow: 1 !important;
-    padding: 5px !important;
-    align-items: flex-start !important;
-    height: 70px;
-    a {
-      align-self: flex-end;
-    }
-  }
-  &__title {
-    width: 320px;
-    margin: 0 5px auto auto !important;
-  }
-  &__company {
-    width: 250px;
-    margin: 0 auto auto 5px !important;
-  }
-  &__link {
-    flex-grow: 1;
-    margin: 0 auto auto 5px !important;
-  }
-  &__status {
-    margin: 0 auto auto 5px !important;
-    min-width: 120px !important;
-  }
-  &__star {
-    align-self: center;
-    &--true {
-      color: #ffc107;
-      svg {
-        font-size: 2rem;
-        transition: transform .25s;
-        &:hover {
-          transform: scale(1.25);
-        }
-      }
-    }
-    &--false {
-      color: lightgray;
-      svg {
-        font-size: 2rem;
-        transition: transform .25s;
-        &:hover {
-          transform: scale(1.25);
-        }
-      }
-    }
-  }  
-  &__forms {
-    display: inherit;
-    justify-content: space-between;
-  }
-  &__form-title {
-    text-align: left;
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-    font-weight: bolder;
-  }
-  &__form-title-req {
-    text-align: left;
-    font-size: 0.75rem;
-    margin-bottom: 5px;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    color: grey;
-  }
-  &__form-job, &__form-resume {
-    width: 50%;
-    padding: 5px;
-  }
-  &__form-cl {
-    margin: auto 5px 10px 5px;
-  }
-  &__followup {
     display: flex;
-    margin-top: $marginBetweenEl;
-  }
-  &__show-hide--icon {
-    background-color: $buttonAddBGColor !important;
-    color: white !important;
-    height: 30px !important;
-    min-width: 110px !important;
-    svg {
-      font-size: $buttonIconSize;
-    }
-    &:hover svg {
-      color: $iconColorHover;
-    }
-  }
-  &__followup-ctrl {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: $marginBetweenEl;
-    a {
-      box-sizing: unset;
-      align-self: center;
-      height: 30px;
-    }
-  }
-  &__followup-list {
-    text-align: left;
-  }
-  &__followup-item {
-    padding: 5px 0;
-    color: grey;
-    &:hover {
-      background-color: #d3d3d345;
-      color: black;
-    }
-  }
-  &__followup-date{
-    display: flex;
-    align-items: center;
-    padding-left: $marginBetweenEl;
-    a {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      svg {
-        color: $fadeRedColor;
-        font-size: 20px;
-        transition: transform .25s;
-        &:hover {
-          color: $redColor;
-          transform: scale(1.25);
+    flex-direction: column;
+    &__header {
+        display: inherit;
+        flex-grow: 1 !important;
+        padding: 5px !important;
+        align-items: flex-start !important;
+        height: 70px;
+        a {
+            align-self: flex-end;
         }
-      }
     }
-  }
-  &__followup-span {
-    font-weight: bolder;
-  }
-  &__followup-text {
-    margin-top: 5px;
-    padding: 0 5px 0 20px;
-  }
-  &__followup-display, &__followup-list-input {
-    width: 50%;
-    padding: 5px;
-  }
-  &__followup-input {
-    width: -webkit-fill-available;
-    width: 100%;
-    min-height: 60px;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    font-size: 15px;
-  }
-  &__date {
-    width: 145px;
-    box-sizing: unset;
-  }
-  &__ctrl {
-    width: 100%;
-    text-align: right;
-    margin: $marginBetweenEl 0;
-  }
-  &__button {
-    margin-left: 5px !important;
-  }
+    &__title {
+        width: 320px;
+        margin: 0 5px auto auto !important;
+    }
+    &__company {
+        width: 250px;
+        margin: 0 auto auto 5px !important;
+    }
+    &__link {
+        flex-grow: 1;
+        margin: 0 auto auto 5px !important;
+    }
+    &__status {
+        margin: 0 auto auto 5px !important;
+        min-width: 120px !important;
+    }
+    &__star {
+        align-self: center;
+        &--true {
+            color: #ffc107;
+            svg {
+                font-size: 2rem;
+                transition: transform 0.25s;
+                &:hover {
+                    transform: scale(1.25);
+                }
+            }
+        }
+        &--false {
+            color: lightgray;
+            svg {
+                font-size: 2rem;
+                transition: transform 0.25s;
+                &:hover {
+                    transform: scale(1.25);
+                }
+            }
+        }
+    }
+    &__forms {
+        display: inherit;
+        justify-content: space-between;
+    }
+    &__form-title {
+        text-align: left;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+        font-weight: bolder;
+    }
+    &__form-title-req {
+        text-align: left;
+        font-size: 0.75rem;
+        margin-bottom: 5px;
+        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        color: grey;
+    }
+    &__form-job,
+    &__form-resume {
+        width: 50%;
+        padding: 5px;
+    }
+    &__form-cl {
+        margin: auto 5px 10px 5px;
+    }
+    &__followup {
+        display: flex;
+        margin-top: $marginBetweenEl;
+    }
+    &__show-hide--icon {
+        background-color: $buttonAddBGColor !important;
+        color: white !important;
+        height: 30px !important;
+        min-width: 110px !important;
+        svg {
+            font-size: $buttonIconSize;
+        }
+        &:hover svg {
+            color: $iconColorHover;
+        }
+    }
+    &__followup-ctrl {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: $marginBetweenEl;
+        a {
+            box-sizing: unset;
+            align-self: center;
+            height: 30px;
+        }
+    }
+    &__followup-list {
+        text-align: left;
+    }
+    &__followup-item {
+        padding: 5px 0;
+        color: grey;
+        &:hover {
+            background-color: #d3d3d345;
+            color: black;
+        }
+    }
+    &__followup-date {
+        display: flex;
+        align-items: center;
+        padding-left: $marginBetweenEl;
+        a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            svg {
+                color: $fadeRedColor;
+                font-size: 20px;
+                transition: transform 0.25s;
+                &:hover {
+                    color: $redColor;
+                    transform: scale(1.25);
+                }
+            }
+        }
+    }
+    &__followup-span {
+        font-weight: bolder;
+    }
+    &__followup-text {
+        margin-top: 5px;
+        padding: 0 5px 0 20px;
+    }
+    &__followup-display,
+    &__followup-list-input {
+        width: 50%;
+        padding: 5px;
+    }
+    &__followup-input {
+        width: -webkit-fill-available;
+        width: 100%;
+        min-height: 60px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        font-size: 15px;
+    }
+    &__date {
+        width: 145px;
+        box-sizing: unset;
+    }
+    &__ctrl {
+        width: 100%;
+        text-align: right;
+        margin: $marginBetweenEl 0;
+    }
+    &__button {
+        margin-left: 5px !important;
+    }
 }
 
 .form-followup {
-  &__info {
-    display: flex !important;
-    flex-direction: column;
-  }
-  &__date {
-    width: 45%;
-  }
-  &__input{
-    height: 100px;
-  }
+    &__info {
+        display: flex !important;
+        flex-direction: column;
+    }
+    &__date {
+        width: 45%;
+    }
+    &__input {
+        height: 100px;
+    }
+}
+
+.applications {
+    width: 100%;
 }
 
 .table-applications {
-  &__star--true {
-    color: #ffc107;
-    svg {
-      font-size: 1.5rem;
-      transition: transform .25s;
-      &:hover {
-        transform: scale(1.30);
-      }
-    }
-  }
-  &__star--false {
-    color: lightgray;
-    svg {
-      font-size: 1.5rem;
-      transition: transform .25s;
-      &:hover {
-        transform: scale(1.40);
-      }
-    }
-  }
-  &__row-job-title {
-    display: flex;
-    align-items: center;
-    a {
-      display: flex;
-      align-items: center;
-      margin-right: $marginBetweenEl;
-      svg {
-        font-size: 1.4rem;
-        transition: transform .25s;
-        color: $fadeRedColor;
-        &:hover {
-          transform: scale(1.25);
-          color: $redColor;
+    &__star--true {
+        color: #ffc107;
+        svg {
+            font-size: 1.5rem;
+            transition: transform 0.25s;
+            &:hover {
+                transform: scale(1.3);
+            }
         }
-      }
     }
-  }
+    &__star--false {
+        color: lightgray;
+        svg {
+            font-size: 1.5rem;
+            transition: transform 0.25s;
+            &:hover {
+                transform: scale(1.4);
+            }
+        }
+    }
+    &__row-job-title {
+        display: flex;
+        align-items: center;
+        // white-space: nowrap;
+        // text-overflow: ellipsis !important;
+        // overflow: hidden;
+        min-width: 300px !important;
+
+        a {
+            display: flex;
+            align-items: center;
+            margin-right: $marginBetweenEl;
+            svg {
+                font-size: 1.4rem;
+                transition: transform 0.25s;
+                color: $fadeRedColor;
+                &:hover {
+                    transform: scale(1.25);
+                    color: $redColor;
+                }
+            }
+        }
+    }
+    &__followup {
+        // display: block; /* or inline-block */
+        // text-overflow: ellipsis;
+        // word-wrap: break-word;
+        // overflow: hidden;
+        // max-height: 3.6em;
+        // line-height: 1.8em;
+    }
 }
 
 .table-simple {
-  &__table-row {
-    display: flex !important;
-    align-items: center;
-    a:first-child {
-      display: inherit;
-      align-items: inherit;
-      margin-right: 10px;
-      svg {
-        transition: transform .25s;
-        font-size: 20px;
-        color: $fadeRedColor;
-      }
-      svg:hover {
-        transform: scale(1.25);
+    &__table-row {
+        display: flex !important;
+        align-items: center;
+        a:first-child {
+            display: inherit;
+            align-items: inherit;
+            margin-right: 10px;
+            svg {
+                transition: transform 0.25s;
+                font-size: 20px;
+                color: $fadeRedColor;
+            }
+            svg:hover {
+                transform: scale(1.25);
+                color: $redColor;
+            }
+        }
+        a:nth-child(2) {
+            display: inherit;
+            align-items: inherit;
+            svg {
+                margin-left: 5px;
+                transition: transform 0.25s;
+                font-size: 20px;
+            }
+            svg:hover {
+                transform: scale(1.25);
+            }
+        }
+    }
+    &__message {
+        @include displayFlex(center);
+        margin-bottom: $marginBetweenEl;
         color: $redColor;
-      }
+        height: 40px;
+        justify-content: center;
     }
-    a:nth-child(2) {
-      display: inherit;
-      align-items: inherit;
-      svg {
-        margin-left: 5px;
-        transition: transform .25s;
-        font-size: 20px;
-      }
-      svg:hover {
-        transform: scale(1.25);
-      }
-    }
-  }
-  &__message {
-    @include displayFlex(center);
-    margin-bottom: $marginBetweenEl;
-    color: $redColor;
-    height: 40px;
-    justify-content: center;
-  }
 }
 
 .about {
-  &__div {
-    margin-top: 5rem;
-  }
-  &__img {
-    width: 180px;
-    border-radius: 50%;
-  }
-  &__name {
-    font-size: 1.9rem;
-    margin-top: 1rem;
-    font-weight: bold;
-  }
-  &__title {
-    font-size: 1.1rem;
-    font-weight: bolder;
-    margin-top: 0.5rem;
-    color: $iconColorHover;
-  }
-  &__technologies, &__social-media {
-    margin-top: 3.5rem;
-    font-weight: lighter;
-    div:first-child {
-      font-size: 1.3rem;
+    &__div {
+        margin-top: 5rem;
     }
-  }
-  &__icons {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-  }
-  &__icon > svg {
-    width: 30px;
-    height: 30px;
-    margin: 25px;
-    transition: transform .25s;
-    &:hover {
-      transform: scale(2.40);
+    &__img {
+        width: 180px;
+        border-radius: 50%;
     }
-  }
-  &__icon-local {
-    width: 30px;
-    height: 30px;
-    transition: transform .25s;
-    &:hover {
-      transform: scale(2.40);
+    &__name {
+        font-size: 1.9rem;
+        margin-top: 1rem;
+        font-weight: bold;
     }
-  }
-  &__icon-social-media {
-    height: 20px;
-    margin: 10px 15px 20px 15px;
-    transition: transform .25s;
-    &:hover {
-      transform: scale(1.80);
-    }
-  }
-  &__website {
-    a {
-      text-decoration: none;
-      &:hover {
+    &__title {
+        font-size: 1.1rem;
+        font-weight: bolder;
+        margin-top: 0.5rem;
         color: $iconColorHover;
-      }
     }
-  }
-  &__repo {
-    @include displayFlex(center);
-    margin-top: 1.5rem;
-    height: 20px;
-    font-size: 0.9rem;
-    a {
-      display: inherit;
-      align-items: inherit;
-      text-decoration: none;
-      svg {
-        margin-right: 5px;
-      }
-      &:hover {
-        color: $iconColorHover;
-      }
+    &__technologies,
+    &__social-media {
+        margin-top: 3.5rem;
+        font-weight: lighter;
+        div:first-child {
+            font-size: 1.3rem;
+        }
     }
-  }
+    &__icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+    }
+    &__icon > svg {
+        width: 30px;
+        height: 30px;
+        margin: 25px;
+        transition: transform 0.25s;
+        &:hover {
+            transform: scale(2.4);
+        }
+    }
+    &__icon-local {
+        width: 30px;
+        height: 30px;
+        transition: transform 0.25s;
+        &:hover {
+            transform: scale(2.4);
+        }
+    }
+    &__icon-social-media {
+        height: 20px;
+        margin: 10px 15px 20px 15px;
+        transition: transform 0.25s;
+        &:hover {
+            transform: scale(1.8);
+        }
+    }
+    &__website {
+        a {
+            text-decoration: none;
+            &:hover {
+                color: $iconColorHover;
+            }
+        }
+    }
+    &__repo {
+        @include displayFlex(center);
+        margin-top: 1.5rem;
+        height: 20px;
+        font-size: 0.9rem;
+        a {
+            display: inherit;
+            align-items: inherit;
+            text-decoration: none;
+            svg {
+                margin-right: 5px;
+            }
+            &:hover {
+                color: $iconColorHover;
+            }
+        }
+    }
 }
 
 .MuiGrid-container {
-  width: auto !important;
+    width: auto !important;
 }
 
-.MuiButtonBase-root { 
-  &:hover div:first-child svg {
-    color: $iconColorHover;
-  }
+.MuiButtonBase-root {
+    &:hover div:first-child svg {
+        color: $iconColorHover;
+    }
 }
 
 .profile {
-  @include displayFlex(center);
-  flex-direction: column;
-  width: 700px;
-  padding: 40px;
-  margin: auto;
-  .MuiTextField-root {
-    margin: 5px 0;
-  }
-  &__info {
-    width: 100%;
-    display: flex;
+    @include displayFlex(center);
     flex-direction: column;
+    width: 700px;
+    padding: 40px;
     margin: auto;
-  }
-  &__pic {
-    @include displayFlex(center);
-    height: 160px;
-    width: 160px;
-    border: 1px solid lightgrey;
-    margin: $marginBetweenEl;
-    svg {
-      font-size: 100px;
+    .MuiTextField-root {
+        margin: 5px 0;
     }
-  }
-  &__name-email-pic {
-    @include displayFlex(center);
-    margin-bottom: 20px;
-  }
-  &__name-email {
-    @include displayFlex(center);
-    flex-direction: column;
-    align-items: flex-end;    
-  }
-  &__password {
-    @include displayFlex(center);
-    flex-direction: column;
-    align-items: flex-end;
-    margin-bottom: 20px; 
-  }
-  &__ctrl {
-    display: flex;
-    justify-content: flex-end;
-  }
-  &__input {
-    width: 320px;
-    margin-right: 5px !important;
-  }
+    &__info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+    }
+    &__pic {
+        @include displayFlex(center);
+        height: 160px;
+        width: 160px;
+        border: 1px solid lightgrey;
+        margin: $marginBetweenEl;
+        svg {
+            font-size: 100px;
+        }
+    }
+    &__name-email-pic {
+        @include displayFlex(center);
+        margin-bottom: 20px;
+    }
+    &__name-email {
+        @include displayFlex(center);
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    &__password {
+        @include displayFlex(center);
+        flex-direction: column;
+        align-items: flex-end;
+        margin-bottom: 20px;
+    }
+    &__ctrl {
+        display: flex;
+        justify-content: flex-end;
+    }
+    &__input {
+        width: 320px;
+        margin-right: 5px !important;
+    }
 }
 
 .error-message {
-  @include displayFlex(center);
-  color: $redColor;
-  height: 40px;
-  justify-content: center;
-  margin-top: $marginBetweenEl;
+    @include displayFlex(center);
+    color: $redColor;
+    height: 40px;
+    justify-content: center;
+    margin-top: $marginBetweenEl;
 }

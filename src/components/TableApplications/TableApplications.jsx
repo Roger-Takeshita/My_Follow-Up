@@ -33,7 +33,18 @@ function createData(
     followup,
     star
 ) {
-    return { id, title, company, link, coverLetter, appliedOn, rejectedOn, followupDate, followup, star };
+    return {
+        id,
+        title,
+        company,
+        link,
+        coverLetter,
+        appliedOn,
+        rejectedOn,
+        followupDate,
+        followup,
+        star,
+    };
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -67,10 +78,25 @@ const headCells = [
     { id: 'company', numeric: true, disablePadding: false, label: 'Company' },
     { id: 'link', numeric: true, disablePadding: false, label: 'Link' },
     { id: 'coverLetter', numeric: true, disablePadding: false, label: 'CL' },
-    { id: 'appliedOn', numeric: true, disablePadding: false, label: 'Applied On' },
-    { id: 'rejectedOn', numeric: true, disablePadding: false, label: 'Rejected On' },
-    { id: 'followup', numeric: true, disablePadding: false, label: 'Follow-up' },
-    { id: 'star', numeric: true, disablePadding: false, label: 'Star' }
+    {
+        id: 'appliedOn',
+        numeric: true,
+        disablePadding: false,
+        label: 'Applied On',
+    },
+    {
+        id: 'rejectedOn',
+        numeric: true,
+        disablePadding: false,
+        label: 'Rejected On',
+    },
+    {
+        id: 'followup',
+        numeric: true,
+        disablePadding: false,
+        label: 'Follow-up',
+    },
+    { id: 'star', numeric: true, disablePadding: false, label: 'Star' },
 ];
 
 function EnhancedTableHead({ classes, order, orderBy, onRequestSort }) {
@@ -96,7 +122,9 @@ function EnhancedTableHead({ classes, order, orderBy, onRequestSort }) {
                             {headCell.label}
                             {orderBy === headCell.id ? (
                                 <span className={classes.visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    {order === 'desc'
+                                        ? 'sorted descending'
+                                        : 'sorted ascending'}
                                 </span>
                             ) : null}
                         </TableSortLabel>
@@ -112,19 +140,19 @@ EnhancedTableHead.propTypes = {
     onRequestSort: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired
+    rowCount: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%'
+        width: '100%',
     },
     paper: {
         width: '100%',
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 750
+        minWidth: 750,
     },
     visuallyHidden: {
         border: 0,
@@ -135,11 +163,18 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1
-    }
+        width: 1,
+    },
 }));
 
-function TableApplications({ history, results, toggleStar, deleteApplication, handleDelete, handleUpdate }) {
+function TableApplications({
+    history,
+    results,
+    toggleStar,
+    deleteApplication,
+    handleDelete,
+    handleUpdate,
+}) {
     const classes = useStyles();
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('appliedOn');
@@ -157,10 +192,18 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                       application.company,
                       application.link,
                       application.coverLetter ? 'Yes' : '',
-                      application.appliedOn === null ? '' : application.appliedOn.split('T')[0],
-                      application.rejectedOn === null ? '' : application.rejectedOn.split('T')[0],
-                      application.followup.length > 0 ? application.followup[0].date.split('T')[0] : '',
-                      application.followup.length > 0 ? application.followup[0].description : '',
+                      application.appliedOn === null
+                          ? ''
+                          : application.appliedOn.split('T')[0],
+                      application.rejectedOn === null
+                          ? ''
+                          : application.rejectedOn.split('T')[0],
+                      application.followup.length > 0
+                          ? application.followup[0].date.split('T')[0]
+                          : '',
+                      application.followup.length > 0
+                          ? application.followup[0].description
+                          : '',
                       application.star
                   );
               })
@@ -180,12 +223,17 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
             let data;
             switch (mode) {
                 case 'toggleStar':
-                    data = await apiService.putData('/api/applications', { data: {}, parentId: id });
+                    data = await apiService.putData('/api/applications', {
+                        data: {},
+                        parentId: id,
+                    });
                     toggleStar(data);
                     handleUpdate(data);
                     break;
                 case 'delete':
-                    data = await apiService.deleteData('/api/applications', { parentId: id });
+                    data = await apiService.deleteData('/api/applications', {
+                        parentId: id,
+                    });
                     deleteApplication({ _id: data._id });
                     if (results) {
                         handleDelete(data._id);
@@ -212,7 +260,9 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
         setMessage('');
     };
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, applications.length - page * rowsPerPage);
+    const emptyRows =
+        rowsPerPage -
+        Math.min(rowsPerPage, applications.length - page * rowsPerPage);
 
     return (
         <div className={classes.root}>
@@ -232,44 +282,79 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                             rowCount={applications.length}
                         />
                         <TableBody>
-                            {stableSort(applications, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            {stableSort(
+                                applications,
+                                getComparator(order, orderBy)
+                            )
+                                .slice(
+                                    page * rowsPerPage,
+                                    page * rowsPerPage + rowsPerPage
+                                )
                                 .map((row, index) => {
                                     return (
-                                        <TableRow hover tabIndex={-1} key={index}>
-                                            <TableCell component="th" scope="row">
+                                        <TableRow
+                                            hover
+                                            tabIndex={-1}
+                                            key={index}
+                                        >
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                            >
                                                 <div className="table-applications__row-job-title">
                                                     <a
                                                         href="/"
-                                                        onClick={(e) => handleClick(e, 'delete', row.id)}
+                                                        onClick={(e) =>
+                                                            handleClick(
+                                                                e,
+                                                                'delete',
+                                                                row.id
+                                                            )
+                                                        }
                                                     >
                                                         <Tooltip
                                                             title="Delete"
-                                                            TransitionComponent={Zoom}
+                                                            TransitionComponent={
+                                                                Zoom
+                                                            }
                                                             placement="left"
                                                             arrow
                                                         >
                                                             <DeleteOutlineIcon />
                                                         </Tooltip>
                                                     </a>
-                                                    <Link to={`/applications/${row.id}`}>
+                                                    <Link
+                                                        to={`/applications/${row.id}`}
+                                                    >
                                                         <Tooltip
                                                             title="Click to Edit"
-                                                            TransitionComponent={Zoom}
+                                                            TransitionComponent={
+                                                                Zoom
+                                                            }
                                                             placement="right"
                                                             arrow
                                                         >
-                                                            <span>{row.title}</span>
+                                                            <span>
+                                                                {row.title}
+                                                            </span>
                                                         </Tooltip>
                                                     </Link>
                                                 </div>
                                             </TableCell>
-                                            <TableCell align="center">{row.company}</TableCell>
                                             <TableCell align="center">
-                                                <a href={row.link} rel="noopener noreferrer" target="_blank">
+                                                {row.company}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <a
+                                                    href={row.link}
+                                                    rel="noopener noreferrer"
+                                                    target="_blank"
+                                                >
                                                     <Tooltip
                                                         title="Go to Link"
-                                                        TransitionComponent={Zoom}
+                                                        TransitionComponent={
+                                                            Zoom
+                                                        }
                                                         placement="right"
                                                         arrow
                                                     >
@@ -277,11 +362,22 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                                                     </Tooltip>
                                                 </a>
                                             </TableCell>
-                                            <TableCell align="center">{row.coverLetter}</TableCell>
-                                            <TableCell align="center">{row.appliedOn}</TableCell>
-                                            <TableCell align="center">{row.rejectedOn}</TableCell>
-                                            <TableCell align="left">
-                                                <strong>{row.followupDate}</strong>
+                                            <TableCell align="center">
+                                                {row.coverLetter}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {row.appliedOn}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {row.rejectedOn}
+                                            </TableCell>
+                                            <TableCell
+                                                align="left"
+                                                className="table-applications__followup"
+                                            >
+                                                <strong>
+                                                    {row.followupDate}
+                                                </strong>
                                                 {row.followupDate ? ` - ` : ''}
                                                 {row.followup}
                                             </TableCell>
@@ -289,7 +385,13 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                                                 <a
                                                     href="/"
                                                     value="teste"
-                                                    onClick={(e) => handleClick(e, 'toggleStar', row.id)}
+                                                    onClick={(e) =>
+                                                        handleClick(
+                                                            e,
+                                                            'toggleStar',
+                                                            row.id
+                                                        )
+                                                    }
                                                     className={
                                                         row.star
                                                             ? 'table-applications__star--true'
@@ -302,7 +404,9 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                                                                 ? 'Remove from Favorite'
                                                                 : 'Add to Favorite'
                                                         }
-                                                        TransitionComponent={Zoom}
+                                                        TransitionComponent={
+                                                            Zoom
+                                                        }
                                                         placement="right"
                                                         arrow
                                                     >
@@ -316,7 +420,7 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{
-                                        height: 33 * emptyRows
+                                        height: 33 * emptyRows,
                                     }}
                                 >
                                     <TableCell colSpan={6} />
@@ -335,18 +439,22 @@ function TableApplications({ history, results, toggleStar, deleteApplication, ha
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            {message !== '' ? <ErrorMessage message={message} doneMessage={doneMessage} /> : ''}
+            {message !== '' ? (
+                <ErrorMessage message={message} doneMessage={doneMessage} />
+            ) : (
+                ''
+            )}
         </div>
     );
 }
 
 const mapStateToProps = (state) => ({
-    applicationsArray: state.application
+    applicationsArray: state.application,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     toggleStar: (id) => dispatch(toggleStar(id)),
-    deleteApplication: (id) => dispatch(deleteApplication(id))
+    deleteApplication: (id) => dispatch(deleteApplication(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableApplications);

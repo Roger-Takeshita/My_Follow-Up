@@ -5,7 +5,7 @@ import {
     updateApplication,
     addFollowup,
     updateFollowup,
-    deleteFollowup
+    deleteFollowup,
 } from '../../redux/application';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -43,7 +43,7 @@ function FormApplication({
     addApplication,
     updateApplication,
     handleUpdate,
-    fromPage
+    fromPage,
 }) {
     const initialState = {
         title: '',
@@ -61,7 +61,7 @@ function FormApplication({
         star: false,
         applicationId: '',
         modifiedFlag: false,
-        message: ''
+        message: '',
     };
     const [form, setForm] = useState(initialState);
     const [formFollowup, setFormFollowup] = useState({
@@ -70,7 +70,7 @@ function FormApplication({
         followupId: '',
         description: '',
         date: '',
-        toggle: false
+        toggle: false,
     });
 
     useEffect(() => {
@@ -84,9 +84,13 @@ function FormApplication({
                           jobDescription: application.jobDescription,
                           resume: application.resume,
                           appliedOn:
-                              application.appliedOn !== null ? application.appliedOn.split('T')[0] : '',
+                              application.appliedOn !== null
+                                  ? application.appliedOn.split('T')[0]
+                                  : '',
                           rejectedOn:
-                              application.rejectedOn !== null ? application.rejectedOn.split('T')[0] : '',
+                              application.rejectedOn !== null
+                                  ? application.rejectedOn.split('T')[0]
+                                  : '',
                           status: application.status,
                           followupNow: '',
                           followup: [...application.followup],
@@ -95,7 +99,7 @@ function FormApplication({
                           star: application.star,
                           applicationId: application._id,
                           modifiedFlag: false,
-                          message: ''
+                          message: '',
                       }
                     : {
                           title: '',
@@ -113,7 +117,7 @@ function FormApplication({
                           star: false,
                           applicationId: '',
                           modifiedFlag: false,
-                          message: ''
+                          message: '',
                       }
             );
         }
@@ -125,7 +129,7 @@ function FormApplication({
             ...form,
             [name]: value,
             modifiedFlag: true,
-            message: ''
+            message: '',
         });
     };
 
@@ -135,7 +139,7 @@ function FormApplication({
             ...form,
             star: !form.star,
             modifiedFlag: true,
-            message: ''
+            message: '',
         });
     };
 
@@ -145,9 +149,11 @@ function FormApplication({
             followupIdx: data.followupIdx,
             parentId: form.applicationId ? form.applicationId : '',
             followupId: data.followupId,
-            description: data.description ? data.description : form.followup[data.followupIdx],
+            description: data.description
+                ? data.description
+                : form.followup[data.followupIdx],
             date: data.date,
-            toggle: true
+            toggle: true,
         });
     };
 
@@ -157,7 +163,7 @@ function FormApplication({
             try {
                 await apiService.deleteData('/api/applications/', {
                     parentId: applicationId,
-                    childId: followupId
+                    childId: followupId,
                 });
                 deleteFollowup({ applicationId, idx });
             } catch (err) {
@@ -168,8 +174,8 @@ function FormApplication({
                 ...form,
                 followup: [
                     ...form.followup.slice(0, idx),
-                    ...form.followup.slice(idx + 1, form.followup.length)
-                ]
+                    ...form.followup.slice(idx + 1, form.followup.length),
+                ],
             });
         }
     };
@@ -179,19 +185,19 @@ function FormApplication({
             setForm({
                 ...form,
                 jobDescription: content,
-                modifiedFlag: true
+                modifiedFlag: true,
             });
         } else if (editor === 'resume') {
             setForm({
                 ...form,
                 resume: content,
-                modifiedFlag: true
+                modifiedFlag: true,
             });
         } else if (editor === 'coverLetter') {
             setForm({
                 ...form,
                 coverLetter: content,
-                modifiedFlag: true
+                modifiedFlag: true,
             });
         }
     };
@@ -200,7 +206,7 @@ function FormApplication({
         e.preventDefault();
         setForm({
             ...form,
-            coverLetterActive: !form.coverLetterActive
+            coverLetterActive: !form.coverLetterActive,
         });
     };
 
@@ -214,26 +220,33 @@ function FormApplication({
                         {
                             _id: '',
                             description: form.followupNow,
-                            date: new Date().toISOString()
+                            date: new Date().toISOString(),
                         },
-                        ...form.followup
+                        ...form.followup,
                     ],
-                    followupNow: ''
+                    followupNow: '',
                 });
             } else {
                 try {
-                    const data = await apiService.postData(`/api/applications`, {
-                        parentId: form.applicationId,
-                        data: { description: form.followupNow }
-                    });
+                    const data = await apiService.postData(
+                        `/api/applications`,
+                        {
+                            parentId: form.applicationId,
+                            data: { description: form.followupNow },
+                        }
+                    );
                     addFollowup({ data, applicationId: form.applicationId });
                     setForm({
                         ...form,
                         followup: [
-                            { _id: data._id, description: data.description, date: data.date },
-                            ...form.followup
+                            {
+                                _id: data._id,
+                                description: data.description,
+                                date: data.date,
+                            },
+                            ...form.followup,
                         ],
-                        followupNow: ''
+                        followupNow: '',
                     });
                 } catch (err) {
                     setForm({ ...form, message: err.message });
@@ -248,12 +261,12 @@ function FormApplication({
                 const followup = await apiService.putData('/api/applications', {
                     parentId: data.parentId,
                     childId: data.followupId,
-                    data: data
+                    data: data,
                 });
                 updateFollowup({
                     followupIdx: formFollowup.followupIdx,
                     parentId: data.parentId,
-                    data: followup
+                    data: followup,
                 });
             } else {
                 const updateFollowup = form.followup;
@@ -261,14 +274,18 @@ function FormApplication({
                 updateFollowup[data.followupIdx].date = data.date;
                 setForm({
                     ...form,
-                    followup: [...updateFollowup.sort((a, b) => new Date(b.date) - new Date(a.date))],
-                    followupNow: ''
+                    followup: [
+                        ...updateFollowup.sort(
+                            (a, b) => new Date(b.date) - new Date(a.date)
+                        ),
+                    ],
+                    followupNow: '',
                 });
             }
         } catch (err) {
             setForm({
                 ...form,
-                message: err.message
+                message: err.message,
             });
         }
     };
@@ -289,13 +306,15 @@ function FormApplication({
         e.preventDefault();
         try {
             if (!form.applicationId) {
-                const data = await apiService.postData('/api/applications', { data: form });
+                const data = await apiService.postData('/api/applications', {
+                    data: form,
+                });
                 addApplication(data);
                 setForm(initialState);
             } else {
                 const data = await apiService.putData(`/api/applications`, {
                     data: form,
-                    parentId: form.applicationId
+                    parentId: form.applicationId,
                 });
                 updateApplication(data);
                 application && fromPage && handleUpdate(data);
@@ -304,10 +323,41 @@ function FormApplication({
         } catch (err) {
             setForm({
                 ...form,
-                message: err.message
+                message: err.message,
             });
         }
     }
+
+    const textTransform = (string) => {
+        if (string !== '') {
+            const title = string.trim() && string.toLowerCase();
+            const words = title.split(' ');
+            for (let i = 0; i < words.length; i++) {
+                words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+            }
+
+            return words.join(' ');
+        }
+
+        return '';
+    };
+
+    const copyJobTitle = () => {
+        navigator.clipboard.writeText(textTransform(form.title));
+    };
+
+    const copyCompany = () => {
+        navigator.clipboard.writeText(textTransform(form.company));
+    };
+
+    const copyResumeTitle = () => {
+        if (form.company !== '' && form.title !== '')
+            navigator.clipboard.writeText(
+                `Resume_-_Roger_Takeshita ${textTransform(
+                    `${form.company.toLowerCase()} - ${form.title.toLowerCase()}`
+                )}`
+            );
+    };
 
     const doneMessage = () => {
         setForm({ ...form, message: '' });
@@ -315,7 +365,7 @@ function FormApplication({
 
     return (
         <div className="container">
-            <h1>
+            <h1 onClick={copyResumeTitle}>
                 {form.title ? form.title.toUpperCase() : 'New Application'}
                 {form.company ? ` - ${form.company.toUpperCase()}` : ''}
             </h1>
@@ -336,7 +386,7 @@ function FormApplication({
                                 <InputAdornment position="start">
                                     <DescriptionIcon />
                                 </InputAdornment>
-                            )
+                            ),
                         }}
                     />
                     <TextField
@@ -354,7 +404,7 @@ function FormApplication({
                                 <InputAdornment position="start">
                                     <BusinessIcon />
                                 </InputAdornment>
-                            )
+                            ),
                         }}
                     />
                     <TextField
@@ -366,13 +416,17 @@ function FormApplication({
                         autoComplete="off"
                         value={form.link}
                         onChange={handleChange}
-                        helperText={application ? `ID: ${application._id}` : '* Required'}
+                        helperText={
+                            application
+                                ? `ID: ${application._id}`
+                                : '* Required'
+                        }
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <LinkIcon />
                                 </InputAdornment>
-                            )
+                            ),
                         }}
                     />
                     <FormControl required className="form-application__status">
@@ -383,7 +437,7 @@ function FormApplication({
                             onChange={handleChange}
                             name="status"
                             inputProps={{
-                                id: 'status-app'
+                                id: 'status-app',
                             }}
                         >
                             <option aria-label="None" value="" />
@@ -398,10 +452,16 @@ function FormApplication({
                             href="/"
                             onClick={handleStarClick}
                             className={
-                                form.star ? 'form-application__star--true' : 'form-application__star--false'
+                                form.star
+                                    ? 'form-application__star--true'
+                                    : 'form-application__star--false'
                             }
                         >
-                            <Tooltip title="Save to Favorites" TransitionComponent={Zoom} arrow>
+                            <Tooltip
+                                title="Save to Favorites"
+                                TransitionComponent={Zoom}
+                                arrow
+                            >
                                 <StarIcon />
                             </Tooltip>
                         </a>
@@ -409,8 +469,15 @@ function FormApplication({
                 </div>
                 <div className="form-application__forms">
                     <div className="form-application__form-job">
-                        <div className="form-application__form-title">Job Description*</div>
-                        <div className="form-application__form-title-req">* Required</div>
+                        <div
+                            className="form-application__form-title"
+                            onClick={copyJobTitle}
+                        >
+                            Job Description*
+                        </div>
+                        <div className="form-application__form-title-req">
+                            * Required
+                        </div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.jobDescription}
@@ -426,14 +493,21 @@ function FormApplication({
                                 toolbar: `fullscreen print | undo redo | bold italic underline strikethrough | 
                                 fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
                                 outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
-                                image media link anchor | help`
+                                image media link anchor | help`,
                             }}
                             onEditorChange={(e) => handleEditorChange(e, 'job')}
                         />
                     </div>
                     <div className="form-application__form-resume">
-                        <div className="form-application__form-title">Resume*</div>
-                        <div className="form-application__form-title-req">* Required</div>
+                        <div
+                            className="form-application__form-title"
+                            onClick={copyCompany}
+                        >
+                            Resume*
+                        </div>
+                        <div className="form-application__form-title-req">
+                            * Required
+                        </div>
                         <Editor
                             apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                             value={form.resume}
@@ -442,15 +516,15 @@ function FormApplication({
                                     {
                                         title: 'Select a Resume',
                                         description: '',
-                                        content: ''
+                                        content: '',
                                     },
                                     ...resumes.map((resume) => {
                                         return {
                                             title: resume.title,
                                             description: '',
-                                            content: resume.description
+                                            content: resume.description,
                                         };
-                                    })
+                                    }),
                                 ],
                                 height: 400,
                                 width: '100%',
@@ -463,9 +537,11 @@ function FormApplication({
                                 toolbar: `fullscreen print template | undo redo | bold italic underline strikethrough | 
                                 fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
                                 outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
-                                image media link anchor | help`
+                                image media link anchor | help`,
                             }}
-                            onEditorChange={(e) => handleEditorChange(e, 'resume')}
+                            onEditorChange={(e) =>
+                                handleEditorChange(e, 'resume')
+                            }
                         />
                     </div>
                 </div>
@@ -497,7 +573,9 @@ function FormApplication({
                                                       >
                                                           <Tooltip
                                                               title="Delete"
-                                                              TransitionComponent={Zoom}
+                                                              TransitionComponent={
+                                                                  Zoom
+                                                              }
                                                               placement="left"
                                                               arrow
                                                           >
@@ -506,29 +584,44 @@ function FormApplication({
                                                       </a>
                                                       <Tooltip
                                                           title="Click to Edit"
-                                                          TransitionComponent={Zoom}
+                                                          TransitionComponent={
+                                                              Zoom
+                                                          }
                                                           placement="right"
                                                           arrow
                                                       >
                                                           <Link
                                                               to="/"
                                                               onClick={(e) =>
-                                                                  handleToggleFormFollowup(e, {
-                                                                      followupIdx: idx,
-                                                                      followupId: follow._id,
-                                                                      description: follow.description,
-                                                                      date: follow.date.split('T')[0]
-                                                                  })
+                                                                  handleToggleFormFollowup(
+                                                                      e,
+                                                                      {
+                                                                          followupIdx: idx,
+                                                                          followupId:
+                                                                              follow._id,
+                                                                          description:
+                                                                              follow.description,
+                                                                          date: follow.date.split(
+                                                                              'T'
+                                                                          )[0],
+                                                                      }
+                                                                  )
                                                               }
                                                           >
                                                               <span className="form-application__followup-span">
-                                                                  {`[${follow.date.split('T')[0]}]`}
+                                                                  {`[${
+                                                                      follow.date.split(
+                                                                          'T'
+                                                                      )[0]
+                                                                  }]`}
                                                               </span>
                                                           </Link>
                                                       </Tooltip>
                                                   </div>
                                                   <div className="form-application__followup-text">
-                                                      <span>{follow.description}</span>
+                                                      <span>
+                                                          {follow.description}
+                                                      </span>
                                                   </div>
                                               </div>
                                           </div>
@@ -536,12 +629,17 @@ function FormApplication({
                                   })
                                 : ''}
                         </div>
-                        <FormDialog formFollowup={formFollowup} handleUpdateFollowup={handleUpdateFollowup} />
+                        <FormDialog
+                            formFollowup={formFollowup}
+                            handleUpdateFollowup={handleUpdateFollowup}
+                        />
                     </div>
                     <div className="form-application__followup-list-input">
                         {form.coverLetterActive && (
                             <div className="form-application__form-cl">
-                                <div className="form-application__form-title">Cover Letter</div>
+                                <div className="form-application__form-title">
+                                    Cover Letter
+                                </div>
                                 <Editor
                                     apiKey="zkqnr88xpimb3d5neqkp3rtzm2ecyu7s5v7j23ov5102hvbb"
                                     value={form.coverLetter}
@@ -557,9 +655,11 @@ function FormApplication({
                                         toolbar: `fullscreen print | undo redo | bold italic underline strikethrough | 
                                         fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | 
                                         outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak emoticons| 
-                                        image media link anchor | help`
+                                        image media link anchor | help`,
                                     }}
-                                    onEditorChange={(e) => handleEditorChange(e, 'coverLetter')}
+                                    onEditorChange={(e) =>
+                                        handleEditorChange(e, 'coverLetter')
+                                    }
                                 />
                             </div>
                         )}
@@ -569,7 +669,11 @@ function FormApplication({
                                 size="small"
                                 variant="contained"
                                 startIcon={
-                                    form.coverLetterActive ? <VisibilityIconOff /> : <VisibilityIcon />
+                                    form.coverLetterActive ? (
+                                        <VisibilityIconOff />
+                                    ) : (
+                                        <VisibilityIcon />
+                                    )
                                 }
                                 onClick={handleCoverLetterVisible}
                             >
@@ -583,7 +687,7 @@ function FormApplication({
                                 value={form.appliedOn}
                                 onChange={handleChange}
                                 InputLabelProps={{
-                                    shrink: true
+                                    shrink: true,
                                 }}
                             />
                             <TextField
@@ -594,7 +698,7 @@ function FormApplication({
                                 value={form.rejectedOn}
                                 onChange={handleChange}
                                 InputLabelProps={{
-                                    shrink: true
+                                    shrink: true,
                                 }}
                             />
                         </div>
@@ -626,18 +730,29 @@ function FormApplication({
                                 variant="contained"
                                 color="primary"
                                 type="submit"
-                                startIcon={form.applicationId !== '' ? <UpdateIcon /> : <PublishIcon />}
+                                startIcon={
+                                    form.applicationId !== '' ? (
+                                        <UpdateIcon />
+                                    ) : (
+                                        <PublishIcon />
+                                    )
+                                }
                                 className={
                                     isFormValid()
                                         ? 'Mui-disabled form-application__button'
                                         : 'form-application__button'
                                 }
                             >
-                                {form.applicationId !== '' ? 'Update Application' : 'Save Application'}
+                                {form.applicationId !== ''
+                                    ? 'Update Application'
+                                    : 'Save Application'}
                             </Button>
                         </div>
                         {form.message !== '' ? (
-                            <ErrorMessage message={form.message} doneMessage={doneMessage} />
+                            <ErrorMessage
+                                message={form.message}
+                                doneMessage={doneMessage}
+                            />
                         ) : (
                             ''
                         )}
@@ -649,7 +764,7 @@ function FormApplication({
 }
 
 const mapStateToProps = (state) => ({
-    resumes: state.resume
+    resumes: state.resume,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -657,7 +772,7 @@ const mapDispatchToProps = (dispatch) => ({
     updateApplication: (data) => dispatch(updateApplication(data)),
     addFollowup: (data) => dispatch(addFollowup(data)),
     updateFollowup: (data) => dispatch(updateFollowup(data)),
-    deleteFollowup: (data) => dispatch(deleteFollowup(data))
+    deleteFollowup: (data) => dispatch(deleteFollowup(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormApplication);
