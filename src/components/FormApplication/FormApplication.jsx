@@ -32,6 +32,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import PublishIcon from '@material-ui/icons/Publish';
 import UpdateIcon from '@material-ui/icons/Update';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Notification from '../Notification/Notification';
 
 function FormApplication({
     application,
@@ -64,6 +65,8 @@ function FormApplication({
         message: '',
     };
     const [form, setForm] = useState(initialState);
+    const [text, setText] = useState('');
+    const [open, setOpen] = useState(false);
     const [formFollowup, setFormFollowup] = useState({
         followupIdx: '',
         parentId: '',
@@ -341,21 +344,43 @@ function FormApplication({
         return '';
     };
 
+    useEffect(() => {
+        const time = setTimeout(() => {
+            setOpen(false);
+            setText('');
+        }, 2000);
+        return () => {
+            clearTimeout(time);
+        };
+    }, [text]);
+
     const copyJobTitle = () => {
-        navigator.clipboard.writeText(textTransform(form.title));
+        if (form.title !== '') {
+            const textPopup = textTransform(form.title);
+            setText(textPopup);
+            setOpen(true);
+            navigator.clipboard.writeText(textPopup);
+        }
     };
 
     const copyCompany = () => {
-        navigator.clipboard.writeText(textTransform(form.company));
+        if (form.company !== '') {
+            const textPopup = textTransform(form.company);
+            setText(textPopup);
+            setOpen(true);
+            navigator.clipboard.writeText(textPopup);
+        }
     };
 
     const copyResumeTitle = () => {
-        if (form.company !== '' && form.title !== '')
-            navigator.clipboard.writeText(
-                `Resume_-_Roger_Takeshita ${textTransform(
-                    `${form.company.toLowerCase()} - ${form.title.toLowerCase()}`
-                )}`
-            );
+        if (form.company !== '' && form.title !== '') {
+            const textPopup = `Resume - Roger Takeshita - ${textTransform(
+                `${form.company.toLowerCase()} - ${form.title.toLowerCase()}`
+            )}`;
+            setText(textPopup);
+            setOpen(true);
+            navigator.clipboard.writeText(textPopup);
+        }
     };
 
     const doneMessage = () => {
@@ -363,7 +388,7 @@ function FormApplication({
     };
 
     return (
-        <div className="container">
+        <div className="form">
             <h1 onClick={copyResumeTitle}>
                 {form.title ? form.title.toUpperCase() : 'New Application'}
                 {form.company ? ` - ${form.company.toUpperCase()}` : ''}
@@ -758,6 +783,7 @@ function FormApplication({
                     </div>
                 </div>
             </form>
+            <Notification text={text} open={open} />
         </div>
     );
 }

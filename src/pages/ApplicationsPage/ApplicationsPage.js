@@ -14,7 +14,9 @@ function ApplicationsPage({ applications, history, match }) {
 
     useEffect(() => {
         async function findApplication() {
-            const application = await applications.find(({ _id }) => _id === match.params.id);
+            const application = await applications.find(
+                ({ _id }) => _id === match.params.id
+            );
             if (application) setApplication(application);
         }
         match && findApplication();
@@ -29,14 +31,23 @@ function ApplicationsPage({ applications, history, match }) {
     };
 
     const handleDelete = (id) => {
-        const updateResults = applications.filter((application) => application._id !== id);
+        const updateResults = applications.filter(
+            (application) => application._id !== id
+        );
         setApplicationsArray(updateResults);
     };
 
     return (
         <div className="container">
             <h1>{application.title ? '' : 'Applications'}</h1>
-            <div>{application.title && <FormApplication history={history} application={application} />}</div>
+            <div>
+                {application.title && (
+                    <FormApplication
+                        history={history}
+                        application={application}
+                    />
+                )}
+            </div>
             <div hidden={application.title ? true : false}>
                 <TableApplications
                     history={history}
@@ -50,7 +61,7 @@ function ApplicationsPage({ applications, history, match }) {
 }
 
 const mapStateToProps = (state) => ({
-    applications: state.application
+    applications: state.application,
 });
 
 export default connect(mapStateToProps)(ApplicationsPage);
