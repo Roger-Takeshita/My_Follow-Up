@@ -363,6 +363,15 @@ function FormApplication({
         }
     };
 
+    const copyJobTitleUpperCase = () => {
+        if (form.title !== '') {
+            const textPopup = form.title.toUpperCase();
+            setText(textPopup);
+            setOpen(true);
+            navigator.clipboard.writeText(textPopup);
+        }
+    };
+
     const copyCompany = () => {
         if (form.company !== '') {
             const textPopup = textTransform(form.company);
@@ -571,7 +580,10 @@ function FormApplication({
                 </div>
                 <div className="form-application__followup">
                     <div className="form-application__followup-display">
-                        <div className="form-application__form-title">
+                        <div
+                            className="form-application__form-title"
+                            onClick={copyJobTitleUpperCase}
+                        >
                             {form.followup.length > 0
                                 ? `Follow-ups (${form.followup.length})`
                                 : 'No Follow-ups'}
