@@ -9,12 +9,12 @@ const userSchema = new Schema(
         firstName: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
         lastName: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
         email: {
             type: String,
@@ -24,54 +24,55 @@ const userSchema = new Schema(
                 if (!(await validator.isEmail(value))) {
                     throw new Error('Email is invalid');
                 }
-            }
+            },
         },
         password: {
             type: String,
-            required: true
+            required: true,
         },
         admin: {
             type: Boolean,
-            default: false
+            default: false,
         },
         avatar: {
-            type: String
+            type: String,
         },
         googleId: {
-            type: String
+            type: String,
         },
         unsuccessfulLogins: {
             type: Number,
-            default: 0
-        }
+            default: 0,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
-//! Mongoose Middleware
-//+ Encrypt the password
 userSchema.pre('save', async function (next) {
     const user = this;
-    if (user.isModified('password')) user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+    }
+
     next();
 });
 
-//+ Compare password
-userSchema.methods.comparePassword = function (tryPassword, cb) {
-    bcrypt.compare(tryPassword, this.password, cb);
+userSchema.methods.comparePassword = function (tryPassword, callback) {
+    bcrypt.compare(tryPassword, this.password, callback);
 };
 
-//+ Return
 userSchema.set('toJSON', {
-    transform: function (doc, ret) {
+    transform: function (_, ret) {
         delete ret.password;
         delete ret.createdAt;
         delete ret.updatedAt;
         delete ret.admin;
+        delete ret.__v;
         return ret;
-    }
+    },
 });
 
 module.exports = mongoose.model('User', userSchema);

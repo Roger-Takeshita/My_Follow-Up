@@ -1,21 +1,15 @@
 const express = require('express');
-const router = express.Router();
 const applicationCtrl = require('../controllers/applications');
+const { auth } = require('../middlewares/auth');
+const router = express.Router();
 
-//! Privet Routes
-router.use(require('../config/auth'));
-router.get('/search', checkAuth, applicationCtrl.search);
-router.post('/new', checkAuth, applicationCtrl.newApplication);
-router.put('/:id', checkAuth, applicationCtrl.updateApplication);
-router.delete('/:id', checkAuth, applicationCtrl.deleteApplication);
-router.post('/:id/new', checkAuth, applicationCtrl.newFollowup);
-router.put('/:id/:followId', checkAuth, applicationCtrl.updateFollowup);
-router.delete('/:id/:followId', checkAuth, applicationCtrl.deleteFollowup);
-router.get('/', checkAuth, applicationCtrl.getApplications);
+router.get('/', auth, applicationCtrl.getApplications);
+router.post('/new', auth, applicationCtrl.newApplication);
+router.put('/:id', auth, applicationCtrl.updateApplication);
+router.delete('/:id', auth, applicationCtrl.deleteApplication);
 
-function checkAuth(req, res, next) {
-    if (req.user) return next();
-    return res.status(400).json({ error: 'Not Authorized' });
-}
+router.post('/:id/new', auth, applicationCtrl.newFollowup);
+router.put('/:id/:followId', auth, applicationCtrl.updateFollowup);
+router.delete('/:id/:followId', auth, applicationCtrl.deleteFollowup);
 
 module.exports = router;

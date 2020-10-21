@@ -4,7 +4,8 @@ const db = mongoose.connection;
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
 });
 
 db.once('connected', () => {

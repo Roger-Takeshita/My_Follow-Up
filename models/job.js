@@ -73,10 +73,20 @@ const jobSchema = new Schema(
 );
 
 jobSchema.set('toJSON', {
-    transform: function (doc, ret) {
+    transform: function (_, ret) {
         delete ret.user;
         delete ret.createdAt;
         delete ret.updatedAt;
+        delete ret.__v;
+        return ret;
+    },
+});
+
+followupSchema.set('toJSON', {
+    transform: function (_, ret) {
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
         return ret;
     },
 });

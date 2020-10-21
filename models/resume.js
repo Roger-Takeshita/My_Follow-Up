@@ -6,29 +6,30 @@ const resumeSchema = new Schema(
         title: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
         description: {
             type: String,
-            required: true
+            required: true,
         },
         user: {
             type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
+            ref: 'User',
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
 resumeSchema.set('toJSON', {
-    transform: function (doc, ret) {
+    transform: function (_, ret) {
         delete ret.user;
         delete ret.createdAt;
         delete ret.updatedAt;
+        delete ret.__v;
         return ret;
-    }
+    },
 });
 
 module.exports = mongoose.model('Resume', resumeSchema);

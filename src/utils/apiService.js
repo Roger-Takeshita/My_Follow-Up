@@ -5,7 +5,7 @@ function requestHelper(type, path, data) {
         method: type,
         headers: new Headers({
             'Content-Type': 'application/json',
-            Authorization: 'Baerer ' + tokenService.getToken(),
+            Authorization: 'Bearer ' + tokenService.getToken(),
         }),
     };
     if (type === 'POST' || type === 'PUT') option.body = JSON.stringify(data);

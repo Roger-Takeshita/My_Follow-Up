@@ -1,10 +1,5 @@
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
-const SECRET = process.env.SECRET_JWT;
-
-function createJWT(user) {
-    return jwt.sign({ user }, SECRET, { expiresIn: '24h' });
-}
+const { createAccessToken } = require('../middlewares/auth');
 
 async function addTries(user, res) {
     try {
@@ -49,7 +44,7 @@ async function signup(req, res) {
         if (!user) {
             const newUser = new User(req.body);
             await newUser.save();
-            const token = createJWT(newUser);
+            const token = createAccessToken(newUser);
             return res.json({ token });
         }
         res.status(400).json({ error: 'Email already taken' });
@@ -61,14 +56,17 @@ async function signup(req, res) {
 async function login(req, res) {
     try {
         let user = await User.findOne({ email: req.body.email });
-        if (!user)
+        if (!user) {
             return res.status(404).json({ error: "User doesn't exist!" });
+        }
+
         if (await checkTimeElapsed(user)) {
-            user.comparePassword(req.body.password, async (err, isMatch) => {
+            user.comparePassword(req.body.password, async (_, isMatch) => {
                 if (isMatch) {
                     user.unsuccessfulLogins = 0;
                     await user.save();
-                    const token = createJWT(user);
+                    const token = createAccessToken(user);
+                    console.log(token);
                     return res.json({ token });
                 } else {
                     addTries(user, res);
@@ -98,14 +96,14 @@ async function updateUser(req, res) {
         const user = await User.findOne({ email: req.body.email });
         if (!user)
             return res.status(404).json({ error: "User doesn't exist!" });
-        user.comparePassword(req.body.password, async (err, isMatch) => {
+        user.comparePassword(req.body.password, async (_, isMatch) => {
             if (isMatch) {
                 user.firstName = req.body.firstName;
                 user.lastName = req.body.lastName;
                 if (req.body.newPassword !== '')
                     user.password = req.body.newPassword;
                 await user.save();
-                const token = createJWT(user);
+                const token = createAccessToken(user);
                 return res.json({ token });
             }
             res.status(400).json({ error: 'Wrong password!' });

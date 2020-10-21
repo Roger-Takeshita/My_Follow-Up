@@ -13,8 +13,8 @@ function SearchPage({ history }) {
 
     useEffect(() => {
         async function searchQuery() {
-            const results = await apiService.getData(`/api/applications/search`, {
-                search: query
+            const results = await apiService.getData(`/api/search`, {
+                search: query,
             });
             setResults(results);
             setApplication({});
@@ -42,7 +42,9 @@ function SearchPage({ history }) {
     };
 
     const handleDelete = (id) => {
-        const updateResults = results.filter((application) => application._id !== id);
+        const updateResults = results.filter(
+            (application) => application._id !== id
+        );
         setResults(updateResults);
     };
 

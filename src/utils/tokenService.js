@@ -1,4 +1,3 @@
-//! Storing, retrieving and removing tokens from localStorage
 function setToken(token) {
     if (token) {
         localStorage.setItem('token', token);
@@ -13,7 +12,6 @@ function updateToken(token) {
     }
 }
 
-//! Getting token and checking if it's still valid
 function getToken() {
     let token = localStorage.getItem('token');
     if (token) {
@@ -28,13 +26,11 @@ function getToken() {
     return token;
 }
 
-//! Getting user from token
 function getUserFromToken() {
     const token = getToken();
     return token ? JSON.parse(atob(token.split('.')[1])).user : null;
 }
 
-//! Remove token
 function removeToken() {
     localStorage.removeItem('token');
 }
@@ -44,5 +40,5 @@ export default {
     getToken,
     getUserFromToken,
     removeToken,
-    updateToken
+    updateToken,
 };
